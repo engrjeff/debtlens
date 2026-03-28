@@ -9,12 +9,59 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as SiteRouteRouteImport } from './routes/_site/route'
+import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
+import { Route as SiteIndexRouteImport } from './routes/_site/index'
+import { Route as ProtectedPaymentScheduleRouteImport } from './routes/_protected/payment-schedule'
+import { Route as ProtectedPaymentHistoryRouteImport } from './routes/_protected/payment-history'
+import { Route as ProtectedDebtsRouteImport } from './routes/_protected/debts'
+import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
+import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
+import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
-const IndexRoute = IndexRouteImport.update({
+const SiteRouteRoute = SiteRouteRouteImport.update({
+  id: '/_site',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiteIndexRoute = SiteIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => SiteRouteRoute,
+} as any)
+const ProtectedPaymentScheduleRoute =
+  ProtectedPaymentScheduleRouteImport.update({
+    id: '/payment-schedule',
+    path: '/payment-schedule',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedPaymentHistoryRoute = ProtectedPaymentHistoryRouteImport.update({
+  id: '/payment-history',
+  path: '/payment-history',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedDebtsRoute = ProtectedDebtsRouteImport.update({
+  id: '/debts',
+  path: '/debts',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const authSignUpRoute = authSignUpRouteImport.update({
+  id: '/(auth)/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authSignInRoute = authSignInRouteImport.update({
+  id: '/(auth)/sign-in',
+  path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -24,38 +71,144 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof SiteIndexRoute
+  '/sign-in': typeof authSignInRoute
+  '/sign-up': typeof authSignUpRoute
+  '/dashboard': typeof ProtectedDashboardRoute
+  '/debts': typeof ProtectedDebtsRoute
+  '/payment-history': typeof ProtectedPaymentHistoryRoute
+  '/payment-schedule': typeof ProtectedPaymentScheduleRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof SiteIndexRoute
+  '/sign-in': typeof authSignInRoute
+  '/sign-up': typeof authSignUpRoute
+  '/dashboard': typeof ProtectedDashboardRoute
+  '/debts': typeof ProtectedDebtsRoute
+  '/payment-history': typeof ProtectedPaymentHistoryRoute
+  '/payment-schedule': typeof ProtectedPaymentScheduleRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_protected': typeof ProtectedRouteRouteWithChildren
+  '/_site': typeof SiteRouteRouteWithChildren
+  '/(auth)/sign-in': typeof authSignInRoute
+  '/(auth)/sign-up': typeof authSignUpRoute
+  '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/debts': typeof ProtectedDebtsRoute
+  '/_protected/payment-history': typeof ProtectedPaymentHistoryRoute
+  '/_protected/payment-schedule': typeof ProtectedPaymentScheduleRoute
+  '/_site/': typeof SiteIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/sign-in'
+    | '/sign-up'
+    | '/dashboard'
+    | '/debts'
+    | '/payment-history'
+    | '/payment-schedule'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/auth/$'
-  id: '__root__' | '/' | '/api/auth/$'
+  to:
+    | '/'
+    | '/sign-in'
+    | '/sign-up'
+    | '/dashboard'
+    | '/debts'
+    | '/payment-history'
+    | '/payment-schedule'
+    | '/api/auth/$'
+  id:
+    | '__root__'
+    | '/_protected'
+    | '/_site'
+    | '/(auth)/sign-in'
+    | '/(auth)/sign-up'
+    | '/_protected/dashboard'
+    | '/_protected/debts'
+    | '/_protected/payment-history'
+    | '/_protected/payment-schedule'
+    | '/_site/'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
+  SiteRouteRoute: typeof SiteRouteRouteWithChildren
+  authSignInRoute: typeof authSignInRoute
+  authSignUpRoute: typeof authSignUpRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_site': {
+      id: '/_site'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SiteRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ProtectedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_site/': {
+      id: '/_site/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof SiteIndexRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
+    '/_protected/payment-schedule': {
+      id: '/_protected/payment-schedule'
+      path: '/payment-schedule'
+      fullPath: '/payment-schedule'
+      preLoaderRoute: typeof ProtectedPaymentScheduleRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/payment-history': {
+      id: '/_protected/payment-history'
+      path: '/payment-history'
+      fullPath: '/payment-history'
+      preLoaderRoute: typeof ProtectedPaymentHistoryRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/debts': {
+      id: '/_protected/debts'
+      path: '/debts'
+      fullPath: '/debts'
+      preLoaderRoute: typeof ProtectedDebtsRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/dashboard': {
+      id: '/_protected/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/(auth)/sign-up': {
+      id: '/(auth)/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof authSignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/sign-in': {
+      id: '/(auth)/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof authSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -68,8 +221,41 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ProtectedRouteRouteChildren {
+  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedDebtsRoute: typeof ProtectedDebtsRoute
+  ProtectedPaymentHistoryRoute: typeof ProtectedPaymentHistoryRoute
+  ProtectedPaymentScheduleRoute: typeof ProtectedPaymentScheduleRoute
+}
+
+const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedDebtsRoute: ProtectedDebtsRoute,
+  ProtectedPaymentHistoryRoute: ProtectedPaymentHistoryRoute,
+  ProtectedPaymentScheduleRoute: ProtectedPaymentScheduleRoute,
+}
+
+const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
+  ProtectedRouteRouteChildren,
+)
+
+interface SiteRouteRouteChildren {
+  SiteIndexRoute: typeof SiteIndexRoute
+}
+
+const SiteRouteRouteChildren: SiteRouteRouteChildren = {
+  SiteIndexRoute: SiteIndexRoute,
+}
+
+const SiteRouteRouteWithChildren = SiteRouteRoute._addFileChildren(
+  SiteRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
+  SiteRouteRoute: SiteRouteRouteWithChildren,
+  authSignInRoute: authSignInRoute,
+  authSignUpRoute: authSignUpRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
