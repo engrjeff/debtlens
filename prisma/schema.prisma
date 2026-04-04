@@ -13,18 +13,20 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String       @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean      @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   firstName     String?
   lastName      String?
   role          String?
   sessions      Session[]
   accounts      Account[]
+  obligations   Obligation[]
+  payments      Payment[]
 
   @@unique([email])
   @@map("user")
@@ -76,4 +78,68 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// ──────────────────────────────────────────
+// Finance
+// ──────────────────────────────────────────
+
+enum ObligationType {
+  BILL
+  LOAN
+}
+
+enum RecurrenceType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  ANNUALLY
+}
+
+model Obligation {
+  id               String         @id @default(cuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String
+  type             ObligationType
+  amount           Float // scheduled payment per recurrence period
+  recurrence       RecurrenceType
+  dueDay           Int? // 1–31, only meaningful when recurrence = MONTHLY
+  nextDueDate      DateTime
+  totalAmount      Float
+  remainingBalance Float
+  category         String
+
+  // Loan-specific
+  interestRate Float? // e.g. 0.0525 = 5.25%
+
+  payments Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([nextDueDate])
+  @@index([userId, nextDueDate])
+  @@map("obligation")
+}
+
+model Payment {
+  id             String     @id @default(cuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  obligationId   String
+  obligation     Obligation @relation(fields: [obligationId], references: [id], onDelete: Cascade)
+  amount         Float
+  proofOfPayment String?
+  paidAt         DateTime   @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([obligationId])
+  @@index([paidAt])
+  @@map("payment")
 }

@@ -1,4 +1,3 @@
-import { AppHeader } from "@/components/app-header"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { getSession } from "@/lib/auth.functions"
@@ -30,9 +29,8 @@ function RouteComponent() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar />
       <SidebarInset>
-        <AppHeader />
         <Outlet />
       </SidebarInset>
     </SidebarProvider>

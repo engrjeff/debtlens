@@ -1,6 +1,6 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
+import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -19,6 +19,8 @@ const badgeVariants = cva(
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
+        BILL: "bg-emerald-500/20 font-medium text-emerald-500 capitalize",
+        LOAN: "bg-cyan-500/20 font-medium text-cyan-500 capitalize",
       },
     },
     defaultVariants: {

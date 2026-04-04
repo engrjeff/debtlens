@@ -5,7 +5,6 @@ const envSchema = z.object({
   DATABASE_URL: z.url(),
   NODE_ENV: z.enum(["development", "production", "test"]),
   BETTER_AUTH_URL: z.url(),
-  APP_URL: z.url(),
 })
 
 // Validate server environment

@@ -19,6 +19,7 @@ import {
   LayoutDashboardIcon,
   PhilippinePesoIcon,
 } from "lucide-react"
+import { UserMenu } from "./user-menu"
 
 const sidebar = {
   user: {
@@ -61,7 +62,7 @@ function NavMain() {
               <SidebarMenuButton
                 asChild
                 tooltip={item.title}
-                className="data-[status=active]:bg-primary data-[status=active]:hover:bg-primary/90"
+                className="data-[status=active]:bg-primary data-[status=active]:text-primary-foreground data-[status=active]:hover:bg-primary/90"
               >
                 <Link to={item.url}>
                   {item.icon && <item.icon />}
@@ -96,7 +97,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain />
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
+      <SidebarFooter>
+        <UserMenu />
+      </SidebarFooter>
     </Sidebar>
   )
 }
