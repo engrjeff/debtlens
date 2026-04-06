@@ -252,6 +252,60 @@ export function computeInsights(obligations: Obligation[]) {
   }
 }
 
+// ── Payment / Due-date helpers ────────────────────────────────────────────────
+
+/**
+ * Advance a due date by one recurrence period.
+ * For MONTHLY / QUARTERLY / ANNUALLY the `dueDay` field (1-31) is used as the
+ * canonical day-of-month so that, e.g., a bill always falls on the 31st
+ * (clamped to the last valid day of each month).
+ */
+export function computeNextDueDate(
+  currentDueDate: Date,
+  recurrence: string,
+  dueDay?: number | null,
+): Date {
+  const base = new Date(currentDueDate)
+  const y = base.getFullYear()
+  const m = base.getMonth()
+  const d = base.getDate()
+
+  switch (recurrence) {
+    case "DAILY":
+      return new Date(y, m, d + 1)
+
+    case "WEEKLY":
+      return new Date(y, m, d + 7)
+
+    case "MONTHLY": {
+      const targetDay = dueDay ?? d
+      const rawMonth = m + 1
+      const targetY = rawMonth > 11 ? y + 1 : y
+      const targetM = rawMonth % 12
+      const maxDay = new Date(targetY, targetM + 1, 0).getDate()
+      return new Date(targetY, targetM, Math.min(targetDay, maxDay))
+    }
+
+    case "QUARTERLY": {
+      const targetDay = dueDay ?? d
+      const rawMonth = m + 3
+      const targetY = y + Math.floor(rawMonth / 12)
+      const targetM = rawMonth % 12
+      const maxDay = new Date(targetY, targetM + 1, 0).getDate()
+      return new Date(targetY, targetM, Math.min(targetDay, maxDay))
+    }
+
+    case "ANNUALLY": {
+      const targetDay = dueDay ?? d
+      const maxDay = new Date(y + 1, m + 1, 0).getDate()
+      return new Date(y + 1, m, Math.min(targetDay, maxDay))
+    }
+
+    default:
+      return base
+  }
+}
+
 // ── Filter + Sort ─────────────────────────────────────────────────────────────
 
 export function filterObligations(

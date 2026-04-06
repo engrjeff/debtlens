@@ -12,14 +12,22 @@ import { ObligationType, type Obligation } from "@/generated/prisma/browser"
 
 import { Button } from "@/components/ui/button"
 import { CalendarIcon } from "lucide-react"
+import { useState } from "react"
 import {
   formatDueDate,
   formatPHP,
   getObligationStatus,
   getPerLabel,
 } from "./helpers"
+import { MarkPaidDialog } from "./mark-paid-dialog"
 
-function ObligationItem({ obligation }: { obligation: Obligation }) {
+function ObligationItem({
+  obligation,
+  onMarkPaid,
+}: {
+  obligation: Obligation
+  onMarkPaid: (obligation: Obligation) => void
+}) {
   return (
     <Card size="sm" className="h-full border-none ring-0">
       <CardHeader>
@@ -63,6 +71,7 @@ function ObligationItem({ obligation }: { obligation: Obligation }) {
           size="sm"
           variant="link"
           className="px-0 text-blue-500"
+          onClick={() => onMarkPaid(obligation)}
         >
           Mark as Paid
         </Button>
@@ -72,13 +81,28 @@ function ObligationItem({ obligation }: { obligation: Obligation }) {
 }
 
 export function ObligationList({ obligations }: { obligations: Obligation[] }) {
+  const [pendingObligation, setPendingObligation] = useState<Obligation | null>(null)
+
   return (
-    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {obligations.map((obligation) => (
-        <li key={obligation.id}>
-          <ObligationItem obligation={obligation} />
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {obligations.map((obligation) => (
+          <li key={obligation.id}>
+            <ObligationItem
+              obligation={obligation}
+              onMarkPaid={setPendingObligation}
+            />
+          </li>
+        ))}
+      </ul>
+
+      {pendingObligation && (
+        <MarkPaidDialog
+          obligation={pendingObligation}
+          open={true}
+          onClose={() => setPendingObligation(null)}
+        />
+      )}
+    </>
   )
 }
