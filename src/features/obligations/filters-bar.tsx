@@ -6,7 +6,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
-import { Search, XIcon } from "lucide-react"
+import { GridIcon, ListIcon, Search, XIcon } from "lucide-react"
 import { useState } from "react"
 import type { ObligationsSearch } from "./search-params"
 
@@ -34,6 +34,11 @@ const SORT_OPTIONS: { value: ObligationsSearch["sort"]; label: string }[] = [
   { value: "due-date", label: "Nearest Due Date" },
   { value: "amount", label: "Highest Amount" },
   { value: "balance", label: "Largest Balance" },
+]
+
+const VIEW_OPTIONS: { value: ObligationsSearch["view"]; label: string }[] = [
+  { value: "grid", label: "View as Grid" },
+  { value: "list", label: "View as List" },
 ]
 
 function SearchField({
@@ -128,6 +133,20 @@ export function FiltersBar({ search, onUpdate }: FiltersBarProps) {
           </NativeSelectOption>
         ))}
       </NativeSelect>
+
+      <div className="flex items-center gap-1 rounded-lg border p-1">
+        {VIEW_OPTIONS.map((opt) => (
+          <Button
+            key={opt.value}
+            variant={search.view === opt.value ? "secondary" : "ghost"}
+            size="icon-sm"
+            onClick={() => onUpdate({ view: opt.value })}
+            aria-label={opt.label}
+          >
+            {opt.value === "grid" ? <GridIcon /> : <ListIcon />}
+          </Button>
+        ))}
+      </div>
     </div>
   )
 }

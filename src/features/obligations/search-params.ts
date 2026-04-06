@@ -14,6 +14,7 @@ export const obligationsSearchSchema = z.object({
     .optional()
     .default("due-date"),
   page: z.coerce.number().int().min(1).optional().default(1),
+  view: z.enum(["grid", "list"]).optional().default("grid"),
 })
 
 export type ObligationsSearch = z.infer<typeof obligationsSearchSchema>

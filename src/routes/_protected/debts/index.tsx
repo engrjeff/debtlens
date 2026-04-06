@@ -6,6 +6,7 @@ import {
 } from "@/features/obligations/insight-cards"
 import { ObligationCreateDialog } from "@/features/obligations/obligation-create-dialog"
 import { ObligationList } from "@/features/obligations/obligations-list"
+import { ObligationsTable } from "@/features/obligations/obligations-table"
 import {
   fetchObligationInsights,
   fetchObligations,
@@ -62,7 +63,11 @@ function RouteComponent() {
             <FiltersBar search={search} onUpdate={handleUpdate} />
           </div>
           <div className="p-4">
-            <ObligationList obligations={obligations} />
+            {search.view === "list" ? (
+              <ObligationsTable obligations={obligations} />
+            ) : (
+              <ObligationList obligations={obligations} />
+            )}
           </div>
         </>
       )}

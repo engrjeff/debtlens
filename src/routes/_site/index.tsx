@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_site/")({ component: App })
 
@@ -8,10 +8,16 @@ function App() {
     <div className="flex min-h-svh p-6">
       <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
         <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
+          <h1 className="font-medium">Welcome to DebtLens</h1>
+          <p>Consolidate, monitor, and track your balances in one place.</p>
+          <div className="flex items-center gap-4">
+            <Button asChild>
+              <Link to="/sign-in">Log In</Link>
+            </Button>
+            <Button variant="secondary" asChild>
+              <Link to="/sign-up">Sign Up</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
