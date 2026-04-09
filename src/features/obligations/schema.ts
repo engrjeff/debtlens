@@ -61,3 +61,34 @@ export const obligationFormSchema = z
   })
 
 export type ObligationInput = z.infer<typeof obligationFormSchema>
+
+// ── Edit schemas (no type change, no dueDay – recomputed server-side) ─────────
+
+const recurrenceEnum = z.enum(["DAILY", "WEEKLY", "MONTHLY", "QUARTERLY", "ANNUALLY"])
+
+export const editBillSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100, "Name must be 100 characters or fewer"),
+  category: z.string().min(1, "Category is required"),
+  amount: z.number({ message: "Enter a valid amount" }).positive("Must be greater than 0"),
+  recurrence: recurrenceEnum,
+  nextDueDate: z.string().min(1, "Next due date is required"),
+})
+
+export const editLoanSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100, "Name must be 100 characters or fewer"),
+  category: z.string().min(1, "Category is required"),
+  amount: z.number({ message: "Enter a valid amount" }).positive("Must be greater than 0"),
+  recurrence: recurrenceEnum,
+  nextDueDate: z.string().min(1, "Next due date is required"),
+  remainingBalance: z
+    .number({ message: "Enter a valid amount" })
+    .nonnegative("Cannot be negative"),
+  interestRate: z
+    .number({ message: "Enter a valid rate" })
+    .min(0, "Cannot be negative")
+    .max(100, "Enter the rate as a percentage, e.g. 5.25")
+    .optional(),
+})
+
+export type EditBillInput = z.infer<typeof editBillSchema>
+export type EditLoanInput = z.infer<typeof editLoanSchema>

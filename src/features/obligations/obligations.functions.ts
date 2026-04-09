@@ -1,13 +1,15 @@
 import { ensureSession } from "@/lib/auth.functions"
 import { createServerFn } from "@tanstack/react-start"
-import { z } from "zod"
+import { z } from "zod/v3"
 import {
   createObligation,
+  deleteObligation,
   getObligationInsights,
   getObligations,
   markObligationPaid,
+  updateObligation,
 } from "./obligations.server"
-import { obligationFormSchema } from "./schema"
+import { editBillSchema, editLoanSchema, obligationFormSchema } from "./schema"
 import { obligationsSearchSchema } from "./search-params"
 
 export const fetchObligations = createServerFn({ method: "GET" })
@@ -29,6 +31,31 @@ export const addObligation = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const session = await ensureSession()
     return createObligation(data, session.user.id)
+  })
+
+export const editObligation = createServerFn({ method: "POST" })
+  .inputValidator(
+    z.object({
+      obligationId: z.string(),
+      type: z.enum(["BILL", "LOAN"]),
+      // Validated precisely in the handler after type is known
+      data: z.record(z.unknown()),
+    }),
+  )
+  .handler(async ({ data: input }) => {
+    const session = await ensureSession()
+    const parsed =
+      input.type === "BILL"
+        ? editBillSchema.parse(input.data)
+        : editLoanSchema.parse(input.data)
+    return updateObligation(input.obligationId, session.user.id, parsed)
+  })
+
+export const removeObligation = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ obligationId: z.string() }))
+  .handler(async ({ data }) => {
+    const session = await ensureSession()
+    return deleteObligation(data.obligationId, session.user.id)
   })
 
 export const markAsPaid = createServerFn({ method: "POST" })

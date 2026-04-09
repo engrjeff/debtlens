@@ -110,6 +110,7 @@ model Obligation {
   totalAmount      Float
   remainingBalance Float
   category         String
+  isDeleted        Boolean?       @default(false)
 
   // Loan-specific
   interestRate Float? // e.g. 0.0525 = 5.25%

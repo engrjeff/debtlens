@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -13,13 +12,9 @@ import { ObligationType, type Obligation } from "@/generated/prisma/browser"
 import { Button } from "@/components/ui/button"
 import { CalendarIcon } from "lucide-react"
 import { useState } from "react"
-import {
-  formatDueDate,
-  formatPHP,
-  getObligationStatus,
-  getPerLabel,
-} from "./helpers"
+import { formatDueDate, formatPHP, getPerLabel } from "./helpers"
 import { MarkPaidDialog } from "./mark-paid-dialog"
+import { ObligationItemMenu } from "./obligation-item-menu"
 
 function ObligationItem({
   obligation,
@@ -29,7 +24,7 @@ function ObligationItem({
   onMarkPaid: (obligation: Obligation) => void
 }) {
   return (
-    <Card size="sm" className="h-full border-none ring-0">
+    <Card size="sm" className="relative h-full border-none ring-0">
       <CardHeader>
         <CardDescription>
           <Badge variant={obligation.type}>
@@ -42,11 +37,9 @@ function ObligationItem({
             Loan Amount: {formatPHP(obligation.totalAmount)}
           </CardDescription>
         )}
-        <CardAction>
-          <Badge variant="outline" className="capitalize">
-            {getObligationStatus(obligation.nextDueDate).replaceAll("-", " ")}
-          </Badge>
-        </CardAction>
+        <div className="absolute top-1 right-1">
+          <ObligationItemMenu obligation={obligation} />
+        </div>
       </CardHeader>
       <CardContent className="mt-auto">
         <p className="mb-1 text-xs text-muted-foreground">
@@ -81,7 +74,9 @@ function ObligationItem({
 }
 
 export function ObligationList({ obligations }: { obligations: Obligation[] }) {
-  const [pendingObligation, setPendingObligation] = useState<Obligation | null>(null)
+  const [pendingObligation, setPendingObligation] = useState<Obligation | null>(
+    null
+  )
 
   return (
     <>

@@ -39,7 +39,7 @@ function RouteComponent() {
   )
 
   return (
-    <main className="divide-y">
+    <main className="container mx-auto divide-y">
       <div className="flex items-center justify-between gap-4 p-4">
         <div>
           <h2 className="text-lg font-semibold">Obligations</h2>

@@ -14,7 +14,11 @@ import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
 import { Controller, useFormContext } from "react-hook-form"
 import { type ObligationInput } from "./schema"
 
-export function ObligationCategorySelector() {
+export function ObligationCategorySelector({
+  label = "Now, select a category",
+}: {
+  label?: string
+}) {
   const form = useFormContext<ObligationInput>()
 
   const type = form.watch("type")
@@ -30,7 +34,7 @@ export function ObligationCategorySelector() {
       name="category"
       render={({ field, fieldState }) => (
         <Field>
-          <FieldLabel htmlFor="category">Now, select a category</FieldLabel>
+          <FieldLabel htmlFor="category">{label}</FieldLabel>
           <FieldContent>
             <NativeSelect
               {...field}

@@ -1,7 +1,7 @@
 import { prisma } from "@/db/prisma"
-import type { ObligationInput } from "./schema"
-import { PAGE_SIZE, type ObligationsSearch } from "./search-params"
 import { computeNextDueDate } from "./helpers"
+import type { EditBillInput, EditLoanInput, ObligationInput } from "./schema"
+import { PAGE_SIZE, type ObligationsSearch } from "./search-params"
 
 export async function getObligations(
   userId: string,
@@ -52,6 +52,7 @@ export async function getObligations(
 
   const where = {
     userId,
+    isDeleted: false,
     ...(search.type !== "ALL" ? { type: search.type } : {}),
     ...(search.q
       ? {
@@ -101,10 +102,56 @@ export async function createObligation(data: ObligationInput, userId: string) {
   return obligation
 }
 
+export async function updateObligation(
+  obligationId: string,
+  userId: string,
+  data: EditBillInput | EditLoanInput,
+) {
+  const obligation = await prisma.obligation.findFirst({
+    where: { id: obligationId, userId, isDeleted: false },
+  })
+
+  if (!obligation) {
+    throw new Error("Obligation not found")
+  }
+
+  // Recompute dueDay from nextDueDate when recurrence is monthly-based
+  let dueDay: number
+  if (data.recurrence === "MONTHLY") {
+    dueDay = new Date(data.nextDueDate).getDate()
+  } else {
+    dueDay = 1
+  }
+
+  return prisma.obligation.update({
+    where: { id: obligationId },
+    data: {
+      ...data,
+      nextDueDate: new Date(data.nextDueDate),
+      dueDay,
+    },
+  })
+}
+
+export async function deleteObligation(obligationId: string, userId: string) {
+  const obligation = await prisma.obligation.findFirst({
+    where: { id: obligationId, userId, isDeleted: false },
+  })
+
+  if (!obligation) {
+    throw new Error("Obligation not found")
+  }
+
+  return prisma.obligation.update({
+    where: { id: obligationId },
+    data: { isDeleted: true },
+  })
+}
+
 export async function markObligationPaid(
   obligationId: string,
   userId: string,
-  paymentAmount?: number,
+  paymentAmount?: number
 ) {
   const obligation = await prisma.obligation.findFirst({
     where: { id: obligationId, userId },
@@ -129,13 +176,17 @@ export async function markObligationPaid(
       // Stop advancing the due date once fully paid
       nextDueDate =
         remainingBalance > 0
-          ? computeNextDueDate(obligation.nextDueDate, obligation.recurrence, obligation.dueDay)
+          ? computeNextDueDate(
+              obligation.nextDueDate,
+              obligation.recurrence,
+              obligation.dueDay
+            )
           : obligation.nextDueDate
     } else {
       nextDueDate = computeNextDueDate(
         obligation.nextDueDate,
         obligation.recurrence,
-        obligation.dueDay,
+        obligation.dueDay
       )
     }
 
