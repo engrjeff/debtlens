@@ -10,11 +10,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
 import { formatPHP, getPerLabel } from "@/features/obligations/helpers"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { fetchObligationInsights } from "@/features/obligations/obligations.functions"
 import type { Obligation } from "@/generated/prisma/browser"
+import { generatePageTitle } from "@/lib/utils"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { format, isSameDay } from "date-fns"
 import {
@@ -31,7 +31,7 @@ import { useMemo, useState } from "react"
 export const Route = createFileRoute("/_protected/payment-schedule")({
   loader: () => fetchObligationInsights(),
   head: () => ({
-    meta: [{ title: "Payment Schedule | DebtLens" }],
+    meta: [{ title: generatePageTitle("Payment Schedule") }],
   }),
   component: RouteComponent,
 })
@@ -79,11 +79,9 @@ function RouteComponent() {
 
   return (
     <>
-      <header className="flex items-center gap-4 border-b px-4 py-3">
-        <SidebarTrigger />
-        <Separator orientation="vertical" />
+      <header className="container mx-auto flex max-w-6xl items-center gap-4 border-b p-4">
         <div>
-          <h2 className="font-semibold">Payment Schedule</h2>
+          <h1 className="font-semibold">Payment Schedule</h1>
           <p className="text-xs text-muted-foreground">
             {format(viewMonth, "MMMM yyyy")} · {obligations.length} obligation
             {obligations.length !== 1 ? "s" : ""}
@@ -91,8 +89,8 @@ function RouteComponent() {
         </div>
       </header>
 
-      <main className="container mx-auto p-4">
-        <div className="flex items-start gap-4">
+      <main className="container mx-auto max-w-6xl p-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
           {/* ── Left: Calendar panel ── */}
           <ScheduleCalendar
             viewMonth={viewMonth}

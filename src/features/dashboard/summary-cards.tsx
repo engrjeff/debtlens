@@ -1,19 +1,9 @@
-import { Link } from "@tanstack/react-router"
-import {
-  AlertTriangle,
-  CalendarDays,
-  CreditCard,
-  Wallet,
-} from "lucide-react"
-import type { DashboardSummary } from "./dashboard.utils"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { formatPHP } from "@/features/obligations/helpers"
+import { formatCompactPHP } from "@/features/obligations/helpers"
+import { Link } from "@tanstack/react-router"
+import { AlertTriangle, CalendarDays, CreditCard, Wallet } from "lucide-react"
+import type { DashboardSummary } from "./dashboard.utils"
 
 interface SummaryCardsProps {
   summary: DashboardSummary
@@ -39,7 +29,10 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
         search={(c) => ({ ...c, status: "due-this-month" })}
         className="group"
       >
-        <Card size="sm" className="h-full transition-shadow group-hover:ring-primary">
+        <Card
+          size="sm"
+          className="h-full transition-shadow group-hover:ring-primary"
+        >
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-normal text-muted-foreground">
@@ -50,7 +43,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
           </CardHeader>
           <CardContent>
             <p className="font-mono text-2xl font-bold">
-              {formatPHP(totalDueThisMonth)}
+              {formatCompactPHP(totalDueThisMonth)}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               Total obligations this month
@@ -65,7 +58,10 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
         search={(c) => ({ ...c, status: "due-this-week" })}
         className="group"
       >
-        <Card size="sm" className="h-full transition-shadow group-hover:ring-primary">
+        <Card
+          size="sm"
+          className="h-full transition-shadow group-hover:ring-primary"
+        >
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-normal text-muted-foreground">
@@ -76,7 +72,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
           </CardHeader>
           <CardContent>
             <p className="font-mono text-2xl font-bold">
-              {formatPHP(dueInNext7DaysAmount)}
+              {formatCompactPHP(dueInNext7DaysAmount)}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {dueInNext7DaysCount === 0
@@ -113,7 +109,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
             <p
               className={`font-mono text-2xl font-bold ${isOverdue ? "text-destructive" : ""}`}
             >
-              {isOverdue ? formatPHP(overdueAmount) : "None"}
+              {isOverdue ? formatCompactPHP(overdueAmount) : "None"}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {isOverdue
@@ -136,7 +132,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
         </CardHeader>
         <CardContent>
           <p className="font-mono text-2xl font-bold">
-            {formatPHP(totalRemainingDebt)}
+            {formatCompactPHP(totalRemainingDebt)}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
             {totalRemainingDebt === 0 ? "No active loans" : "Across all loans"}

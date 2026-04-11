@@ -1,14 +1,20 @@
-import { UserMenu } from "./user-menu"
+import { siteConfig } from "@/config/site"
+import { Link } from "@tanstack/react-router"
+import { SidebarTrigger } from "./ui/sidebar"
 
 export function AppHeader() {
   return (
-    <header className="flex items-center border-b p-4">
-      <div>
-        <h1 className="font-semibold">Welcome to DebtLens!</h1>
-      </div>
-      <div className="ml-auto flex min-h-8 items-center gap-4">
-        <UserMenu />
-      </div>
-    </header>
+    <div className="flex h-16 items-center justify-between border-b bg-background p-4 lg:hidden">
+      <Link to="/dashboard" className="flex items-center gap-3">
+        <img
+          src="/logo.svg"
+          width={30}
+          height={30}
+          className="object-contain"
+        />
+        <span className="text-base font-semibold">{siteConfig.title}</span>
+      </Link>
+      <SidebarTrigger />
+    </div>
   )
 }

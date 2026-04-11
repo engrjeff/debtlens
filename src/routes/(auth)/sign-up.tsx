@@ -1,5 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Link, createFileRoute, redirect, useNavigate } from "@tanstack/react-router"
+import {
+  Link,
+  createFileRoute,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -7,9 +12,21 @@ import { z } from "zod"
 import { PasswordInput } from "@/components/password-input"
 import { SubmitButton } from "@/components/submit-button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { siteConfig } from "@/config/site"
 import { authClient } from "@/lib/auth-client"
 import { getSession } from "@/lib/auth.functions"
 
@@ -47,7 +64,6 @@ function RouteComponent() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
-     
     resolver: zodResolver(schema as any),
   })
 
@@ -64,7 +80,9 @@ function RouteComponent() {
     })
 
     if (error) {
-      setServerError(error.message ?? "Could not create account. Please try again.")
+      setServerError(
+        error.message ?? "Could not create account. Please try again."
+      )
       return
     }
 
@@ -76,7 +94,9 @@ function RouteComponent() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Create an account</CardTitle>
-          <CardDescription>Start tracking your debt with DebtLens</CardDescription>
+          <CardDescription>
+            Start tracking your debt with {siteConfig.title}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -88,7 +108,10 @@ function RouteComponent() {
               )}
 
               <div className="flex gap-3">
-                <Field data-invalid={!!errors.firstName || undefined} className="flex-1">
+                <Field
+                  data-invalid={!!errors.firstName || undefined}
+                  className="flex-1"
+                >
                   <FieldLabel htmlFor="firstName">First name</FieldLabel>
                   <Input
                     id="firstName"
@@ -97,10 +120,15 @@ function RouteComponent() {
                     aria-invalid={!!errors.firstName || undefined}
                     {...register("firstName")}
                   />
-                  {errors.firstName && <FieldError>{errors.firstName.message}</FieldError>}
+                  {errors.firstName && (
+                    <FieldError>{errors.firstName.message}</FieldError>
+                  )}
                 </Field>
 
-                <Field data-invalid={!!errors.lastName || undefined} className="flex-1">
+                <Field
+                  data-invalid={!!errors.lastName || undefined}
+                  className="flex-1"
+                >
                   <FieldLabel htmlFor="lastName">Last name</FieldLabel>
                   <Input
                     id="lastName"
@@ -109,7 +137,9 @@ function RouteComponent() {
                     aria-invalid={!!errors.lastName || undefined}
                     {...register("lastName")}
                   />
-                  {errors.lastName && <FieldError>{errors.lastName.message}</FieldError>}
+                  {errors.lastName && (
+                    <FieldError>{errors.lastName.message}</FieldError>
+                  )}
                 </Field>
               </div>
 
@@ -123,7 +153,9 @@ function RouteComponent() {
                   aria-invalid={!!errors.email || undefined}
                   {...register("email")}
                 />
-                {errors.email && <FieldError>{errors.email.message}</FieldError>}
+                {errors.email && (
+                  <FieldError>{errors.email.message}</FieldError>
+                )}
               </Field>
 
               <Field data-invalid={!!errors.password || undefined}>
@@ -135,11 +167,15 @@ function RouteComponent() {
                   aria-invalid={!!errors.password || undefined}
                   {...register("password")}
                 />
-                {errors.password && <FieldError>{errors.password.message}</FieldError>}
+                {errors.password && (
+                  <FieldError>{errors.password.message}</FieldError>
+                )}
               </Field>
 
               <Field data-invalid={!!errors.confirmPassword || undefined}>
-                <FieldLabel htmlFor="confirmPassword">Confirm password</FieldLabel>
+                <FieldLabel htmlFor="confirmPassword">
+                  Confirm password
+                </FieldLabel>
                 <PasswordInput
                   id="confirmPassword"
                   placeholder="••••••••"
@@ -147,7 +183,9 @@ function RouteComponent() {
                   aria-invalid={!!errors.confirmPassword || undefined}
                   {...register("confirmPassword")}
                 />
-                {errors.confirmPassword && <FieldError>{errors.confirmPassword.message}</FieldError>}
+                {errors.confirmPassword && (
+                  <FieldError>{errors.confirmPassword.message}</FieldError>
+                )}
               </Field>
 
               <SubmitButton loading={isSubmitting} className="w-full" size="lg">

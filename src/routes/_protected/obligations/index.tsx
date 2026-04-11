@@ -1,7 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
 import { EmptyObligationsView } from "@/features/obligations/empty-obligations-view"
 import { FiltersBar } from "@/features/obligations/filters-bar"
 import {
@@ -17,6 +13,9 @@ import {
   fetchObligations,
 } from "@/features/obligations/obligations.functions"
 import { obligationsSearchSchema } from "@/features/obligations/search-params"
+import { generatePageTitle } from "@/lib/utils"
+import { createFileRoute } from "@tanstack/react-router"
+import { Suspense } from "react"
 
 export const Route = createFileRoute("/_protected/obligations/")({
   validateSearch: obligationsSearchSchema,
@@ -28,7 +27,7 @@ export const Route = createFileRoute("/_protected/obligations/")({
     return {
       meta: [
         {
-          title: "Obligations",
+          title: generatePageTitle("Obligations"),
         },
       ],
     }
@@ -60,12 +59,10 @@ function RouteComponent() {
   const obligations = applyProgressFilter(rawObligations, search.progress)
 
   return (
-    <div className="flex flex-col">
-      <header className="flex items-center gap-4 border-b px-4 py-3">
-        <SidebarTrigger />
-        <Separator orientation="vertical" />
+    <div className="container mx-auto grid space-y-4 p-4">
+      <header className="flex items-center gap-4 border-b pb-4">
         <div>
-          <h2 className="font-semibold">Obligations</h2>
+          <h1 className="font-semibold">Obligations</h1>
           <p className="text-sm text-muted-foreground">
             Track your bills and loans in one place.
           </p>
@@ -75,7 +72,7 @@ function RouteComponent() {
         </div>
       </header>
 
-      <main className="container mx-auto grid space-y-4 p-4">
+      <main className="space-y-4">
         {allObligations.length === 0 ? (
           <EmptyObligationsView />
         ) : (

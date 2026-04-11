@@ -1,6 +1,6 @@
-import { endOfMonth, startOfMonth } from "date-fns"
 import type { Obligation } from "@/generated/prisma/client"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
+import { endOfMonth, startOfMonth } from "date-fns"
 
 // ── Category colors ───────────────────────────────────────────────────────────
 
@@ -120,6 +120,15 @@ export function formatPHP(amount: number): string {
     style: "currency",
     currency: "PHP",
     minimumFractionDigits: 2,
+  }).format(amount)
+}
+
+export function formatCompactPHP(amount: number): string {
+  return new Intl.NumberFormat("en-PH", {
+    style: "currency",
+    currency: "PHP",
+    notation: "compact",
+    maximumFractionDigits: 2,
   }).format(amount)
 }
 

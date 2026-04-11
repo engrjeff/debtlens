@@ -1,9 +1,9 @@
-import { Link, useSearch } from "@tanstack/react-router"
-import { CheckIcon, XIcon } from "lucide-react"
-import type { ObligationsSearch } from "./search-params"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
+import { Link, useSearch } from "@tanstack/react-router"
+import { CheckIcon, XIcon } from "lucide-react"
+import type { ObligationsSearch } from "./search-params"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -138,13 +138,17 @@ function hasActiveFilters(search: ObligationsSearch): boolean {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const typeFilters: Array<{ value: ObligationsSearch["type"]; label: string }> = [
-  { value: "ALL", label: "All" },
-  { value: "BILL", label: "Bills" },
-  { value: "LOAN", label: "Loans" },
-]
+const typeFilters: Array<{ value: ObligationsSearch["type"]; label: string }> =
+  [
+    { value: "ALL", label: "All" },
+    { value: "BILL", label: "Bills" },
+    { value: "LOAN", label: "Loans" },
+  ]
 
-const statusFilters: Array<{ label: string; value: ObligationsSearch["status"] }> = [
+const statusFilters: Array<{
+  label: string
+  value: ObligationsSearch["status"]
+}> = [
   { label: "This week", value: "due-this-week" },
   { label: "This Month", value: "due-this-month" },
   { label: "Overdue", value: "overdue" },
@@ -182,7 +186,7 @@ export function ObligationFilterChips() {
   const chips = buildActiveChips(search)
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="flex flex-wrap items-center gap-4 md:justify-between">
       <Tabs key={search.type} value={search.type}>
         <TabsList>
           {typeFilters.map((filter) => (
@@ -202,47 +206,49 @@ export function ObligationFilterChips() {
         </TabsList>
       </Tabs>
 
-      <div className="ml-auto flex items-center gap-1.5">
-        {chips.length > 0 && <ClearFiltersButton />}
+      <div className="max-w-[90vw] overflow-x-auto">
+        <div className="flex items-center gap-1.5 lg:ml-auto">
+          {chips.length > 0 && <ClearFiltersButton />}
 
-        {/* Advanced filter chips */}
-        {chips.map((chip) => (
-          <Link
-            key={chip.id}
-            to="/obligations"
-            search={(current) => chip.remove(current as ObligationsSearch)}
-            className={cn(
-              buttonVariants({ size: "sm", variant: "secondary" }),
-              "rounded-full"
-            )}
-          >
-            {chip.label}
-            <XIcon className="size-3 shrink-0" />
-          </Link>
-        ))}
-
-        {/* Default status quick-filter buttons */}
-        {statusFilters.map((filter) => (
-          <Button
-            key={`status-filter-${filter.value}`}
-            variant={filter.value === search.status ? "default" : "secondary"}
-            size="sm"
-            className="rounded-full"
-            asChild
-          >
+          {/* Advanced filter chips */}
+          {chips.map((chip) => (
             <Link
+              key={chip.id}
               to="/obligations"
-              search={(current) => ({
-                ...current,
-                status:
-                  filter.value === search.status ? undefined : filter.value,
-              })}
+              search={(current) => chip.remove(current as ObligationsSearch)}
+              className={cn(
+                buttonVariants({ size: "sm", variant: "secondary" }),
+                "rounded-full"
+              )}
             >
-              {filter.value === search.status && <CheckIcon />}
-              {filter.label}
+              {chip.label}
+              <XIcon className="size-3 shrink-0" />
             </Link>
-          </Button>
-        ))}
+          ))}
+
+          {/* Default status quick-filter buttons */}
+          {statusFilters.map((filter) => (
+            <Button
+              key={`status-filter-${filter.value}`}
+              variant={filter.value === search.status ? "default" : "secondary"}
+              size="sm"
+              className="rounded-full"
+              asChild
+            >
+              <Link
+                to="/obligations"
+                search={(current) => ({
+                  ...current,
+                  status:
+                    filter.value === search.status ? undefined : filter.value,
+                })}
+              >
+                {filter.value === search.status && <CheckIcon />}
+                {filter.label}
+              </Link>
+            </Button>
+          ))}
+        </div>
       </div>
     </div>
   )

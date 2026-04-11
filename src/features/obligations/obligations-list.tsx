@@ -1,4 +1,15 @@
-
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import type { Obligation } from "@/generated/prisma/browser"
+import { ObligationType } from "@/generated/prisma/browser"
 import { Link } from "@tanstack/react-router"
 import { CalendarIcon } from "lucide-react"
 import { useState } from "react"
@@ -10,18 +21,6 @@ import {
 } from "./helpers"
 import { MarkPaidDialog } from "./mark-paid-dialog"
 import { ObligationItemMenu } from "./obligation-item-menu"
-import type {Obligation} from "@/generated/prisma/browser";
-import { Button } from "@/components/ui/button"
-import {  ObligationType } from "@/generated/prisma/browser"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 
 function ObligationItem({
   obligation,
@@ -103,14 +102,18 @@ function ObligationItem({
   )
 }
 
-export function ObligationList({ obligations }: { obligations: Array<Obligation> }) {
+export function ObligationList({
+  obligations,
+}: {
+  obligations: Array<Obligation>
+}) {
   const [pendingObligation, setPendingObligation] = useState<Obligation | null>(
     null
   )
 
   return (
     <>
-      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {obligations.map((obligation) => (
           <li key={obligation.id}>
             <ObligationItem

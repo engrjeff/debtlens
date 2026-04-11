@@ -1,9 +1,9 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import type { Obligation } from "@/generated/prisma/browser"
 import { Link } from "@tanstack/react-router"
 import { AlertTriangle, CalendarClock, CreditCard, Wallet } from "lucide-react"
-import { computeInsights, formatPHP, formatPayoffDate } from "./helpers"
-import type { Obligation } from "@/generated/prisma/browser"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { computeInsights, formatCompactPHP, formatPayoffDate } from "./helpers"
 
 interface InsightCardsProps {
   obligations: Array<Obligation>
@@ -21,7 +21,7 @@ export function InsightCards({ obligations }: InsightCardsProps) {
   } = computeInsights(obligations)
 
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
       <Link
         to="/obligations"
         search={(current) => ({ ...current, status: "due-this-week" })}
@@ -37,7 +37,9 @@ export function InsightCards({ obligations }: InsightCardsProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatPHP(dueThisWeekAmount)}</p>
+            <p className="text-2xl font-bold">
+              {formatCompactPHP(dueThisWeekAmount)}
+            </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {dueThisWeekCount} obligation{dueThisWeekCount !== 1 ? "s" : ""}{" "}
               coming up
@@ -61,7 +63,9 @@ export function InsightCards({ obligations }: InsightCardsProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatPHP(totalDueThisMonth)}</p>
+            <p className="text-2xl font-bold">
+              {formatCompactPHP(totalDueThisMonth)}
+            </p>
             <p className="mt-1 text-xs text-muted-foreground">
               Total obligations this month
             </p>
@@ -91,7 +95,7 @@ export function InsightCards({ obligations }: InsightCardsProps) {
             <p
               className={`text-2xl font-bold ${overdueCount > 0 ? "text-destructive" : ""}`}
             >
-              {overdueCount > 0 ? formatPHP(overdueAmount) : "None"}
+              {overdueCount > 0 ? formatCompactPHP(overdueAmount) : "None"}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {overdueCount > 0
@@ -106,13 +110,15 @@ export function InsightCards({ obligations }: InsightCardsProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-normal text-muted-foreground">
-              Total Remaining Debt
+              Remaining Debt
             </CardTitle>
             <CreditCard className="size-4 text-violet-500" />
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-bold">{formatPHP(totalRemainingDebt)}</p>
+          <p className="text-2xl font-bold">
+            {formatCompactPHP(totalRemainingDebt)}
+          </p>
           <p className="mt-1 text-xs text-muted-foreground">
             {debtFreeMonths != null ? (
               <>

@@ -1,15 +1,3 @@
-import { useNavigate, useSearch } from "@tanstack/react-router"
-import { FilterIcon, XIcon } from "lucide-react"
-import {
-  
-  createContext,
-  useCallback,
-  useContext,
-  useState
-} from "react"
-import { getCategoryMeta } from "./helpers"
-import type {ReactNode} from "react";
-import type { ObligationsSearch } from "./search-params"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -26,6 +14,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { FilterIcon, XIcon } from "lucide-react"
+import type { ReactNode } from "react"
+import { createContext, useCallback, useContext, useState } from "react"
+import { getCategoryMeta } from "./helpers"
+import type { ObligationsSearch } from "./search-params"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -63,7 +57,10 @@ const DEFAULT_DRAFT: FilterDraft = {
 
 type FilterDraftContextValue = {
   draft: FilterDraft
-  set: <TKey extends keyof FilterDraft>(key: TKey, value: FilterDraft[TKey]) => void
+  set: <TKey extends keyof FilterDraft>(
+    key: TKey,
+    value: FilterDraft[TKey]
+  ) => void
   toggleCategory: (value: string) => void
 }
 
@@ -71,7 +68,8 @@ const FilterDraftContext = createContext<FilterDraftContextValue | null>(null)
 
 function useFilterDraft() {
   const ctx = useContext(FilterDraftContext)
-  if (!ctx) throw new Error("useFilterDraft must be inside ObligationsMoreFilters")
+  if (!ctx)
+    throw new Error("useFilterDraft must be inside ObligationsMoreFilters")
   return ctx
 }
 
@@ -152,7 +150,11 @@ function TypeFilter() {
 
   return (
     <FilterSection title="Type">
-      <RadioGroup value={draft.type} onValueChange={handleChange} className="gap-2">
+      <RadioGroup
+        value={draft.type}
+        onValueChange={handleChange}
+        className="gap-2"
+      >
         {(["ALL", "BILL", "LOAN"] as const).map((t) => (
           <div key={t} className="flex items-center gap-2.5">
             <RadioGroupItem value={t} id={`type-${t}`} />
@@ -194,7 +196,10 @@ function StatusFilter() {
         {options.map((s) => (
           <div key={s.value} className="flex items-center gap-2.5">
             <RadioGroupItem value={s.value} id={`status-${s.value}`} />
-            <Label htmlFor={`status-${s.value}`} className="cursor-pointer font-normal">
+            <Label
+              htmlFor={`status-${s.value}`}
+              className="cursor-pointer font-normal"
+            >
               {s.label}
             </Label>
           </div>
@@ -248,7 +253,10 @@ function CategoryFilter() {
                   checked={draft.categories.includes(opt.value)}
                   onCheckedChange={() => toggleCategory(opt.value)}
                 />
-                <Label htmlFor={`cat-${opt.value}`} className="cursor-pointer font-normal">
+                <Label
+                  htmlFor={`cat-${opt.value}`}
+                  className="cursor-pointer font-normal"
+                >
                   {opt.label}
                 </Label>
               </div>
@@ -281,7 +289,10 @@ function DueDateFilter() {
         {options.map((r) => (
           <div key={r.value} className="flex items-center gap-2.5">
             <RadioGroupItem value={r.value} id={`due-${r.value}`} />
-            <Label htmlFor={`due-${r.value}`} className="cursor-pointer font-normal">
+            <Label
+              htmlFor={`due-${r.value}`}
+              className="cursor-pointer font-normal"
+            >
               {r.label}
             </Label>
           </div>
@@ -401,7 +412,10 @@ function ProgressFilter() {
         {options.map((p) => (
           <div key={p.value} className="flex items-center gap-2.5">
             <RadioGroupItem value={p.value} id={`progress-${p.value}`} />
-            <Label htmlFor={`progress-${p.value}`} className="cursor-pointer font-normal">
+            <Label
+              htmlFor={`progress-${p.value}`}
+              className="cursor-pointer font-normal"
+            >
               {p.label}
             </Label>
           </div>
@@ -431,7 +445,10 @@ function SortFilter() {
         {options.map((s) => (
           <div key={s.value} className="flex items-center gap-2.5">
             <RadioGroupItem value={s.value} id={`sort-${s.value}`} />
-            <Label htmlFor={`sort-${s.value}`} className="cursor-pointer font-normal">
+            <Label
+              htmlFor={`sort-${s.value}`}
+              className="cursor-pointer font-normal"
+            >
               {s.label}
             </Label>
           </div>
@@ -481,9 +498,13 @@ export function ObligationsMoreFilters() {
         categories: draft.categories.length ? draft.categories : undefined,
         dueRange: draft.dueRange !== "any" ? draft.dueRange : undefined,
         dueStart:
-          draft.dueRange === "custom" && draft.dueStart ? draft.dueStart : undefined,
+          draft.dueRange === "custom" && draft.dueStart
+            ? draft.dueStart
+            : undefined,
         dueEnd:
-          draft.dueRange === "custom" && draft.dueEnd ? draft.dueEnd : undefined,
+          draft.dueRange === "custom" && draft.dueEnd
+            ? draft.dueEnd
+            : undefined,
         minAmount: draft.minAmount ? Number(draft.minAmount) : undefined,
         maxAmount: draft.maxAmount ? Number(draft.maxAmount) : undefined,
         minBalance: draft.minBalance ? Number(draft.minBalance) : undefined,
@@ -525,20 +546,9 @@ export function ObligationsMoreFilters() {
 
         <SheetContent className="flex w-full flex-col gap-0 p-0 sm:max-w-100">
           {/* Header */}
-          <SheetHeader className="flex-row items-center justify-between border-b px-5 py-4">
-            <div>
-              <SheetTitle>Filters</SheetTitle>
-              <SheetDescription>Refine your obligations</SheetDescription>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleReset}
-              className="text-muted-foreground"
-            >
-              <XIcon className="mr-1 size-3.5" />
-              Reset
-            </Button>
+          <SheetHeader className="border-b">
+            <SheetTitle>Filters</SheetTitle>
+            <SheetDescription>Refine your obligations</SheetDescription>
           </SheetHeader>
 
           {/* Scrollable content */}

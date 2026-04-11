@@ -1,13 +1,5 @@
 import * as React from "react"
 
-import { Link } from "@tanstack/react-router"
-import {
-  Calendar1Icon,
-  HistoryIcon,
-  LayoutDashboardIcon,
-  PhilippinePesoIcon,
-} from "lucide-react"
-import { UserMenu } from "./user-menu"
 import {
   Sidebar,
   SidebarContent,
@@ -20,13 +12,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { siteConfig } from "@/config/site"
+import { Link } from "@tanstack/react-router"
+import {
+  Calendar1Icon,
+  HistoryIcon,
+  LayoutDashboardIcon,
+  PhilippinePesoIcon,
+} from "lucide-react"
+import { UserMenu } from "./user-menu"
 
 const sidebar = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -80,19 +76,21 @@ function NavMain() {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
-            >
-              <Link to="/dashboard">
-                <span className="text-base font-semibold">Debt Lens</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+      <SidebarHeader className="p-4">
+        <Link to="/dashboard" className="flex items-center gap-4">
+          <img
+            src="/logo.svg"
+            width={36}
+            height={36}
+            className="object-contain"
+          />
+          <div className="flex flex-col">
+            <span className="text-base font-semibold">{siteConfig.title}</span>
+            <span className="text-xs text-muted-foreground">
+              Track your obligations
+            </span>
+          </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <NavMain />

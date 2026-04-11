@@ -1,18 +1,10 @@
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { formatPHP, getDueDaysLabel } from "@/features/obligations/helpers"
 import { Link } from "@tanstack/react-router"
 import { ArrowRight, CalendarClock } from "lucide-react"
 import type { UpcomingObligation } from "./dashboard.utils"
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import {
-  formatPHP,
-  getDueDaysLabel,
-} from "@/features/obligations/helpers"
 
 interface UpcomingListProps {
   items: Array<UpcomingObligation>
@@ -39,7 +31,7 @@ export function UpcomingList({ items }: UpcomingListProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 p-0">
+      <CardContent className="flex-1 p-0 group-data-[size=sm]/card:px-0">
         {items.length === 0 ? (
           <div className="flex h-full items-center justify-center py-12 text-sm text-muted-foreground">
             No upcoming obligations

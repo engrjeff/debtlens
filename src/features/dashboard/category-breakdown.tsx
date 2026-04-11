@@ -1,17 +1,20 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import type { ChartConfig } from "@/components/ui/chart"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+import { Skeleton } from "@/components/ui/skeleton"
+import {
+  formatCompactPHP,
+  formatPHP,
+  getCategoryMeta,
+} from "@/features/obligations/helpers"
 import { Link } from "@tanstack/react-router"
 import { LayoutGrid } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 import type { CategoryBreakdownItem } from "./dashboard.utils"
-import type {ChartConfig} from "@/components/ui/chart";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent
-} from "@/components/ui/chart"
-import { Skeleton } from "@/components/ui/skeleton"
-import { formatPHP, getCategoryMeta } from "@/features/obligations/helpers"
 
 // Map Tailwind dot class → hex so Recharts can use it as fill
 const DOT_TO_HEX: Record<string, string> = {
@@ -78,8 +81,11 @@ export function CategoryBreakdown({ items }: CategoryBreakdownProps) {
         <ChartContainer
           config={chartConfig}
           className="w-full"
-          initialDimension={{ width: 600, height: Math.max(180, items.length * 40) }}
-          style={{ height: Math.max(180, items.length * 40) }}
+          // initialDimension={{
+          //   width: 600,
+          //   height: Math.max(180, items.length * 40),
+          // }}
+          // style={{ height: Math.max(180, items.length * 40) }}
         >
           <BarChart
             data={chartData}
@@ -124,7 +130,7 @@ export function CategoryBreakdown({ items }: CategoryBreakdownProps) {
                 className="fill-foreground"
                 fontSize={12}
                 formatter={(value: unknown) =>
-                  typeof value === "number" ? formatPHP(value) : ""
+                  typeof value === "number" ? formatCompactPHP(value) : ""
                 }
               />
             </Bar>

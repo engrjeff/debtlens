@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   formatDueDate,
@@ -43,6 +42,7 @@ import { ObligationEditDialog } from "@/features/obligations/obligation-edit-dia
 import { ObligationEditForm } from "@/features/obligations/obligation-edit-form"
 import { fetchObligationById } from "@/features/obligations/obligations.functions"
 import { ObligationType } from "@/generated/prisma/browser"
+import { generatePageTitle } from "@/lib/utils"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { format } from "date-fns"
 import {
@@ -66,7 +66,11 @@ export const Route = createFileRoute("/_protected/obligations/$id")({
   },
   head(ctx) {
     return {
-      meta: [{ title: `Obligations > ${ctx.loaderData?.name} | DebtLens` }],
+      meta: [
+        {
+          title: generatePageTitle(`Obligations > ${ctx.loaderData?.name}`),
+        },
+      ],
     }
   },
 })
@@ -84,11 +88,9 @@ function RouteComponent() {
   const status = getObligationStatus(obligation.nextDueDate)
 
   return (
-    <>
+    <div className="container mx-auto max-w-2xl">
       {/* ── Page header ── */}
-      <header className="flex items-center gap-4 border-b px-4 py-3">
-        <SidebarTrigger />
-        <Separator orientation="vertical" />
+      <header className="flex items-center gap-4 border-b p-4">
         <Breadcrumb className="flex-1">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -105,7 +107,7 @@ function RouteComponent() {
       </header>
 
       {/* ── Main content ── */}
-      <main className="container mx-auto max-w-2xl space-y-5 p-4 pb-12">
+      <main className="container mx-auto space-y-5 p-4 pb-12">
         {/* Step 3 — Obligation identity */}
         <ObligationHeader obligation={obligation} />
 
@@ -150,7 +152,7 @@ function RouteComponent() {
         open={showDelete}
         onOpenChange={(open) => setShowDelete(open)}
       />
-    </>
+    </div>
   )
 }
 

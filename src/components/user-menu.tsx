@@ -1,12 +1,6 @@
 import { useNavigate } from "@tanstack/react-router"
 import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react"
 
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "./ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -18,6 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { authClient } from "@/lib/auth-client"
 import { getInitials } from "@/lib/utils"
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "./ui/sidebar"
 
 export function UserMenu() {
   const { isMobile } = useSidebar()
@@ -43,9 +43,11 @@ export function UserMenu() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8">
+              <Avatar className="h-8 w-8 bg-primary">
                 {user.image && <AvatarImage src={user.image} alt={user.name} />}
-                <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  {getInitials(user.name)}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -62,11 +64,13 @@ export function UserMenu() {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8">
+                <Avatar className="h-8 w-8 bg-primary">
                   {user.image && (
                     <AvatarImage src={user.image} alt={user.name} />
                   )}
-                  <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    {getInitials(user.name)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>

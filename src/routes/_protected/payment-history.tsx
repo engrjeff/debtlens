@@ -5,14 +5,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
 import { PaymentsTable } from "@/features/payments/payments-table"
 import { fetchPayments } from "@/features/payments/payments.functions"
 import {
   PAGE_SIZE,
   paymentsSearchSchema,
 } from "@/features/payments/search-params"
+import { generatePageTitle } from "@/lib/utils"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_protected/payment-history")({
@@ -20,7 +19,7 @@ export const Route = createFileRoute("/_protected/payment-history")({
   loaderDeps: ({ search }) => search,
   loader: ({ deps }) => fetchPayments({ data: deps }),
   head: () => ({
-    meta: [{ title: "Payment History | DebtLens" }],
+    meta: [{ title: generatePageTitle("Payment History") }],
   }),
   component: RouteComponent,
 })
@@ -36,12 +35,10 @@ function RouteComponent() {
   }
 
   return (
-    <div className="flex flex-col">
-      <header className="flex items-center gap-4 border-b px-4 py-3">
-        <SidebarTrigger />
-        <Separator orientation="vertical" />
+    <>
+      <header className="container mx-auto flex items-center gap-4 space-y-4 border-b p-4">
         <div>
-          <h2 className="font-semibold">Payment History</h2>
+          <h1 className="font-semibold">Payment History</h1>
           <p className="text-sm text-muted-foreground">
             A record of all payments you've made.
           </p>
@@ -99,6 +96,6 @@ function RouteComponent() {
           </>
         )}
       </main>
-    </div>
+    </>
   )
 }
