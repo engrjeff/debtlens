@@ -364,7 +364,15 @@ function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
-        <span className="text-base font-bold tracking-tight">DebtLens</span>
+        <Link to="/" className="flex items-center gap-3">
+          <img
+            src="/logo.svg"
+            width={32}
+            height={32}
+            className="object-contain"
+          />
+          <span className="text-base font-bold">{siteConfig.title}</span>
+        </Link>
         <div className="flex items-center gap-2">
           <SignedOut>
             <Button variant="ghost" size="sm" asChild>
