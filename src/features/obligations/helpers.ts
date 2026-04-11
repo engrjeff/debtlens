@@ -178,6 +178,13 @@ export function getProgressPercent(
   return Math.min(100, Math.max(0, (paid / totalAmount) * 100))
 }
 
+export function getProgressPercentString(
+  remainingBalance: number,
+  totalAmount: number
+) {
+  return getProgressPercent(remainingBalance, totalAmount).toFixed(2) + "% paid"
+}
+
 export function getPayoffMonths(
   remainingBalance: number,
   monthlyPayment: number

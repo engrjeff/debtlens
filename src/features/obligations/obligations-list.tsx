@@ -12,7 +12,12 @@ import { ObligationType, type Obligation } from "@/generated/prisma/browser"
 import { Button } from "@/components/ui/button"
 import { CalendarIcon } from "lucide-react"
 import { useState } from "react"
-import { formatDueDate, formatPHP, getPerLabel } from "./helpers"
+import {
+  formatDueDate,
+  formatPHP,
+  getPerLabel,
+  getProgressPercentString,
+} from "./helpers"
 import { MarkPaidDialog } from "./mark-paid-dialog"
 import { ObligationItemMenu } from "./obligation-item-menu"
 
@@ -41,29 +46,41 @@ function ObligationItem({
           <ObligationItemMenu obligation={obligation} />
         </div>
       </CardHeader>
-      <CardContent className="mt-auto">
-        <p className="mb-1 text-xs text-muted-foreground">
-          {obligation.category}
-        </p>
-        <div className="flex items-center justify-between">
+      <CardContent className="mt-auto flex items-center justify-between">
+        <div>
+          <p className="mb-1 text-xs text-muted-foreground">
+            {obligation.category}
+          </p>
           <p className="text-lg font-semibold">
             {formatPHP(obligation.amount)}{" "}
             <span className="text-[10px] text-muted-foreground">
               / {getPerLabel(obligation.recurrence)}
             </span>
           </p>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        </div>
+
+        <div>
+          <p className="mb-1 text-xs text-muted-foreground">Next Due</p>
+          <div className="flex items-center gap-2 text-xs font-semibold">
             <CalendarIcon className="size-3" />
             <span>{formatDueDate(obligation.nextDueDate)}</span>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="justify-end">
+      <CardFooter className="justify-between">
+        {obligation.type === ObligationType.LOAN ? (
+          <span className="text-xs font-semibold text-emerald-500">
+            {getProgressPercentString(
+              obligation.remainingBalance,
+              obligation.totalAmount
+            )}
+          </span>
+        ) : null}
         <Button
           type="button"
-          size="sm"
+          size="xs"
           variant="link"
-          className="px-0 text-blue-500"
+          className="ml-auto px-0 text-blue-500"
           onClick={() => onMarkPaid(obligation)}
         >
           Mark as Paid

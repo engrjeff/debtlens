@@ -1,3 +1,5 @@
+import { Separator } from "@/components/ui/separator"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 import { EmptyObligationsView } from "@/features/obligations/empty-obligations-view"
 import {
   InsightCards,
@@ -33,47 +35,51 @@ function RouteComponent() {
   const search = Route.useSearch()
 
   return (
-    <main className="container mx-auto divide-y">
-      <div className="flex items-center justify-between gap-4 p-4">
+    <>
+      <header className="flex items-center gap-4 border-b px-4 py-3">
+        <SidebarTrigger />
+        <Separator orientation="vertical" />
         <div>
-          <h2 className="text-lg font-semibold">Obligations</h2>
+          <h2 className="font-semibold">Obligations</h2>
           <p className="text-sm text-muted-foreground">
             Track your bills and loans in one place.
           </p>
         </div>
-        <ObligationCreateDialog />
-      </div>
+        <div className="ml-auto">
+          <ObligationCreateDialog />
+        </div>
+      </header>
 
-      {allObligations.length === 0 ? (
-        <EmptyObligationsView />
-      ) : (
-        <>
-          <div className="p-4">
+      <main className="container mx-auto space-y-4 p-4">
+        {allObligations.length === 0 ? (
+          <EmptyObligationsView />
+        ) : (
+          <>
             <Suspense fallback={<InsightCardsSkeleton />}>
               <InsightCards obligations={allObligations} />
             </Suspense>
-          </div>
-          <div className="flex items-center justify-between gap-4 p-4">
-            <ObligationFilterChips />
-            <div className="flex items-center gap-3">
-              <ObligationsSearch />
-              <ObligationsSort />
-              <ObligationsViewToggle />
+            <div className="flex items-center justify-between gap-4">
+              <ObligationFilterChips />
+              <div className="flex items-center gap-3">
+                <ObligationsSearch />
+                <ObligationsSort />
+                <ObligationsViewToggle />
+              </div>
             </div>
-          </div>
-          {pageInfo.total === 0 ? (
-            <NoObligationsResultsView />
-          ) : (
-            <div className="p-4">
-              {search.view === "list" ? (
-                <ObligationsTable obligations={obligations} />
-              ) : (
-                <ObligationList obligations={obligations} />
-              )}
-            </div>
-          )}
-        </>
-      )}
-    </main>
+            {pageInfo.total === 0 ? (
+              <NoObligationsResultsView />
+            ) : (
+              <div>
+                {search.view === "list" ? (
+                  <ObligationsTable obligations={obligations} />
+                ) : (
+                  <ObligationList obligations={obligations} />
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </main>
+    </>
   )
 }

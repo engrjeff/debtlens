@@ -12,7 +12,12 @@ import {
 import type { Obligation } from "@/generated/prisma/browser"
 import { useSearch } from "@tanstack/react-router"
 import { useState } from "react"
-import { formatDueDate, formatPHP, getObligationStatus } from "./helpers"
+import {
+  formatDueDate,
+  formatPHP,
+  getObligationStatus,
+  getProgressPercentString,
+} from "./helpers"
 import { MarkPaidDialog } from "./mark-paid-dialog"
 import { ObligationItemMenu } from "./obligation-item-menu"
 
@@ -72,7 +77,13 @@ export function ObligationsTable({
                 </TableCell>
                 {isViewingLoan && (
                   <TableCell className="text-right font-mono">
-                    <p> {formatPHP(obligation.remainingBalance)}</p>
+                    <p>{formatPHP(obligation.remainingBalance)}</p>
+                    <span className="text-xs text-muted-foreground">
+                      {getProgressPercentString(
+                        obligation.remainingBalance,
+                        obligation.totalAmount
+                      )}
+                    </span>
                   </TableCell>
                 )}
                 <TableCell className="text-center">
