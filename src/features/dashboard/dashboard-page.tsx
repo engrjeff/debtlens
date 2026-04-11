@@ -31,7 +31,7 @@ export function DashboardPage({ obligations }: DashboardPageProps) {
       <header className="container mx-auto flex items-center gap-4 border-b p-4">
         <div>
           <h2 className="font-semibold">Dashboard</h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="hidden text-sm text-muted-foreground md:block">
             Your financial snapshot at a glance.
           </p>
         </div>

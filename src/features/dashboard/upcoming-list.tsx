@@ -62,7 +62,7 @@ function UpcomingRow({ item }: { item: UpcomingObligation }) {
       >
         {/* Status stripe */}
         <div
-          className={`h-8 w-0.5 shrink-0 rounded-full ${
+          className={`h-11 w-0.5 shrink-0 rounded-full ${
             isOverdue
               ? "bg-destructive"
               : isDueToday
@@ -75,29 +75,29 @@ function UpcomingRow({ item }: { item: UpcomingObligation }) {
 
         {/* Name + meta */}
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <span
-              className={`truncate text-sm font-medium ${isOverdue ? "text-destructive" : ""}`}
-            >
-              {item.name}
-            </span>
-            <Badge variant={item.type} className="shrink-0">
-              {item.type === "BILL" ? "Bill" : "Loan"}
-            </Badge>
-          </div>
+          <p
+            className={`truncate text-sm font-medium ${isOverdue ? "text-destructive" : ""}`}
+          >
+            {item.name}
+          </p>
+          <Badge variant={item.type}>
+            {item.type === "BILL" ? "Bill" : "Loan"}
+          </Badge>
+        </div>
+
+        {/* Amount */}
+        <div>
+          <span
+            className={`shrink-0 font-mono text-sm font-semibold ${isOverdue ? "text-destructive" : ""}`}
+          >
+            {formatPHP(item.amount)}
+          </span>
           <p
             className={`mt-0.5 text-xs ${isUrgent ? "font-medium text-destructive" : "text-muted-foreground"}`}
           >
             {getDueDaysLabel(item.nextDueDate)}
           </p>
         </div>
-
-        {/* Amount */}
-        <span
-          className={`shrink-0 font-mono text-sm font-semibold ${isOverdue ? "text-destructive" : ""}`}
-        >
-          {formatPHP(item.amount)}
-        </span>
       </Link>
     </li>
   )

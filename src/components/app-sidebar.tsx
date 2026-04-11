@@ -11,6 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { siteConfig } from "@/config/site"
 import { Link } from "@tanstack/react-router"
@@ -48,6 +49,7 @@ const sidebar = {
 }
 
 function NavMain() {
+  const { setOpenMobile } = useSidebar()
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -59,6 +61,7 @@ function NavMain() {
                 asChild
                 tooltip={item.title}
                 className="data-[status=active]:bg-primary data-[status=active]:text-primary-foreground data-[status=active]:hover:bg-primary/90"
+                onClick={() => setOpenMobile(false)}
               >
                 <Link to={item.url}>
                   <item.icon />

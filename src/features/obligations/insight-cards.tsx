@@ -21,7 +21,7 @@ export function InsightCards({ obligations }: InsightCardsProps) {
   } = computeInsights(obligations)
 
   return (
-    <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       <Link
         to="/obligations"
         search={(current) => ({ ...current, status: "due-this-week" })}

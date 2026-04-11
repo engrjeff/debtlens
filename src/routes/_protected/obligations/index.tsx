@@ -64,7 +64,7 @@ function RouteComponent() {
         <div>
           <h1 className="font-semibold">Obligations</h1>
           <p className="text-sm text-muted-foreground">
-            Track your bills and loans in one place.
+            Track your bills and loans.
           </p>
         </div>
         <div className="ml-auto">
