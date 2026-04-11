@@ -150,7 +150,12 @@ export async function deleteObligation(obligationId: string, userId: string) {
 export async function markObligationPaid(
   obligationId: string,
   userId: string,
-  paymentAmount?: number
+  payload: {
+    amount?: number
+    forDueDate?: Date
+    modeOfPayment: string
+    notes?: string
+  }
 ) {
   const obligation = await prisma.obligation.findFirst({
     where: { id: obligationId, userId },
@@ -160,11 +165,20 @@ export async function markObligationPaid(
     throw new Error("Obligation not found")
   }
 
-  const amount = paymentAmount ?? obligation.amount
+  const amount = payload.amount ?? obligation.amount
+  const forDueDate = payload.forDueDate ?? obligation.nextDueDate
 
   return prisma.$transaction(async (tx) => {
     await tx.payment.create({
-      data: { obligationId, userId, amount, paidAt: new Date() },
+      data: {
+        obligationId,
+        userId,
+        amount,
+        forDueDate,
+        modeOfPayment: payload.modeOfPayment,
+        notes: payload.notes,
+        paidAt: new Date(),
+      },
     })
 
     let nextDueDate: Date
@@ -199,6 +213,11 @@ export async function markObligationPaid(
 export async function getObligation(id: string, userId: string) {
   const obligation = await prisma.obligation.findUnique({
     where: { id, userId, isDeleted: false },
+    include: {
+      payments: {
+        orderBy: { paidAt: "desc" },
+      },
+    },
   })
 
   if (!obligation) {

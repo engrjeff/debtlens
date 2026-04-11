@@ -103,11 +103,11 @@ export function ObligationForm({ onAfterSave }: ObligationFormProps) {
     const recurrence = formData.get("recurrence") as string
     const nextDueDate = formData.get("nextDueDate") as string
 
-    if (recurrence === RecurrenceType.MONTHLY) {
-      if (amount && type === ObligationType.BILL) {
-        form.setValue("totalAmount", Number(amount))
-      }
+    if (amount && type === ObligationType.BILL) {
+      form.setValue("totalAmount", Number(amount))
+    }
 
+    if (recurrence === RecurrenceType.MONTHLY) {
       if (nextDueDate) {
         const dueDay = new Date(nextDueDate).getDate() // 1-31
 

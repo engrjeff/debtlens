@@ -10,7 +10,7 @@ import {
   markObligationPaid,
   updateObligation,
 } from "./obligations.server"
-import { editBillSchema, editLoanSchema, obligationFormSchema } from "./schema"
+import { editBillSchema, editLoanSchema, markAsPaidSchema, obligationFormSchema } from "./schema"
 import { obligationsSearchSchema } from "./search-params"
 
 export const fetchObligations = createServerFn({ method: "GET" })
@@ -67,13 +67,13 @@ export const removeObligation = createServerFn({ method: "POST" })
   })
 
 export const markAsPaid = createServerFn({ method: "POST" })
-  .inputValidator(
-    z.object({
-      obligationId: z.string(),
-      amount: z.number().positive().optional(),
-    })
-  )
+  .inputValidator(markAsPaidSchema)
   .handler(async ({ data }) => {
     const session = await ensureSession()
-    return markObligationPaid(data.obligationId, session.user.id, data.amount)
+    return markObligationPaid(data.obligationId, session.user.id, {
+      amount: data.amount,
+      forDueDate: data.forDueDate ? new Date(data.forDueDate) : undefined,
+      modeOfPayment: data.modeOfPayment,
+      notes: data.notes,
+    })
   })

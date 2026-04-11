@@ -11,7 +11,7 @@ import { ObligationCreateDialog } from "./obligation-create-dialog"
 
 export function EmptyObligationsView() {
   return (
-    <div className="p-4">
+    <div className="h-full">
       <Empty className="border border-dashed">
         <EmptyHeader>
           <EmptyMedia variant="icon">

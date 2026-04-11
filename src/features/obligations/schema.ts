@@ -92,3 +92,18 @@ export const editLoanSchema = z.object({
 
 export type EditBillInput = z.infer<typeof editBillSchema>
 export type EditLoanInput = z.infer<typeof editLoanSchema>
+
+// ── Payment ───────────────────────────────────────────────────────────────────
+
+export const PAYMENT_MODES = ["Cash", "Bank Transfer", "GCash", "Maya"] as const
+export type PaymentMode = (typeof PAYMENT_MODES)[number]
+
+export const markAsPaidSchema = z.object({
+  obligationId: z.string(),
+  amount: z.number().positive().optional(),
+  forDueDate: z.string().optional(),
+  modeOfPayment: z.enum(PAYMENT_MODES, { message: "Select a mode of payment" }),
+  notes: z.string().optional(),
+})
+
+export type MarkAsPaidInput = z.infer<typeof markAsPaidSchema>

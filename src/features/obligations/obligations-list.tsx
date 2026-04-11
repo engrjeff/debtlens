@@ -48,7 +48,10 @@ function ObligationItem({
         </CardTitle>
         {obligation.type === ObligationType.LOAN && (
           <CardDescription className="text-xs">
-            Loan Amount: {formatPHP(obligation.totalAmount)}
+            Loan Amount:{" "}
+            <span className="font-mono">
+              {formatPHP(obligation.totalAmount)}
+            </span>
           </CardDescription>
         )}
         <div className="absolute top-1 right-1">
@@ -61,7 +64,7 @@ function ObligationItem({
             {obligation.category}
           </p>
           <p className="text-lg font-semibold">
-            {formatPHP(obligation.amount)}{" "}
+            <span className="font-mono">{formatPHP(obligation.amount)}</span>{" "}
             <span className="text-[10px] text-muted-foreground">
               / {getPerLabel(obligation.recurrence)}
             </span>

@@ -82,9 +82,11 @@ export function ObligationsTable({
                   </span>
                 </TableCell>
                 {isViewingLoan && (
-                  <TableCell className="text-right font-mono">
-                    <p>{formatPHP(obligation.remainingBalance)}</p>
-                    <span className="text-xs text-muted-foreground">
+                  <TableCell className="text-right">
+                    <p className="font-mono">
+                      {formatPHP(obligation.remainingBalance)}
+                    </p>
+                    <span className="text-xs text-emerald-500">
                       {getProgressPercentString(
                         obligation.remainingBalance,
                         obligation.totalAmount

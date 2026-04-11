@@ -44,7 +44,7 @@ function RouteComponent() {
   const search = Route.useSearch()
 
   return (
-    <>
+    <div className="flex flex-col">
       <header className="flex items-center gap-4 border-b px-4 py-3">
         <SidebarTrigger />
         <Separator orientation="vertical" />
@@ -59,7 +59,7 @@ function RouteComponent() {
         </div>
       </header>
 
-      <main className="container mx-auto space-y-4 p-4">
+      <main className="container mx-auto grid space-y-4 p-4">
         {allObligations.length === 0 ? (
           <EmptyObligationsView />
         ) : (
@@ -89,6 +89,6 @@ function RouteComponent() {
           </>
         )}
       </main>
-    </>
+    </div>
   )
 }

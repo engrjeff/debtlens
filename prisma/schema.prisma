@@ -133,6 +133,9 @@ model Payment {
   obligationId   String
   obligation     Obligation @relation(fields: [obligationId], references: [id], onDelete: Cascade)
   amount         Float
+  forDueDate     DateTime
+  modeOfPayment  String
+  notes          String?
   proofOfPayment String?
   paidAt         DateTime   @default(now())
 
