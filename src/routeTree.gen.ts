@@ -19,7 +19,6 @@ import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
 import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
 import { Route as ProtectedDebtsIndexRouteImport } from './routes/_protected/debts/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as ProtectedDebtsNewRouteImport } from './routes/_protected/debts/new'
 
 const SiteRouteRoute = SiteRouteRouteImport.update({
   id: '/_site',
@@ -70,11 +69,6 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProtectedDebtsNewRoute = ProtectedDebtsNewRouteImport.update({
-  id: '/debts/new',
-  path: '/debts/new',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof SiteIndexRoute
@@ -83,7 +77,6 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof ProtectedDashboardRoute
   '/payment-history': typeof ProtectedPaymentHistoryRoute
   '/payment-schedule': typeof ProtectedPaymentScheduleRoute
-  '/debts/new': typeof ProtectedDebtsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/debts/': typeof ProtectedDebtsIndexRoute
 }
@@ -94,7 +87,6 @@ export interface FileRoutesByTo {
   '/dashboard': typeof ProtectedDashboardRoute
   '/payment-history': typeof ProtectedPaymentHistoryRoute
   '/payment-schedule': typeof ProtectedPaymentScheduleRoute
-  '/debts/new': typeof ProtectedDebtsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/debts': typeof ProtectedDebtsIndexRoute
 }
@@ -108,7 +100,6 @@ export interface FileRoutesById {
   '/_protected/payment-history': typeof ProtectedPaymentHistoryRoute
   '/_protected/payment-schedule': typeof ProtectedPaymentScheduleRoute
   '/_site/': typeof SiteIndexRoute
-  '/_protected/debts/new': typeof ProtectedDebtsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/debts/': typeof ProtectedDebtsIndexRoute
 }
@@ -121,7 +112,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/payment-history'
     | '/payment-schedule'
-    | '/debts/new'
     | '/api/auth/$'
     | '/debts/'
   fileRoutesByTo: FileRoutesByTo
@@ -132,7 +122,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/payment-history'
     | '/payment-schedule'
-    | '/debts/new'
     | '/api/auth/$'
     | '/debts'
   id:
@@ -145,7 +134,6 @@ export interface FileRouteTypes {
     | '/_protected/payment-history'
     | '/_protected/payment-schedule'
     | '/_site/'
-    | '/_protected/debts/new'
     | '/api/auth/$'
     | '/_protected/debts/'
   fileRoutesById: FileRoutesById
@@ -230,13 +218,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_protected/debts/new': {
-      id: '/_protected/debts/new'
-      path: '/debts/new'
-      fullPath: '/debts/new'
-      preLoaderRoute: typeof ProtectedDebtsNewRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
   }
 }
 
@@ -244,7 +225,6 @@ interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedPaymentHistoryRoute: typeof ProtectedPaymentHistoryRoute
   ProtectedPaymentScheduleRoute: typeof ProtectedPaymentScheduleRoute
-  ProtectedDebtsNewRoute: typeof ProtectedDebtsNewRoute
   ProtectedDebtsIndexRoute: typeof ProtectedDebtsIndexRoute
 }
 
@@ -252,7 +232,6 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedPaymentHistoryRoute: ProtectedPaymentHistoryRoute,
   ProtectedPaymentScheduleRoute: ProtectedPaymentScheduleRoute,
-  ProtectedDebtsNewRoute: ProtectedDebtsNewRoute,
   ProtectedDebtsIndexRoute: ProtectedDebtsIndexRoute,
 }
 
