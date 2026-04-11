@@ -41,8 +41,8 @@ export function ObligationsTable({
           <TableHeader>
             <TableRow className="bg-accent/80 hover:bg-accent/80">
               <TableHead className="w-4">#</TableHead>
-              <TableHead>Type</TableHead>
               <TableHead>Name</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead className="text-right">Amount</TableHead>
               {isViewingLoan && (
                 <TableHead className="text-right">Balance</TableHead>
@@ -56,11 +56,7 @@ export function ObligationsTable({
             {obligations.map((obligation, index) => (
               <TableRow key={obligation.id}>
                 <TableCell className="font-medium">{index + 1}</TableCell>
-                <TableCell>
-                  <Badge variant={obligation.type}>
-                    {obligation.type.toLowerCase()}
-                  </Badge>
-                </TableCell>
+
                 <TableCell>
                   <Link
                     to="/obligations/$id"
@@ -72,6 +68,12 @@ export function ObligationsTable({
                   <span className="text-xs text-muted-foreground">
                     {obligation.category}
                   </span>
+                </TableCell>
+
+                <TableCell>
+                  <Badge variant={obligation.type}>
+                    {obligation.type.toLowerCase()}
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <div>
