@@ -1,7 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute('/_protected/payment-schedule')({
+export const Route = createFileRoute("/_protected/payment-schedule")({
   component: RouteComponent,
+  head: () => ({
+    meta: [{ title: "Payment Schedule | DebtLens" }],
+  }),
 })
 
 function RouteComponent() {

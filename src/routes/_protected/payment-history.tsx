@@ -1,4 +1,3 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import {
   Pagination,
   PaginationContent,
@@ -10,14 +9,18 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { PaymentsTable } from "@/features/payments/payments-table"
 import { fetchPayments } from "@/features/payments/payments.functions"
-import { PAGE_SIZE, paymentsSearchSchema } from "@/features/payments/search-params"
+import {
+  PAGE_SIZE,
+  paymentsSearchSchema,
+} from "@/features/payments/search-params"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_protected/payment-history")({
   validateSearch: paymentsSearchSchema,
   loaderDeps: ({ search }) => search,
   loader: ({ deps }) => fetchPayments({ data: deps }),
   head: () => ({
-    meta: [{ title: "Payment History" }],
+    meta: [{ title: "Payment History | DebtLens" }],
   }),
   component: RouteComponent,
 })
@@ -54,7 +57,8 @@ function RouteComponent() {
           <>
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>
-                Showing {offset + 1}–{Math.min(offset + PAGE_SIZE, pageInfo.total)} of{" "}
+                Showing {offset + 1}–
+                {Math.min(offset + PAGE_SIZE, pageInfo.total)} of{" "}
                 {pageInfo.total} payment{pageInfo.total !== 1 ? "s" : ""}
               </span>
               <span>
