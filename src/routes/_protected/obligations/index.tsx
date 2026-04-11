@@ -21,12 +21,21 @@ import { obligationsSearchSchema } from "@/features/obligations/search-params"
 import { createFileRoute } from "@tanstack/react-router"
 import { Suspense } from "react"
 
-export const Route = createFileRoute("/_protected/debts/")({
+export const Route = createFileRoute("/_protected/obligations/")({
   validateSearch: obligationsSearchSchema,
   loaderDeps: ({ search }) => search,
   loader: ({ deps }) =>
     Promise.all([fetchObligations({ data: deps }), fetchObligationInsights()]),
   component: RouteComponent,
+  head: () => {
+    return {
+      meta: [
+        {
+          title: "Obligations",
+        },
+      ],
+    }
+  },
 })
 
 function RouteComponent() {

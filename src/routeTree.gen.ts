@@ -17,8 +17,9 @@ import { Route as ProtectedPaymentHistoryRouteImport } from './routes/_protected
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
 import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
 import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
-import { Route as ProtectedDebtsIndexRouteImport } from './routes/_protected/debts/index'
+import { Route as ProtectedObligationsIndexRouteImport } from './routes/_protected/obligations/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ProtectedObligationsIdRouteImport } from './routes/_protected/obligations/$id'
 
 const SiteRouteRoute = SiteRouteRouteImport.update({
   id: '/_site',
@@ -59,15 +60,21 @@ const authSignInRoute = authSignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProtectedDebtsIndexRoute = ProtectedDebtsIndexRouteImport.update({
-  id: '/debts/',
-  path: '/debts/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
+const ProtectedObligationsIndexRoute =
+  ProtectedObligationsIndexRouteImport.update({
+    id: '/obligations/',
+    path: '/obligations/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ProtectedObligationsIdRoute = ProtectedObligationsIdRouteImport.update({
+  id: '/obligations/$id',
+  path: '/obligations/$id',
+  getParentRoute: () => ProtectedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -77,8 +84,9 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof ProtectedDashboardRoute
   '/payment-history': typeof ProtectedPaymentHistoryRoute
   '/payment-schedule': typeof ProtectedPaymentScheduleRoute
+  '/obligations/$id': typeof ProtectedObligationsIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/debts/': typeof ProtectedDebtsIndexRoute
+  '/obligations/': typeof ProtectedObligationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof SiteIndexRoute
@@ -87,8 +95,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof ProtectedDashboardRoute
   '/payment-history': typeof ProtectedPaymentHistoryRoute
   '/payment-schedule': typeof ProtectedPaymentScheduleRoute
+  '/obligations/$id': typeof ProtectedObligationsIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/debts': typeof ProtectedDebtsIndexRoute
+  '/obligations': typeof ProtectedObligationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,8 +109,9 @@ export interface FileRoutesById {
   '/_protected/payment-history': typeof ProtectedPaymentHistoryRoute
   '/_protected/payment-schedule': typeof ProtectedPaymentScheduleRoute
   '/_site/': typeof SiteIndexRoute
+  '/_protected/obligations/$id': typeof ProtectedObligationsIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/_protected/debts/': typeof ProtectedDebtsIndexRoute
+  '/_protected/obligations/': typeof ProtectedObligationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -112,8 +122,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/payment-history'
     | '/payment-schedule'
+    | '/obligations/$id'
     | '/api/auth/$'
-    | '/debts/'
+    | '/obligations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,8 +133,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/payment-history'
     | '/payment-schedule'
+    | '/obligations/$id'
     | '/api/auth/$'
-    | '/debts'
+    | '/obligations'
   id:
     | '__root__'
     | '/_protected'
@@ -134,8 +146,9 @@ export interface FileRouteTypes {
     | '/_protected/payment-history'
     | '/_protected/payment-schedule'
     | '/_site/'
+    | '/_protected/obligations/$id'
     | '/api/auth/$'
-    | '/_protected/debts/'
+    | '/_protected/obligations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -204,11 +217,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_protected/debts/': {
-      id: '/_protected/debts/'
-      path: '/debts'
-      fullPath: '/debts/'
-      preLoaderRoute: typeof ProtectedDebtsIndexRouteImport
+    '/_protected/obligations/': {
+      id: '/_protected/obligations/'
+      path: '/obligations'
+      fullPath: '/obligations/'
+      preLoaderRoute: typeof ProtectedObligationsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/api/auth/$': {
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/obligations/$id': {
+      id: '/_protected/obligations/$id'
+      path: '/obligations/$id'
+      fullPath: '/obligations/$id'
+      preLoaderRoute: typeof ProtectedObligationsIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
@@ -225,14 +245,16 @@ interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedPaymentHistoryRoute: typeof ProtectedPaymentHistoryRoute
   ProtectedPaymentScheduleRoute: typeof ProtectedPaymentScheduleRoute
-  ProtectedDebtsIndexRoute: typeof ProtectedDebtsIndexRoute
+  ProtectedObligationsIdRoute: typeof ProtectedObligationsIdRoute
+  ProtectedObligationsIndexRoute: typeof ProtectedObligationsIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedPaymentHistoryRoute: ProtectedPaymentHistoryRoute,
   ProtectedPaymentScheduleRoute: ProtectedPaymentScheduleRoute,
-  ProtectedDebtsIndexRoute: ProtectedDebtsIndexRoute,
+  ProtectedObligationsIdRoute: ProtectedObligationsIdRoute,
+  ProtectedObligationsIndexRoute: ProtectedObligationsIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

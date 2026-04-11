@@ -4,6 +4,7 @@ import { z } from "zod/v3"
 import {
   createObligation,
   deleteObligation,
+  getObligation,
   getObligationInsights,
   getObligations,
   markObligationPaid,
@@ -19,12 +20,19 @@ export const fetchObligations = createServerFn({ method: "GET" })
     return getObligations(session.user.id, data)
   })
 
-export const fetchObligationInsights = createServerFn({ method: "GET" }).handler(
-  async () => {
+export const fetchObligationInsights = createServerFn({
+  method: "GET",
+}).handler(async () => {
+  const session = await ensureSession()
+  return getObligationInsights(session.user.id)
+})
+
+export const fetchObligationById = createServerFn({ method: "GET" })
+  .inputValidator(z.object({ id: z.string() }))
+  .handler(async ({ data }) => {
     const session = await ensureSession()
-    return getObligationInsights(session.user.id)
-  }
-)
+    return getObligation(data.id, session.user.id)
+  })
 
 export const addObligation = createServerFn({ method: "POST" })
   .inputValidator(obligationFormSchema)
@@ -40,7 +48,7 @@ export const editObligation = createServerFn({ method: "POST" })
       type: z.enum(["BILL", "LOAN"]),
       // Validated precisely in the handler after type is known
       data: z.record(z.unknown()),
-    }),
+    })
   )
   .handler(async ({ data: input }) => {
     const session = await ensureSession()
@@ -63,7 +71,7 @@ export const markAsPaid = createServerFn({ method: "POST" })
     z.object({
       obligationId: z.string(),
       amount: z.number().positive().optional(),
-    }),
+    })
   )
   .handler(async ({ data }) => {
     const session = await ensureSession()

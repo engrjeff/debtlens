@@ -33,7 +33,7 @@ const statusFilters: Array<{
 ]
 
 export function ObligationFilterChips() {
-  const search = useSearch({ from: "/_protected/debts/" })
+  const search = useSearch({ from: "/_protected/obligations/" })
 
   const hasFilters = [search.status].filter(Boolean).length !== 0
 
@@ -48,7 +48,7 @@ export function ObligationFilterChips() {
           asChild
         >
           <Link
-            to="/debts"
+            to="/obligations"
             search={(current) => ({ ...current, type: filter.value })}
           >
             {filter.value === search.type ? (
@@ -69,7 +69,7 @@ export function ObligationFilterChips() {
           asChild
         >
           <Link
-            to="/debts"
+            to="/obligations"
             search={(current) => ({ ...current, status: filter.value })}
           >
             {filter.value === search.status ? (
@@ -83,7 +83,7 @@ export function ObligationFilterChips() {
       {hasFilters && (
         <Button variant="ghost" size="sm" className="rounded-full" asChild>
           <Link
-            to="/debts"
+            to="/obligations"
             search={(current) => ({
               ...current,
               status: undefined,

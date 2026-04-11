@@ -1,8 +1,8 @@
 import {
-  ListIcon,
   MoreHorizontalIcon,
   PencilIcon,
   TrashIcon,
+  ViewIcon,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -14,15 +14,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import type { Obligation } from "@/generated/prisma/browser"
+import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { ObligationDeleteDialog } from "./obligation-delete-dialog"
 import { ObligationEditDialog } from "./obligation-edit-dialog"
 import { ObligationEditForm } from "./obligation-edit-form"
 
-type Action = "edit" | "history" | "delete"
+type Action = "edit" | "view" | "delete"
 
 export function ObligationItemMenu({ obligation }: { obligation: Obligation }) {
   const [action, setAction] = useState<Action>()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -37,9 +39,17 @@ export function ObligationItemMenu({ obligation }: { obligation: Obligation }) {
             <PencilIcon />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setAction("history")}>
-            <ListIcon />
-            History
+          <DropdownMenuItem
+            onClick={() => {
+              setAction("view")
+              navigate({
+                to: "/obligations/$id",
+                params: { id: obligation.id },
+              })
+            }}
+          >
+            <ViewIcon />
+            View
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

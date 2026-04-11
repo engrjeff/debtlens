@@ -10,6 +10,7 @@ import {
 import { ObligationType, type Obligation } from "@/generated/prisma/browser"
 
 import { Button } from "@/components/ui/button"
+import { Link } from "@tanstack/react-router"
 import { CalendarIcon } from "lucide-react"
 import { useState } from "react"
 import {
@@ -36,7 +37,15 @@ function ObligationItem({
             {obligation.type.toLowerCase()}
           </Badge>
         </CardDescription>
-        <CardTitle>{obligation.name}</CardTitle>
+        <CardTitle>
+          <Link
+            to="/obligations/$id"
+            params={{ id: obligation.id }}
+            className="hover:underline"
+          >
+            {obligation.name}
+          </Link>
+        </CardTitle>
         {obligation.type === ObligationType.LOAN && (
           <CardDescription className="text-xs">
             Loan Amount: {formatPHP(obligation.totalAmount)}

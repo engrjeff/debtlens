@@ -195,3 +195,15 @@ export async function markObligationPaid(
     })
   })
 }
+
+export async function getObligation(id: string, userId: string) {
+  const obligation = await prisma.obligation.findUnique({
+    where: { id, userId, isDeleted: false },
+  })
+
+  if (!obligation) {
+    throw new Error("Obligation not found")
+  }
+
+  return obligation
+}

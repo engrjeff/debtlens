@@ -9,8 +9,8 @@ import { SearchIcon, XIcon } from "lucide-react"
 import { useState } from "react"
 
 export function ObligationsSearch() {
-  const search = useSearch({ from: "/_protected/debts/" })
-  const navigate = useNavigate({ from: "/debts/" })
+  const search = useSearch({ from: "/_protected/obligations/" })
+  const navigate = useNavigate({ from: "/obligations/" })
 
   const [query, setQuery] = useState(() => search.q ?? "")
 

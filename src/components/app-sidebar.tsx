@@ -34,8 +34,8 @@ const sidebar = {
       icon: LayoutDashboardIcon,
     },
     {
-      title: "Debts & Loans",
-      url: "/debts",
+      title: "Obligations",
+      url: "/obligations",
       icon: PhilippinePesoIcon,
     },
     {

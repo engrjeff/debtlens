@@ -19,8 +19,8 @@ const SORT_OPTIONS: { value: ObligationsSearch["sort"]; label: string }[] = [
 ]
 
 export function ObligationsSort() {
-  const search = useSearch({ from: "/_protected/debts/" })
-  const navigate = useNavigate({ from: "/debts/" })
+  const search = useSearch({ from: "/_protected/obligations/" })
+  const navigate = useNavigate({ from: "/obligations/" })
 
   return (
     <DropdownMenu>

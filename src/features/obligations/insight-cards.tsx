@@ -23,7 +23,7 @@ export function InsightCards({ obligations }: InsightCardsProps) {
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       <Link
-        to="/debts"
+        to="/obligations"
         search={(current) => ({ ...current, status: "due-this-week" })}
         className="group"
       >
@@ -47,7 +47,7 @@ export function InsightCards({ obligations }: InsightCardsProps) {
       </Link>
 
       <Link
-        to="/debts"
+        to="/obligations"
         search={(current) => ({ ...current, status: "due-this-month" })}
         className="group"
       >
@@ -70,7 +70,7 @@ export function InsightCards({ obligations }: InsightCardsProps) {
       </Link>
 
       <Link
-        to="/debts"
+        to="/obligations"
         search={(current) => ({ ...current, status: "overdue" })}
         className="group"
       >

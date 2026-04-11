@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { Obligation } from "@/generated/prisma/browser"
-import { useSearch } from "@tanstack/react-router"
+import { Link, useSearch } from "@tanstack/react-router"
 import { useState } from "react"
 import {
   formatDueDate,
@@ -26,7 +26,7 @@ export function ObligationsTable({
 }: {
   obligations: Obligation[]
 }) {
-  const search = useSearch({ from: "/_protected/debts/" })
+  const search = useSearch({ from: "/_protected/obligations/" })
   const [pendingObligation, setPendingObligation] = useState<Obligation | null>(
     null
   )
@@ -62,7 +62,13 @@ export function ObligationsTable({
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <p className="font-semibold">{obligation.name}</p>
+                  <Link
+                    to="/obligations/$id"
+                    params={{ id: obligation.id }}
+                    className="hover:underline"
+                  >
+                    <p className="font-semibold">{obligation.name}</p>
+                  </Link>
                   <span className="text-xs text-muted-foreground">
                     {obligation.category}
                   </span>
