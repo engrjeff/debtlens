@@ -13,7 +13,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:migrate": "pnpm dlx prisma migrate dev",
     "db:generate": "pnpm dlx prisma generate",
-    "postinstall": "prisma generate --no-engine",
+    "postinstall": "prisma generate",
     "vercel-build": "prisma generate && prisma migrate deploy && vite build"
   },
   "dependencies": {
