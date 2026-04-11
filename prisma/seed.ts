@@ -1,9 +1,28 @@
 import { prisma } from "@/db/prisma"
 import "dotenv/config"
+import { readFileSync } from "fs"
+import { resolve } from "path"
 
-const today = new Date()
-function nextMonthDay(day: number): Date {
-  return new Date(today.getFullYear(), today.getMonth() + 1, day)
+interface PaymentSeed {
+  amount: number
+  forDueDate: string
+  modeOfPayment: string
+  notes?: string | null
+  paidAt: string
+}
+
+interface ObligationSeed {
+  name: string
+  type: "BILL" | "LOAN"
+  amount: number
+  recurrence: "DAILY" | "WEEKLY" | "MONTHLY" | "QUARTERLY" | "ANNUALLY"
+  dueDay: number | null
+  nextDueDate: string
+  totalAmount: number
+  remainingBalance: number
+  category: string
+  interestRate: number | null
+  payments: PaymentSeed[]
 }
 
 async function main() {
@@ -11,81 +30,56 @@ async function main() {
     where: { email: "jeffsegoviadev@gmail.com" },
   })
 
-  // Clear existing seed data for idempotency
+  const obligations: ObligationSeed[] = JSON.parse(
+    readFileSync(resolve("data/obligations.json"), "utf-8")
+  )
+
+  // Clear existing data for idempotency
   await prisma.payment.deleteMany({ where: { userId: user.id } })
   await prisma.obligation.deleteMany({ where: { userId: user.id } })
 
-  // ─────────────────────────────────────────────
-  // BILLS
-  // ─────────────────────────────────────────────
-  const bills = [
-    {
-      name: "Toyota Veloz",
-      category: "Rent",
-      amount: 18000,
-      recurrence: "MONTHLY" as const,
-      dueDay: 5,
-      nextDueDate: nextMonthDay(5),
-      totalAmount: 18000,
-      remainingBalance: 18000,
-    },
-  ]
+  let billCount = 0
+  let loanCount = 0
+  let paymentCount = 0
 
-  // ─────────────────────────────────────────────
-  // LOANS
-  // ─────────────────────────────────────────────
-  const loans = [
-    {
-      name: "Pag-IBIG Housing Loan",
-      category: "Housing Loan",
-      amount: 8500,
-      recurrence: "MONTHLY" as const,
-      dueDay: 15,
-      nextDueDate: nextMonthDay(15),
-      totalAmount: 2_040_000,
-      remainingBalance: 1_530_000,
-      interestRate: 6.375,
-    },
-  ]
-
-  for (const bill of bills) {
-    await prisma.obligation.create({
+  for (const o of obligations) {
+    const created = await prisma.obligation.create({
       data: {
         userId: user.id,
-        type: "BILL",
-        name: bill.name,
-        category: bill.category,
-        amount: bill.amount,
-        recurrence: bill.recurrence,
-        dueDay: bill.dueDay,
-        nextDueDate: bill.nextDueDate,
-        totalAmount: bill.totalAmount,
-        remainingBalance: bill.remainingBalance,
+        type: o.type,
+        name: o.name,
+        category: o.category,
+        amount: o.amount,
+        recurrence: o.recurrence,
+        dueDay: o.dueDay,
+        nextDueDate: new Date(o.nextDueDate),
+        totalAmount: o.totalAmount,
+        remainingBalance: o.remainingBalance,
+        interestRate: o.interestRate,
       },
     })
+
+    if (o.type === "BILL") billCount++
+    else loanCount++
+
+    for (const p of o.payments) {
+      await prisma.payment.create({
+        data: {
+          userId: user.id,
+          obligationId: created.id,
+          amount: p.amount,
+          forDueDate: new Date(p.forDueDate),
+          modeOfPayment: p.modeOfPayment,
+          notes: p.notes ?? undefined,
+          paidAt: new Date(p.paidAt),
+        },
+      })
+      paymentCount++
+    }
   }
 
-  for (const loan of loans) {
-    await prisma.obligation.create({
-      data: {
-        userId: user.id,
-        type: "LOAN",
-        name: loan.name,
-        category: loan.category,
-        amount: loan.amount,
-        recurrence: loan.recurrence,
-        dueDay: loan.dueDay,
-        nextDueDate: loan.nextDueDate,
-        totalAmount: loan.totalAmount,
-        remainingBalance: loan.remainingBalance,
-        interestRate: loan.interestRate,
-      },
-    })
-  }
-
-  const count = await prisma.obligation.count({ where: { userId: user.id } })
   console.log(
-    `✓ Seeded ${count} obligations (${bills.length} bills, ${loans.length} loans) for ${user.email}`
+    `✓ Seeded ${obligations.length} obligations (${billCount} bills, ${loanCount} loans) with ${paymentCount} payments for ${user.email}`
   )
 }
 
