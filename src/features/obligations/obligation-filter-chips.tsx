@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Link, useSearch } from "@tanstack/react-router"
-import { CheckIcon } from "lucide-react"
+import { CheckIcon, XIcon } from "lucide-react"
 import type { ObligationsSearch } from "./search-params"
 
 const typeFilters: { value: ObligationsSearch["type"]; label: string }[] = [
@@ -34,6 +34,8 @@ const statusFilters: Array<{
 
 export function ObligationFilterChips() {
   const search = useSearch({ from: "/_protected/debts/" })
+
+  const hasFilters = [search.status].filter(Boolean).length !== 0
 
   return (
     <div className="flex items-center gap-1">
@@ -77,6 +79,20 @@ export function ObligationFilterChips() {
           </Link>
         </Button>
       ))}
+
+      {hasFilters && (
+        <Button variant="ghost" size="sm" className="rounded-full" asChild>
+          <Link
+            to="/debts"
+            search={(current) => ({
+              ...current,
+              status: undefined,
+            })}
+          >
+            <XIcon /> Clear Filters
+          </Link>
+        </Button>
+      )}
     </div>
   )
 }
