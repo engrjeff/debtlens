@@ -15,7 +15,7 @@ export function ObligationsSearch() {
   const [query, setQuery] = useState(() => search.q ?? "")
 
   return (
-    <InputGroup className="min-w-xs">
+    <InputGroup className="max-w-xs">
       <InputGroupInput
         placeholder="Search by name or category…"
         value={query}

@@ -12,7 +12,7 @@ import { ArrowUpDownIcon } from "lucide-react"
 import type { ObligationsSearch } from "./search-params"
 
 const SORT_OPTIONS: { value: ObligationsSearch["sort"]; label: string }[] = [
-  { value: "due-date", label: "Nearest Due Date" },
+  { value: "due-date", label: "Due Date (Nearest)" },
   { value: "amount", label: "Highest Amount" },
   { value: "balance", label: "Largest Balance" },
   { value: "type", label: "Type" },

@@ -1,18 +1,15 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { EmptyObligationsView } from "@/features/obligations/empty-obligations-view"
+import { FiltersBar } from "@/features/obligations/filters-bar"
 import {
   InsightCards,
   InsightCardsSkeleton,
 } from "@/features/obligations/insight-cards"
 import { NoObligationsResultsView } from "@/features/obligations/no-obligations-result-view"
 import { ObligationCreateDialog } from "@/features/obligations/obligation-create-dialog"
-import { ObligationFilterChips } from "@/features/obligations/obligation-filter-chips"
 import { ObligationList } from "@/features/obligations/obligations-list"
-import { ObligationsSearch } from "@/features/obligations/obligations-search"
-import { ObligationsSort } from "@/features/obligations/obligations-sort"
 import { ObligationsTable } from "@/features/obligations/obligations-table"
-import { ObligationsViewToggle } from "@/features/obligations/obligations-view-toggle"
 import {
   fetchObligationInsights,
   fetchObligations,
@@ -67,14 +64,7 @@ function RouteComponent() {
             <Suspense fallback={<InsightCardsSkeleton />}>
               <InsightCards obligations={allObligations} />
             </Suspense>
-            <div className="flex items-center justify-between gap-4">
-              <ObligationFilterChips />
-              <div className="flex items-center gap-3">
-                <ObligationsSearch />
-                <ObligationsSort />
-                <ObligationsViewToggle />
-              </div>
-            </div>
+            <FiltersBar />
             {pageInfo.total === 0 ? (
               <NoObligationsResultsView />
             ) : (
