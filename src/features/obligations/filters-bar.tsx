@@ -23,11 +23,10 @@ const TYPE_OPTIONS: { value: ObligationsSearch["type"]; label: string }[] = [
 
 const STATUS_OPTIONS: { value: ObligationsSearch["status"]; label: string }[] =
   [
-    { value: "ALL", label: "All Statuses" },
     { value: "overdue", label: "Overdue" },
     { value: "due-today", label: "Due Today" },
     { value: "due-this-week", label: "Due This Week" },
-    { value: "upcoming", label: "Upcoming" },
+    { value: "due-this-month", label: "Due This Month" },
   ]
 
 const SORT_OPTIONS: { value: ObligationsSearch["sort"]; label: string }[] = [

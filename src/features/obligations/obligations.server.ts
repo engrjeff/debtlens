@@ -1,4 +1,11 @@
 import { prisma } from "@/db/prisma"
+import {
+  addDays,
+  startOfTomorrow as dateFnsStartOfTomorrow,
+  endOfMonth,
+  startOfDay,
+  startOfMonth,
+} from "date-fns"
 import { computeNextDueDate } from "./helpers"
 import type { EditBillInput, EditLoanInput, ObligationInput } from "./schema"
 import { PAGE_SIZE, type ObligationsSearch } from "./search-params"
@@ -8,21 +15,11 @@ export async function getObligations(
   search: ObligationsSearch
 ) {
   const now = new Date()
-  const startOfToday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate()
-  )
-  const startOfTomorrow = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + 1
-  )
-  const endOfWeek = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + 8 // inclusive of day 7
-  )
+  const startOfToday = startOfDay(now)
+  const startOfTomorrow = dateFnsStartOfTomorrow()
+  const endOfWeek = addDays(startOfToday, 8) // inclusive of day 7
+  const monthStart = startOfMonth(now)
+  const monthEnd = endOfMonth(now)
 
   const statusFilter = (() => {
     switch (search.status) {
@@ -32,8 +29,8 @@ export async function getObligations(
         return { nextDueDate: { gte: startOfToday, lt: startOfTomorrow } }
       case "due-this-week":
         return { nextDueDate: { gte: startOfToday, lt: endOfWeek } }
-      case "upcoming":
-        return { nextDueDate: { gte: endOfWeek } }
+      case "due-this-month":
+        return { nextDueDate: { gte: monthStart, lte: monthEnd } }
       default:
         return {}
     }
@@ -45,6 +42,8 @@ export async function getObligations(
         return { amount: "desc" as const }
       case "balance":
         return { remainingBalance: "desc" as const }
+      case "type":
+        return { type: "desc" as const }
       default:
         return { nextDueDate: "asc" as const }
     }
@@ -87,7 +86,7 @@ export async function getObligations(
 }
 
 export async function getObligationInsights(userId: string) {
-  return prisma.obligation.findMany({ where: { userId } })
+  return prisma.obligation.findMany({ where: { userId, isDeleted: false } })
 }
 
 export async function createObligation(data: ObligationInput, userId: string) {
@@ -105,7 +104,7 @@ export async function createObligation(data: ObligationInput, userId: string) {
 export async function updateObligation(
   obligationId: string,
   userId: string,
-  data: EditBillInput | EditLoanInput,
+  data: EditBillInput | EditLoanInput
 ) {
   const obligation = await prisma.obligation.findFirst({
     where: { id: obligationId, userId, isDeleted: false },

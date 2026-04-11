@@ -6,11 +6,10 @@ export const obligationsSearchSchema = z.object({
   q: z.string().optional(),
   type: z.enum(["ALL", "BILL", "LOAN"]).optional().default("ALL"),
   status: z
-    .enum(["ALL", "overdue", "due-today", "due-this-week", "upcoming"])
-    .optional()
-    .default("ALL"),
+    .enum(["overdue", "due-today", "due-this-week", "due-this-month"])
+    .optional(),
   sort: z
-    .enum(["due-date", "amount", "balance"])
+    .enum(["due-date", "amount", "balance", "type"])
     .optional()
     .default("due-date"),
   page: z.coerce.number().int().min(1).optional().default(1),

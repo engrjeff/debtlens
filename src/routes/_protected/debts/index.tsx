@@ -1,22 +1,23 @@
 import { EmptyObligationsView } from "@/features/obligations/empty-obligations-view"
-import { FiltersBar } from "@/features/obligations/filters-bar"
 import {
   InsightCards,
   InsightCardsSkeleton,
 } from "@/features/obligations/insight-cards"
+import { NoObligationsResultsView } from "@/features/obligations/no-obligations-result-view"
 import { ObligationCreateDialog } from "@/features/obligations/obligation-create-dialog"
+import { ObligationFilterChips } from "@/features/obligations/obligation-filter-chips"
 import { ObligationList } from "@/features/obligations/obligations-list"
+import { ObligationsSearch } from "@/features/obligations/obligations-search"
+import { ObligationsSort } from "@/features/obligations/obligations-sort"
 import { ObligationsTable } from "@/features/obligations/obligations-table"
+import { ObligationsViewToggle } from "@/features/obligations/obligations-view-toggle"
 import {
   fetchObligationInsights,
   fetchObligations,
 } from "@/features/obligations/obligations.functions"
-import {
-  obligationsSearchSchema,
-  type ObligationsSearch,
-} from "@/features/obligations/search-params"
+import { obligationsSearchSchema } from "@/features/obligations/search-params"
 import { createFileRoute } from "@tanstack/react-router"
-import { Suspense, useCallback } from "react"
+import { Suspense } from "react"
 
 export const Route = createFileRoute("/_protected/debts/")({
   validateSearch: obligationsSearchSchema,
@@ -30,13 +31,6 @@ function RouteComponent() {
   const [{ items: obligations, pageInfo }, allObligations] =
     Route.useLoaderData()
   const search = Route.useSearch()
-  const navigate = Route.useNavigate()
-
-  const handleUpdate = useCallback(
-    (patch: Partial<ObligationsSearch>) =>
-      navigate({ search: (prev) => ({ ...prev, ...patch }) }),
-    [navigate]
-  )
 
   return (
     <main className="container mx-auto divide-y">
@@ -50,7 +44,7 @@ function RouteComponent() {
         <ObligationCreateDialog />
       </div>
 
-      {pageInfo.total === 0 ? (
+      {allObligations.length === 0 ? (
         <EmptyObligationsView />
       ) : (
         <>
@@ -59,16 +53,25 @@ function RouteComponent() {
               <InsightCards obligations={allObligations} />
             </Suspense>
           </div>
-          <div className="p-4">
-            <FiltersBar search={search} onUpdate={handleUpdate} />
+          <div className="flex items-center justify-between gap-4 p-4">
+            <ObligationFilterChips />
+            <div className="flex items-center gap-3">
+              <ObligationsSearch />
+              <ObligationsSort />
+              <ObligationsViewToggle />
+            </div>
           </div>
-          <div className="p-4">
-            {search.view === "list" ? (
-              <ObligationsTable obligations={obligations} />
-            ) : (
-              <ObligationList obligations={obligations} />
-            )}
-          </div>
+          {pageInfo.total === 0 ? (
+            <NoObligationsResultsView />
+          ) : (
+            <div className="p-4">
+              {search.view === "list" ? (
+                <ObligationsTable obligations={obligations} />
+              ) : (
+                <ObligationList obligations={obligations} />
+              )}
+            </div>
+          )}
         </>
       )}
     </main>

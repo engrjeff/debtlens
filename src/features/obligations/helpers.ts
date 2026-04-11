@@ -1,5 +1,6 @@
 import type { Obligation } from "@/generated/prisma/client"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
+import { endOfMonth, startOfMonth } from "date-fns"
 
 // ── Category colors ───────────────────────────────────────────────────────────
 
@@ -199,8 +200,8 @@ export function formatPayoffDate(months: number): string {
 
 export function computeInsights(obligations: Obligation[]) {
   const now = new Date()
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  const monthStart = startOfMonth(now)
+  const monthEnd = endOfMonth(now)
 
   let totalDueThisMonth = 0
   let dueThisWeekCount = 0
@@ -214,7 +215,7 @@ export function computeInsights(obligations: Obligation[]) {
     const due = new Date(o.nextDueDate)
     const status = getObligationStatus(o.nextDueDate)
 
-    if (due >= startOfMonth && due <= endOfMonth) {
+    if (due >= monthStart && due <= monthEnd) {
       totalDueThisMonth += o.amount
     }
 
@@ -263,7 +264,7 @@ export function computeInsights(obligations: Obligation[]) {
 export function computeNextDueDate(
   currentDueDate: Date,
   recurrence: string,
-  dueDay?: number | null,
+  dueDay?: number | null
 ): Date {
   const base = new Date(currentDueDate)
   const y = base.getFullYear()
