@@ -1,8 +1,9 @@
+import { PAGE_SIZE } from "./search-params"
+import type { PaymentsSearch } from "./search-params"
 import { prisma } from "@/db/prisma"
-import { PAGE_SIZE, type PaymentsSearch } from "./search-params"
 
 export async function getPayments(userId: string, search: PaymentsSearch) {
-  const page = search.page ?? 1
+  const page = search.page
   const skip = (page - 1) * PAGE_SIZE
 
   const where = { userId }

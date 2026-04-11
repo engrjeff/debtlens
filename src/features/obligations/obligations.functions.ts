@@ -1,4 +1,3 @@
-import { ensureSession } from "@/lib/auth.functions"
 import { createServerFn } from "@tanstack/react-start"
 import { z } from "zod/v3"
 import {
@@ -12,6 +11,7 @@ import {
 } from "./obligations.server"
 import { editBillSchema, editLoanSchema, markAsPaidSchema, obligationFormSchema } from "./schema"
 import { obligationsSearchSchema } from "./search-params"
+import { ensureSession } from "@/lib/auth.functions"
 
 export const fetchObligations = createServerFn({ method: "GET" })
   .inputValidator(obligationsSearchSchema)

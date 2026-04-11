@@ -1,6 +1,3 @@
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import type { Obligation } from "@/generated/prisma/client"
 import { ObligationCreateDialog } from "../obligations/obligation-create-dialog"
 import { CategoryBreakdown } from "./category-breakdown"
 import { DashboardEmpty } from "./dashboard-empty"
@@ -15,9 +12,12 @@ import { DebtProgress } from "./debt-progress"
 import { InsightsPanel } from "./insights-panel"
 import { SummaryCards } from "./summary-cards"
 import { UpcomingList } from "./upcoming-list"
+import type { Obligation } from "@/generated/prisma/client"
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Separator } from "@/components/ui/separator"
 
 interface DashboardPageProps {
-  obligations: Obligation[]
+  obligations: Array<Obligation>
 }
 
 export function DashboardPage({ obligations }: DashboardPageProps) {

@@ -1,15 +1,4 @@
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { ObligationType, type Obligation } from "@/generated/prisma/browser"
 
-import { Button } from "@/components/ui/button"
 import { Link } from "@tanstack/react-router"
 import { CalendarIcon } from "lucide-react"
 import { useState } from "react"
@@ -21,6 +10,18 @@ import {
 } from "./helpers"
 import { MarkPaidDialog } from "./mark-paid-dialog"
 import { ObligationItemMenu } from "./obligation-item-menu"
+import type {Obligation} from "@/generated/prisma/browser";
+import { Button } from "@/components/ui/button"
+import {  ObligationType } from "@/generated/prisma/browser"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 function ObligationItem({
   obligation,
@@ -102,7 +103,7 @@ function ObligationItem({
   )
 }
 
-export function ObligationList({ obligations }: { obligations: Obligation[] }) {
+export function ObligationList({ obligations }: { obligations: Array<Obligation> }) {
   const [pendingObligation, setPendingObligation] = useState<Obligation | null>(
     null
   )

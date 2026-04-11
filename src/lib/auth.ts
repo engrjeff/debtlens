@@ -1,8 +1,8 @@
-import { serverEnv } from "@/config/server-env"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { tanstackStartCookies } from "better-auth/tanstack-start"
 import { prisma } from "../db/prisma"
+import { serverEnv } from "@/config/server-env"
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {

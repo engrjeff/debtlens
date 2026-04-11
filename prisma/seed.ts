@@ -1,7 +1,8 @@
-import { prisma } from "@/db/prisma"
 import "dotenv/config"
-import { readFileSync } from "fs"
-import { resolve } from "path"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
+
+import { prisma } from "@/db/prisma"
 
 interface PaymentSeed {
   amount: number
@@ -22,7 +23,7 @@ interface ObligationSeed {
   remainingBalance: number
   category: string
   interestRate: number | null
-  payments: PaymentSeed[]
+  payments: Array<PaymentSeed>
 }
 
 async function main() {
@@ -30,7 +31,7 @@ async function main() {
     where: { email: "jeffsegoviadev@gmail.com" },
   })
 
-  const obligations: ObligationSeed[] = JSON.parse(
+  const obligations: Array<ObligationSeed> = JSON.parse(
     readFileSync(resolve("data/obligations.json"), "utf-8")
   )
 

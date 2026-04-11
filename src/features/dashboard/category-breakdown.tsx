@@ -1,16 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "@/components/ui/chart"
-import { Skeleton } from "@/components/ui/skeleton"
-import { formatPHP, getCategoryMeta } from "@/features/obligations/helpers"
 import { Link } from "@tanstack/react-router"
 import { LayoutGrid } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 import type { CategoryBreakdownItem } from "./dashboard.utils"
+import type {ChartConfig} from "@/components/ui/chart";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent
+} from "@/components/ui/chart"
+import { Skeleton } from "@/components/ui/skeleton"
+import { formatPHP, getCategoryMeta } from "@/features/obligations/helpers"
 
 // Map Tailwind dot class → hex so Recharts can use it as fill
 const DOT_TO_HEX: Record<string, string> = {
@@ -33,7 +34,7 @@ function getCategoryHex(category: string): string {
 }
 
 interface CategoryBreakdownProps {
-  items: CategoryBreakdownItem[]
+  items: Array<CategoryBreakdownItem>
 }
 
 export function CategoryBreakdown({ items }: CategoryBreakdownProps) {

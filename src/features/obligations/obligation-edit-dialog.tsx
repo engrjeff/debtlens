@@ -1,3 +1,4 @@
+import type {ComponentProps, PropsWithChildren} from "react";
 import {
   Dialog,
   DialogContent,
@@ -5,7 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { type ComponentProps, type PropsWithChildren } from "react"
 
 export function ObligationEditDialog({
   children,

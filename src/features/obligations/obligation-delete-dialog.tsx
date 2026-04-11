@@ -1,6 +1,12 @@
 import { Trash2Icon } from "lucide-react"
 
-import { SubmitButton } from "@/components/submit-button"
+import { useRouter } from "@tanstack/react-router"
+import { useServerFn } from "@tanstack/react-start"
+import {  useState } from "react"
+import { toast } from "sonner"
+import { removeObligation } from "./obligations.functions"
+import type {ComponentProps} from "react";
+import type { Obligation } from "@/generated/prisma/browser"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -11,12 +17,7 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import type { Obligation } from "@/generated/prisma/browser"
-import { useRouter } from "@tanstack/react-router"
-import { useServerFn } from "@tanstack/react-start"
-import { useState, type ComponentProps } from "react"
-import { toast } from "sonner"
-import { removeObligation } from "./obligations.functions"
+import { SubmitButton } from "@/components/submit-button"
 
 interface ObligationDeleteDialogProps extends ComponentProps<
   typeof AlertDialog
@@ -46,7 +47,7 @@ export function ObligationDeleteDialog({
           richColors: true,
         })
         router.invalidate()
-        dialogProps?.onOpenChange?.(false)
+        dialogProps.onOpenChange?.(false)
       }
     } catch (error) {
       console.log(error)

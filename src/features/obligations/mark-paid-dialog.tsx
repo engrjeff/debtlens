@@ -1,24 +1,3 @@
-import { NumberInput } from "@/components/number-input"
-import { SubmitButton } from "@/components/submit-button"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-  FieldSet,
-} from "@/components/ui/field"
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
-import { Textarea } from "@/components/ui/textarea"
-import type { Obligation } from "@/generated/prisma/browser"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
@@ -27,12 +6,35 @@ import { useState } from "react"
 import {
   Controller,
   FormProvider,
-  useForm,
-  type SubmitHandler,
+  
+  useForm
 } from "react-hook-form"
 import { toast } from "sonner"
 import { markAsPaid } from "./obligations.functions"
-import { markAsPaidSchema, PAYMENT_MODES, type MarkAsPaidInput } from "./schema"
+import {  PAYMENT_MODES, markAsPaidSchema } from "./schema"
+import type {SubmitHandler} from "react-hook-form";
+import type {MarkAsPaidInput} from "./schema";
+import type { Obligation } from "@/generated/prisma/browser"
+import { Textarea } from "@/components/ui/textarea"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/submit-button"
+import { NumberInput } from "@/components/number-input"
 
 interface MarkPaidDialogProps {
   obligation: Obligation

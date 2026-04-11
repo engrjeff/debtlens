@@ -7,13 +7,13 @@
  * duplicating date logic.
  */
 
+import { endOfMonth, startOfMonth } from "date-fns"
+import type { Obligation } from "@/generated/prisma/client"
 import {
   formatPayoffDate,
   getObligationStatus,
   getProgressPercent,
 } from "@/features/obligations/helpers"
-import type { Obligation } from "@/generated/prisma/client"
-import { endOfMonth, startOfMonth } from "date-fns"
 
 // ── Shared types ──────────────────────────────────────────────────────────────
 
@@ -89,7 +89,7 @@ export interface DashboardInsight {
  * Returns aggregate financial stats for the dashboard summary cards.
  */
 export function getDashboardSummary(
-  obligations: Obligation[]
+  obligations: Array<Obligation>
 ): DashboardSummary {
   const now = new Date()
   const monthStart = startOfMonth(now)
@@ -146,7 +146,7 @@ export function getDashboardSummary(
 /**
  * Returns all obligations that are currently past due, sorted oldest-first.
  */
-export function getOverdue(obligations: Obligation[]): Obligation[] {
+export function getOverdue(obligations: Array<Obligation>): Array<Obligation> {
   return obligations
     .filter((o) => getObligationStatus(o.nextDueDate) === "overdue")
     .sort(
@@ -160,7 +160,7 @@ export function getOverdue(obligations: Obligation[]): Obligation[] {
 /**
  * Returns obligations due today or within the next 7 days, sorted by due date.
  */
-export function getDueInNext7Days(obligations: Obligation[]): Obligation[] {
+export function getDueInNext7Days(obligations: Array<Obligation>): Array<Obligation> {
   return obligations
     .filter((o) => {
       const status = getObligationStatus(o.nextDueDate)
@@ -179,9 +179,9 @@ export function getDueInNext7Days(obligations: Obligation[]): Obligation[] {
  * then soonest upcoming), shaped for the UpcomingList UI component.
  */
 export function getUpcoming(
-  obligations: Obligation[],
+  obligations: Array<Obligation>,
   limit = 5
-): UpcomingObligation[] {
+): Array<UpcomingObligation> {
   return obligations
     .slice()
     .sort(
@@ -206,7 +206,7 @@ export function getUpcoming(
  * Computes overall loan payoff progress and an estimated debt-free date.
  * Debt-free date is derived from the loan that takes the longest to pay off.
  */
-export function getDebtProgress(obligations: Obligation[]): DebtProgressData {
+export function getDebtProgress(obligations: Array<Obligation>): DebtProgressData {
   const loans = obligations.filter((o) => o.type === "LOAN")
 
   const totalRemaining = loans.reduce((sum, l) => sum + l.remainingBalance, 0)
@@ -254,8 +254,8 @@ export function getDebtProgress(obligations: Obligation[]): DebtProgressData {
  * Non-monthly recurrences are normalised to a monthly figure.
  */
 export function getCategoryBreakdown(
-  obligations: Obligation[]
-): CategoryBreakdownItem[] {
+  obligations: Array<Obligation>
+): Array<CategoryBreakdownItem> {
   const map = new Map<string, CategoryBreakdownItem>()
 
   for (const o of obligations) {
@@ -301,9 +301,9 @@ function toMonthlyAmount(amount: number, recurrence: string): number {
  * state of obligations.  Returns an empty array when there is nothing notable.
  */
 export function generateInsights(
-  obligations: Obligation[]
-): DashboardInsight[] {
-  const insights: DashboardInsight[] = []
+  obligations: Array<Obligation>
+): Array<DashboardInsight> {
+  const insights: Array<DashboardInsight> = []
 
   const summary = getDashboardSummary(obligations)
   const {

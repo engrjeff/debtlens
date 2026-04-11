@@ -9,7 +9,7 @@
     "**/routeTree.gen.ts": true
   },
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit",
-    "source.removeUnusedImports": "explicit"
+    "source.organizeImports": "always",
+    "source.removeUnusedImports": "always"
   }
 }

@@ -1,12 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { Obligation } from "@/generated/prisma/browser"
 import { Link } from "@tanstack/react-router"
 import { AlertTriangle, CalendarClock, CreditCard, Wallet } from "lucide-react"
-import { computeInsights, formatPayoffDate, formatPHP } from "./helpers"
+import { computeInsights, formatPHP, formatPayoffDate } from "./helpers"
+import type { Obligation } from "@/generated/prisma/browser"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface InsightCardsProps {
-  obligations: Obligation[]
+  obligations: Array<Obligation>
 }
 
 export function InsightCards({ obligations }: InsightCardsProps) {
@@ -117,7 +117,7 @@ export function InsightCards({ obligations }: InsightCardsProps) {
             {debtFreeMonths != null ? (
               <>
                 Debt-free by{" "}
-                <span className="font-medium text-foreground">
+                <span className="font-semibold text-emerald-500">
                   {formatPayoffDate(debtFreeMonths)}
                 </span>
               </>

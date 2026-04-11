@@ -1,3 +1,4 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import {
   Pagination,
   PaginationContent,
@@ -10,7 +11,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import { PaymentsTable } from "@/features/payments/payments-table"
 import { fetchPayments } from "@/features/payments/payments.functions"
 import { PAGE_SIZE, paymentsSearchSchema } from "@/features/payments/search-params"
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_protected/payment-history")({
   validateSearch: paymentsSearchSchema,

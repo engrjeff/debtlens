@@ -1,15 +1,3 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import type { Obligation } from "@/generated/prisma/browser"
 import { Link, useSearch } from "@tanstack/react-router"
 import { useState } from "react"
 import {
@@ -20,11 +8,23 @@ import {
 } from "./helpers"
 import { MarkPaidDialog } from "./mark-paid-dialog"
 import { ObligationItemMenu } from "./obligation-item-menu"
+import type { Obligation } from "@/generated/prisma/browser"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 
 export function ObligationsTable({
   obligations,
 }: {
-  obligations: Obligation[]
+  obligations: Array<Obligation>
 }) {
   const search = useSearch({ from: "/_protected/obligations/" })
   const [pendingObligation, setPendingObligation] = useState<Obligation | null>(

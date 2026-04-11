@@ -1,3 +1,7 @@
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { format } from "date-fns"
+import { CalendarIcon, PencilIcon, ReceiptIcon, Trash2Icon } from "lucide-react"
+import { useState } from "react"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,10 +34,6 @@ import { ObligationEditDialog } from "@/features/obligations/obligation-edit-dia
 import { ObligationEditForm } from "@/features/obligations/obligation-edit-form"
 import { fetchObligationById } from "@/features/obligations/obligations.functions"
 import { ObligationType } from "@/generated/prisma/browser"
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { format } from "date-fns"
-import { CalendarIcon, PencilIcon, ReceiptIcon, Trash2Icon } from "lucide-react"
-import { useState } from "react"
 
 export const Route = createFileRoute("/_protected/obligations/$id")({
   component: RouteComponent,

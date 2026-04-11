@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router"
+import { Link, createFileRoute, redirect, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -47,7 +47,7 @@ function RouteComponent() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     resolver: zodResolver(schema as any),
   })
 

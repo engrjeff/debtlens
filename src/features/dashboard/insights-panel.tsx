@@ -1,9 +1,9 @@
-import { Skeleton } from "@/components/ui/skeleton"
 import { AlertTriangle, Info, Lightbulb, Zap } from "lucide-react"
 import type { DashboardInsight } from "./dashboard.utils"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface InsightsPanelProps {
-  insights: DashboardInsight[]
+  insights: Array<DashboardInsight>
 }
 
 const SEVERITY_STYLES = {

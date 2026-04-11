@@ -1,3 +1,5 @@
+import { Controller, useFormContext } from "react-hook-form"
+import type {ObligationInput} from "./schema";
 import {
   Field,
   FieldContent,
@@ -11,8 +13,6 @@ import {
 } from "@/components/ui/native-select"
 import { ObligationType } from "@/generated/prisma/enums"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
-import { Controller, useFormContext } from "react-hook-form"
-import { type ObligationInput } from "./schema"
 
 export function ObligationCategorySelector({
   label = "Now, select a category",

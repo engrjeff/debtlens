@@ -1,10 +1,10 @@
+import { Link } from "@tanstack/react-router"
+import { TrendingDown } from "lucide-react"
+import type { DebtProgressData } from "./dashboard.utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatPHP } from "@/features/obligations/helpers"
-import { Link } from "@tanstack/react-router"
-import { TrendingDown } from "lucide-react"
-import type { DebtProgressData } from "./dashboard.utils"
 
 interface DebtProgressProps {
   data: DebtProgressData
@@ -26,7 +26,7 @@ export function DebtProgress({ data }: DebtProgressProps) {
       <CardHeader className="border-b">
         <div className="flex items-center gap-2">
           <TrendingDown className="size-4 text-muted-foreground" />
-          <CardTitle className="text-sm font-medium">Debt Progress</CardTitle>
+          <CardTitle className="text-sm font-medium">Loan Progress</CardTitle>
         </div>
       </CardHeader>
 

@@ -1,6 +1,6 @@
-import { buttonVariants } from "@/components/ui/button"
 import { Link, useSearch } from "@tanstack/react-router"
 import { Grid2X2Icon, ListIcon } from "lucide-react"
+import { buttonVariants } from "@/components/ui/button"
 
 export function ObligationsViewToggle() {
   const search = useSearch({ from: "/_protected/obligations/" })

@@ -1,3 +1,5 @@
+import { InboxIcon } from "lucide-react"
+import { ObligationCreateDialog } from "./obligation-create-dialog"
 import {
   Empty,
   EmptyContent,
@@ -6,8 +8,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { InboxIcon } from "lucide-react"
-import { ObligationCreateDialog } from "./obligation-create-dialog"
 
 export function NoObligationsResultsView() {
   return (

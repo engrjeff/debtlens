@@ -1,6 +1,6 @@
+import { endOfMonth, startOfMonth } from "date-fns"
 import type { Obligation } from "@/generated/prisma/client"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
-import { endOfMonth, startOfMonth } from "date-fns"
 
 // ── Category colors ───────────────────────────────────────────────────────────
 
@@ -205,7 +205,7 @@ export function formatPayoffDate(months: number): string {
 
 // ── Insights ─────────────────────────────────────────────────────────────────
 
-export function computeInsights(obligations: Obligation[]) {
+export function computeInsights(obligations: Array<Obligation>) {
   const now = new Date()
   const monthStart = startOfMonth(now)
   const monthEnd = endOfMonth(now)
@@ -216,7 +216,6 @@ export function computeInsights(obligations: Obligation[]) {
   let overdueCount = 0
   let overdueAmount = 0
   let totalRemainingDebt = 0
-  let totalMonthlyLoanPayment = 0
 
   for (const o of obligations) {
     const due = new Date(o.nextDueDate)
@@ -238,16 +237,19 @@ export function computeInsights(obligations: Obligation[]) {
 
     if (o.type === "LOAN") {
       totalRemainingDebt += o.remainingBalance
-      if (o.recurrence === "MONTHLY") {
-        totalMonthlyLoanPayment += o.amount
-      }
     }
   }
 
-  const debtFreeMonths =
-    totalMonthlyLoanPayment > 0
-      ? Math.ceil(totalRemainingDebt / totalMonthlyLoanPayment)
-      : null
+  // Debt-free date = when the slowest individual loan finishes.
+  // This matches the dashboard's getDebtProgress calculation.
+  let maxLoanMonths = 0
+  for (const o of obligations) {
+    if (o.type === "LOAN" && o.remainingBalance > 0 && o.amount > 0) {
+      const months = Math.ceil(o.remainingBalance / o.amount)
+      if (months > maxLoanMonths) maxLoanMonths = months
+    }
+  }
+  const debtFreeMonths = maxLoanMonths > 0 ? maxLoanMonths : null
 
   return {
     totalDueThisMonth,
@@ -317,14 +319,14 @@ export function computeNextDueDate(
 // ── Filter + Sort ─────────────────────────────────────────────────────────────
 
 export function filterObligations(
-  obligations: Obligation[],
+  obligations: Array<Obligation>,
   opts: {
     search: string
     typeFilter: TypeFilter
     statusFilter: StatusFilter
     sort: SortOption
   }
-): Obligation[] {
+): Array<Obligation> {
   const q = opts.search.toLowerCase()
 
   return obligations
@@ -352,16 +354,14 @@ export function filterObligations(
         )
       }
       if (opts.sort === "amount") return b.amount - a.amount
-      if (opts.sort === "balance")
-        return b.remainingBalance - a.remainingBalance
-      return 0
+      return b.remainingBalance - a.remainingBalance
     })
 }
 
-export function groupObligations(obligations: Obligation[]) {
-  const overdue: Obligation[] = []
-  const dueThisWeek: Obligation[] = []
-  const upcoming: Obligation[] = []
+export function groupObligations(obligations: Array<Obligation>) {
+  const overdue: Array<Obligation> = []
+  const dueThisWeek: Array<Obligation> = []
+  const upcoming: Array<Obligation> = []
 
   for (const o of obligations) {
     const status = getObligationStatus(o.nextDueDate)

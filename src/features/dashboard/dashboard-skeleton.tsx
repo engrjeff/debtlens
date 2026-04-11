@@ -1,11 +1,11 @@
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Skeleton } from "@/components/ui/skeleton"
 import { CategoryBreakdownSkeleton } from "./category-breakdown"
 import { DebtProgressSkeleton } from "./debt-progress"
 import { InsightsPanelSkeleton } from "./insights-panel"
 import { SummaryCardsSkeleton } from "./summary-cards"
 import { UpcomingListSkeleton } from "./upcoming-list"
+import { Skeleton } from "@/components/ui/skeleton"
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Separator } from "@/components/ui/separator"
 
 export function DashboardSkeleton() {
   return (

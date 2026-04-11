@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button"
+import { PlusIcon } from "lucide-react"
+import { useState } from "react"
+import { ObligationForm } from "./obligation-form"
 import {
   Dialog,
   DialogContent,
@@ -7,9 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { PlusIcon } from "lucide-react"
-import { useState } from "react"
-import { ObligationForm } from "./obligation-form"
+import { Button } from "@/components/ui/button"
 
 export function ObligationCreateDialog() {
   const [open, setOpen] = useState(false)

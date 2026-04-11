@@ -1,6 +1,12 @@
 import { useNavigate } from "@tanstack/react-router"
 import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react"
 
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "./ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -12,12 +18,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { authClient } from "@/lib/auth-client"
 import { getInitials } from "@/lib/utils"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "./ui/sidebar"
 
 export function UserMenu() {
   const { isMobile } = useSidebar()

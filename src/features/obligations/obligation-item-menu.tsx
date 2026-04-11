@@ -5,7 +5,12 @@ import {
   ViewIcon,
 } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { useNavigate } from "@tanstack/react-router"
+import { useState } from "react"
+import { ObligationDeleteDialog } from "./obligation-delete-dialog"
+import { ObligationEditDialog } from "./obligation-edit-dialog"
+import { ObligationEditForm } from "./obligation-edit-form"
+import type { Obligation } from "@/generated/prisma/browser"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,12 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type { Obligation } from "@/generated/prisma/browser"
-import { useNavigate } from "@tanstack/react-router"
-import { useState } from "react"
-import { ObligationDeleteDialog } from "./obligation-delete-dialog"
-import { ObligationEditDialog } from "./obligation-edit-dialog"
-import { ObligationEditForm } from "./obligation-edit-form"
+import { Button } from "@/components/ui/button"
 
 type Action = "edit" | "view" | "delete"
 

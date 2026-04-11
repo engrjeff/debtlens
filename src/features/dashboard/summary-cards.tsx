@@ -1,11 +1,3 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { formatPHP } from "@/features/obligations/helpers"
 import { Link } from "@tanstack/react-router"
 import {
   AlertTriangle,
@@ -14,6 +6,14 @@ import {
   Wallet,
 } from "lucide-react"
 import type { DashboardSummary } from "./dashboard.utils"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { formatPHP } from "@/features/obligations/helpers"
 
 interface SummaryCardsProps {
   summary: DashboardSummary

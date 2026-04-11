@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button"
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { ArrowUpDownIcon } from "lucide-react"
+import type { ObligationsSearch } from "./search-params"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -7,11 +9,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useNavigate, useSearch } from "@tanstack/react-router"
-import { ArrowUpDownIcon } from "lucide-react"
-import type { ObligationsSearch } from "./search-params"
+import { Button } from "@/components/ui/button"
 
-const SORT_OPTIONS: { value: ObligationsSearch["sort"]; label: string }[] = [
+const SORT_OPTIONS: Array<{ value: ObligationsSearch["sort"]; label: string }> = [
   { value: "due-date", label: "Due Date (Nearest)" },
   { value: "amount", label: "Highest Amount" },
   { value: "balance", label: "Largest Balance" },

@@ -1,5 +1,13 @@
 import * as React from "react"
 
+import { Link } from "@tanstack/react-router"
+import {
+  Calendar1Icon,
+  HistoryIcon,
+  LayoutDashboardIcon,
+  PhilippinePesoIcon,
+} from "lucide-react"
+import { UserMenu } from "./user-menu"
 import {
   Sidebar,
   SidebarContent,
@@ -12,14 +20,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Link } from "@tanstack/react-router"
-import {
-  Calendar1Icon,
-  HistoryIcon,
-  LayoutDashboardIcon,
-  PhilippinePesoIcon,
-} from "lucide-react"
-import { UserMenu } from "./user-menu"
 
 const sidebar = {
   user: {
@@ -65,7 +65,7 @@ function NavMain() {
                 className="data-[status=active]:bg-primary data-[status=active]:text-primary-foreground data-[status=active]:hover:bg-primary/90"
               >
                 <Link to={item.url}>
-                  {item.icon && <item.icon />}
+                  <item.icon />
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>

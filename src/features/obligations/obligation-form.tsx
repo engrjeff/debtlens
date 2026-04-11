@@ -1,16 +1,13 @@
-import { SubmitButton } from "@/components/submit-button"
-import { Button } from "@/components/ui/button"
-import { ObligationType, RecurrenceType } from "@/generated/prisma/enums"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
-import { useState, type ChangeEventHandler } from "react"
+import {  useState } from "react"
 import {
   FormProvider,
-  useForm,
-  type SubmitErrorHandler,
-  type SubmitHandler,
+  
+  
+  useForm
 } from "react-hook-form"
 import { toast } from "sonner"
 import { BillForm } from "./bill-form"
@@ -18,7 +15,13 @@ import { LoanForm } from "./loan-form"
 import { ObligationCategorySelector } from "./obligation-category-selector"
 import { ObligationTypeSelector } from "./obligation-type-selector"
 import { addObligation } from "./obligations.functions"
-import { obligationFormSchema, type ObligationInput } from "./schema"
+import {  obligationFormSchema } from "./schema"
+import type {SubmitErrorHandler, SubmitHandler} from "react-hook-form";
+import type {ChangeEventHandler} from "react";
+import type {ObligationInput} from "./schema";
+import { ObligationType, RecurrenceType } from "@/generated/prisma/enums"
+import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/submit-button"
 
 type FormStep = "select-type" | "select-category" | "enter-details"
 

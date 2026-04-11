@@ -43,7 +43,7 @@ export const NumberInput = ({
           type={type}
           inputMode="numeric"
           onWheel={(e) => {
-            e.currentTarget?.blur()
+            e.currentTarget.blur()
           }}
           {...props}
           onChange={handleOnChange}
@@ -57,7 +57,7 @@ export const NumberInput = ({
       type="number"
       inputMode="numeric"
       onWheel={(e) => {
-        e.currentTarget?.blur()
+        e.currentTarget.blur()
       }}
       {...props}
       onChange={handleOnChange}

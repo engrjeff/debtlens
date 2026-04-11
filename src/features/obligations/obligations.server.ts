@@ -1,4 +1,3 @@
-import { prisma } from "@/db/prisma"
 import {
   addDays,
   startOfTomorrow as dateFnsStartOfTomorrow,
@@ -7,8 +6,10 @@ import {
   startOfMonth,
 } from "date-fns"
 import { computeNextDueDate } from "./helpers"
+import {  PAGE_SIZE } from "./search-params"
+import type {ObligationsSearch} from "./search-params";
 import type { EditBillInput, EditLoanInput, ObligationInput } from "./schema"
-import { PAGE_SIZE, type ObligationsSearch } from "./search-params"
+import { prisma } from "@/db/prisma"
 
 export async function getObligations(
   userId: string,
@@ -31,6 +32,25 @@ export async function getObligations(
         return { nextDueDate: { gte: startOfToday, lt: endOfWeek } }
       case "due-this-month":
         return { nextDueDate: { gte: monthStart, lte: monthEnd } }
+      default:
+        return {}
+    }
+  })()
+
+  const dueRangeFilter = (() => {
+    switch (search.dueRange) {
+      case "today":
+        return { nextDueDate: { gte: startOfToday, lt: startOfTomorrow } }
+      case "next7days":
+        return { nextDueDate: { gte: startOfToday, lt: endOfWeek } }
+      case "thisMonth":
+        return { nextDueDate: { gte: monthStart, lte: monthEnd } }
+      case "custom": {
+        const gte = search.dueStart ? new Date(search.dueStart) : undefined
+        const lte = search.dueEnd ? new Date(search.dueEnd) : undefined
+        if (!gte && !lte) return {}
+        return { nextDueDate: { ...(gte ? { gte } : {}), ...(lte ? { lte } : {}) } }
+      }
       default:
         return {}
     }
@@ -62,9 +82,29 @@ export async function getObligations(
         }
       : {}),
     ...statusFilter,
+    ...dueRangeFilter,
+    ...(search.categories?.length
+      ? { category: { in: search.categories } }
+      : {}),
+    ...(search.minAmount != null || search.maxAmount != null
+      ? {
+          amount: {
+            ...(search.minAmount != null ? { gte: search.minAmount } : {}),
+            ...(search.maxAmount != null ? { lte: search.maxAmount } : {}),
+          },
+        }
+      : {}),
+    ...(search.minBalance != null || search.maxBalance != null
+      ? {
+          remainingBalance: {
+            ...(search.minBalance != null ? { gte: search.minBalance } : {}),
+            ...(search.maxBalance != null ? { lte: search.maxBalance } : {}),
+          },
+        }
+      : {}),
   }
 
-  const page = search.page ?? 1
+  const page = search.page
   const skip = (page - 1) * PAGE_SIZE
 
   const [items, total] = await Promise.all([

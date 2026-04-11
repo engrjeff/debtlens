@@ -1,3 +1,5 @@
+import { Controller, useFormContext } from "react-hook-form"
+import type {ObligationInput} from "./schema";
 import { NumberInput } from "@/components/number-input"
 import {
   Field,
@@ -10,8 +12,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { RecurrenceType } from "@/generated/prisma/enums"
-import { Controller, useFormContext } from "react-hook-form"
-import { type ObligationInput } from "./schema"
 
 export function BillForm() {
   const form = useFormContext<ObligationInput>()

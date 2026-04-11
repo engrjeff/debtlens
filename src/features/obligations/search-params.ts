@@ -8,6 +8,17 @@ export const obligationsSearchSchema = z.object({
   status: z
     .enum(["overdue", "due-today", "due-this-week", "due-this-month"])
     .optional(),
+  categories: z.array(z.string()).optional(),
+  dueRange: z
+    .enum(["any", "today", "next7days", "thisMonth", "custom"])
+    .optional(),
+  dueStart: z.string().optional(),
+  dueEnd: z.string().optional(),
+  minAmount: z.coerce.number().optional(),
+  maxAmount: z.coerce.number().optional(),
+  minBalance: z.coerce.number().optional(),
+  maxBalance: z.coerce.number().optional(),
+  progress: z.enum(["low", "mid", "high"]).optional(),
   sort: z
     .enum(["due-date", "amount", "balance", "type"])
     .optional()

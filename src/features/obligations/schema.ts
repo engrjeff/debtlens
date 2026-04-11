@@ -39,16 +39,7 @@ export const obligationFormSchema = z
           path: ["totalAmount"],
         })
       }
-      if (data.remainingBalance == null) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Remaining balance is required",
-          path: ["remainingBalance"],
-        })
-      }
       if (
-        data.totalAmount != null &&
-        data.remainingBalance != null &&
         data.remainingBalance > data.totalAmount
       ) {
         ctx.addIssue({

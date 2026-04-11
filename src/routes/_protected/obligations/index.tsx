@@ -1,3 +1,5 @@
+import { createFileRoute } from "@tanstack/react-router"
+import { Suspense } from "react"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { EmptyObligationsView } from "@/features/obligations/empty-obligations-view"
@@ -15,8 +17,6 @@ import {
   fetchObligations,
 } from "@/features/obligations/obligations.functions"
 import { obligationsSearchSchema } from "@/features/obligations/search-params"
-import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
 
 export const Route = createFileRoute("/_protected/obligations/")({
   validateSearch: obligationsSearchSchema,
@@ -35,10 +35,29 @@ export const Route = createFileRoute("/_protected/obligations/")({
   },
 })
 
+type ObligationItems = Awaited<ReturnType<typeof fetchObligations>>["items"]
+
+function applyProgressFilter(
+  obligations: ObligationItems,
+  progress: string | undefined
+) {
+  if (!progress) return obligations
+  return obligations.filter((o) => {
+    if (o.type !== "LOAN" || !o.totalAmount) return true
+    const paid = o.totalAmount - o.remainingBalance
+    const pct = paid / o.totalAmount
+    if (progress === "high") return pct >= 0.8
+    if (progress === "mid") return pct >= 0.4 && pct < 0.8
+    if (progress === "low") return pct < 0.4
+    return true
+  })
+}
+
 function RouteComponent() {
-  const [{ items: obligations, pageInfo }, allObligations] =
+  const [{ items: rawObligations, pageInfo }, allObligations] =
     Route.useLoaderData()
   const search = Route.useSearch()
+  const obligations = applyProgressFilter(rawObligations, search.progress)
 
   return (
     <div className="flex flex-col">

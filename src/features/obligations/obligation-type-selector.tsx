@@ -1,3 +1,5 @@
+import { Controller, useFormContext } from "react-hook-form"
+import type {ObligationInput} from "./schema";
 import {
   Field,
   FieldContent,
@@ -9,8 +11,6 @@ import {
 } from "@/components/ui/field"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ObligationType } from "@/generated/prisma/enums"
-import { Controller, useFormContext } from "react-hook-form"
-import { type ObligationInput } from "./schema"
 
 export function ObligationTypeSelector() {
   const form = useFormContext<ObligationInput>()

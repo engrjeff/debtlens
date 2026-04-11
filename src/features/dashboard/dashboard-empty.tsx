@@ -1,3 +1,4 @@
+import { LayoutDashboard } from "lucide-react"
 import {
   Empty,
   EmptyContent,
@@ -7,7 +8,6 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 import { ObligationCreateDialog } from "@/features/obligations/obligation-create-dialog"
-import { LayoutDashboard } from "lucide-react"
 
 export function DashboardEmpty() {
   return (
