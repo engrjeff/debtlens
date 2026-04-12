@@ -12,6 +12,7 @@ import {
 import { Progress } from "@/components/ui/progress"
 import type { Obligation } from "@/generated/prisma/browser"
 import { ObligationType, RecurrenceType } from "@/generated/prisma/browser"
+import { cn } from "@/lib/utils"
 import { Link } from "@tanstack/react-router"
 import { CheckCheckIcon, CheckIcon } from "lucide-react"
 import { useState } from "react"
@@ -35,7 +36,10 @@ function ObligationItem({
   return (
     <Card
       size="sm"
-      className={`relative border-none ring-0 lg:h-full${isDone ? "opacity-60" : ""}`}
+      className={cn(
+        "relative border-none ring-0 lg:h-full",
+        isDone ? "opacity-60" : ""
+      )}
     >
       <CardHeader>
         <CardDescription>

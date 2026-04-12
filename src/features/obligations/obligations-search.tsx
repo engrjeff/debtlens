@@ -1,12 +1,12 @@
-import { useNavigate, useSearch } from "@tanstack/react-router"
-import { SearchIcon, XIcon } from "lucide-react"
-import { useState } from "react"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { SearchIcon, XIcon } from "lucide-react"
+import { useState } from "react"
 
 export function ObligationsSearch() {
   const search = useSearch({ from: "/_protected/obligations/" })
@@ -15,7 +15,7 @@ export function ObligationsSearch() {
   const [query, setQuery] = useState(() => search.q ?? "")
 
   return (
-    <InputGroup className="h-10 max-w-full lg:h-9 lg:max-w-xs">
+    <InputGroup className="h-10 lg:h-9 lg:max-w-xs">
       <InputGroupInput
         placeholder="Search by name or category"
         value={query}

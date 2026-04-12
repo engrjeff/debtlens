@@ -1,7 +1,7 @@
+import { Button } from "@/components/ui/button"
 import { Link, useSearch } from "@tanstack/react-router"
 import { CheckIcon } from "lucide-react"
 import type { ObligationsSearch } from "./search-params"
-import { Button } from "@/components/ui/button"
 
 const statusFilters: Array<{
   label: string
@@ -23,7 +23,7 @@ export function ObligationFilterChips() {
           key={`status-filter-${filter.value}`}
           variant={filter.value === search.status ? "default" : "secondary"}
           size="sm"
-          className="rounded-full"
+          className="h-7 rounded-full text-xs lg:h-8 lg:text-sm"
           asChild
         >
           <Link

@@ -1,8 +1,8 @@
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { Link, useSearch } from "@tanstack/react-router"
 import { XIcon } from "lucide-react"
 import type { ObligationsSearch } from "./search-params"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -152,11 +152,11 @@ export function ClearFiltersButton() {
         page: 1,
       })}
       className={cn(
-        buttonVariants({ variant: "ghost", size: "sm" }),
-        "rounded-full"
+        buttonVariants({ variant: "outline", size: "sm" }),
+        "h-7 rounded-full text-xs lg:h-8 lg:text-sm"
       )}
     >
-      <XIcon />
+      <XIcon className="size-3 shrink-0" />
       Clear
     </Link>
   )
@@ -176,7 +176,7 @@ export function ObligationActiveFilters() {
           search={(current) => chip.remove(current as ObligationsSearch)}
           className={cn(
             buttonVariants({ size: "sm", variant: "secondary" }),
-            "rounded-full"
+            "h-7 rounded-full text-xs lg:h-8 lg:text-sm"
           )}
         >
           {chip.label}

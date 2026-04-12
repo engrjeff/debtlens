@@ -10,11 +10,11 @@ export function FiltersBar() {
   return (
     <>
       <div className="block space-y-4 lg:hidden">
-        <ObligationsSearch />
-        <div className="flex items-center justify-between">
-          <ObligationFilterChips />
+        <div className="flex items-center gap-3">
+          <ObligationsSearch />
           <ObligationsMoreFilters />
         </div>
+        <ObligationFilterChips />
         <ObligationActiveFilters />
       </div>
 
