@@ -24,6 +24,7 @@ export const OBLIGATION_CATEGORIES = {
       group: "Lifestyle",
       options: [
         { label: "Subscription", value: "Subscription" },
+        { label: "Credit Card", value: "Credit Card" },
         { label: "Shopping Installment", value: "Shopping Installment" },
         { label: "Gym Membership", value: "Gym Membership" },
         { label: "Tuition", value: "Tuition" },
@@ -37,6 +38,7 @@ export const OBLIGATION_CATEGORIES = {
         { label: "Parking", value: "Parking" },
         { label: "Toll Fees", value: "Toll Fees" },
         { label: "Vehicle Insurance", value: "Vehicle Insurance" },
+        { label: "Vehicle PMS", value: "Vehicle PMS" },
       ],
     },
     {

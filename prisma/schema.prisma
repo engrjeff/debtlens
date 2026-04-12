@@ -90,6 +90,7 @@ enum ObligationType {
 }
 
 enum RecurrenceType {
+  ONCE
   DAILY
   WEEKLY
   MONTHLY
@@ -111,6 +112,7 @@ model Obligation {
   remainingBalance Float
   category         String
   isDeleted        Boolean?       @default(false)
+  isDone           Boolean?       @default(false)
 
   // Loan-specific
   interestRate Float? // e.g. 0.0525 = 5.25%
@@ -123,6 +125,10 @@ model Obligation {
   @@index([userId])
   @@index([nextDueDate])
   @@index([userId, nextDueDate])
+  @@index([isDeleted])
+  @@index([userId, isDeleted])
+  @@index([isDone])
+  @@index([userId, isDone])
   @@map("obligation")
 }
 

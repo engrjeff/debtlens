@@ -1,3 +1,14 @@
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { format, isSameDay } from "date-fns"
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ReceiptIcon,
+} from "lucide-react"
+import { useMemo, useState } from "react"
+import type { Obligation } from "@/generated/prisma/browser"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
@@ -13,18 +24,7 @@ import { Separator } from "@/components/ui/separator"
 import { formatPHP, getPerLabel } from "@/features/obligations/helpers"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { fetchObligationInsights } from "@/features/obligations/obligations.functions"
-import type { Obligation } from "@/generated/prisma/browser"
 import { generatePageTitle } from "@/lib/utils"
-import { Link, createFileRoute } from "@tanstack/react-router"
-import { format, isSameDay } from "date-fns"
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ReceiptIcon,
-} from "lucide-react"
-import { useMemo, useState } from "react"
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
@@ -530,6 +530,14 @@ function getObligationDatesInMonth(
   if (monthsFromAnchor < 0) return dates
 
   switch (obligation.recurrence) {
+    case "ONCE": {
+      // Appears only on its exact due date
+      if (monthsFromAnchor === 0) {
+        dates.push(anchor)
+      }
+      break
+    }
+
     case "DAILY": {
       for (let d = 1; d <= monthEnd.getDate(); d++) {
         const candidate = new Date(year, month, d)

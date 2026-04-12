@@ -10,6 +10,7 @@ const statusFilters: Array<{
   { label: "This week", value: "due-this-week" },
   { label: "This Month", value: "due-this-month" },
   { label: "Overdue", value: "overdue" },
+  { label: "Done", value: "done" },
 ]
 
 export function ObligationFilterChips() {

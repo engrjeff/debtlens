@@ -6,6 +6,7 @@ import {
   getObligation,
   getObligationInsights,
   getObligations,
+  markBillDone,
   markObligationPaid,
   updateObligation,
 } from "./obligations.server"
@@ -76,4 +77,11 @@ export const markAsPaid = createServerFn({ method: "POST" })
       modeOfPayment: data.modeOfPayment,
       notes: data.notes,
     })
+  })
+
+export const markBillAsDone = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ obligationId: z.string() }))
+  .handler(async ({ data }) => {
+    const session = await ensureSession()
+    return markBillDone(data.obligationId, session.user.id)
   })

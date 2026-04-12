@@ -1,9 +1,9 @@
+import { Text } from "@/components/text"
+import { Progress } from "@/components/ui/progress"
+import type { Obligation } from "@/generated/prisma/browser"
 import { formatDistanceToNow } from "date-fns"
 import { TrophyIcon } from "lucide-react"
 import { computeDebtFreeBanner, formatPHP } from "./helpers"
-import type { Obligation } from "@/generated/prisma/browser"
-import { Progress } from "@/components/ui/progress"
-import { Text } from "@/components/text"
 
 interface DebtFreeBannerProps {
   obligations: Array<Obligation>
@@ -36,7 +36,12 @@ export function DebtFreeBanner({ obligations }: DebtFreeBannerProps) {
           <Text size="2xl" weight="bold" className="font-mono text-white">
             {formattedTarget}
           </Text>
-          <Text size="sm" variant="muted" className="text-emerald-400/70">
+          <Text
+            size="xs"
+            weight="bold"
+            variant="muted"
+            className="text-emerald-300"
+          >
             · {distanceLabel}
           </Text>
         </div>
@@ -48,10 +53,10 @@ export function DebtFreeBanner({ obligations }: DebtFreeBannerProps) {
             className="h-1.5 bg-emerald-950/60 *:data-[slot=progress-indicator]:bg-emerald-400"
           />
           <div className="flex justify-between">
-            <Text size="xxs" className="text-emerald-400/60">
+            <Text size="xxs" weight="semibold">
               {overallProgress.toFixed(0)}% paid off
             </Text>
-            <Text size="xxs" className="text-emerald-400/60">
+            <Text size="xxs" weight="semibold">
               {formatPHP(totalRemaining)} remaining
             </Text>
           </div>

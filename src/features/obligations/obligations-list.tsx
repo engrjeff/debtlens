@@ -1,14 +1,3 @@
-import { Link } from "@tanstack/react-router"
-import { CheckIcon } from "lucide-react"
-import { useState } from "react"
-import {
-  formatPHP,
-  getProgressPercent,
-  getProgressPercentString,
-} from "./helpers"
-import { MarkPaidDialog } from "./mark-paid-dialog"
-import { ObligationItemMenu } from "./obligation-item-menu"
-import type { Obligation } from "@/generated/prisma/browser"
 import { Text } from "@/components/text"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -21,7 +10,18 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { ObligationType } from "@/generated/prisma/browser"
+import type { Obligation } from "@/generated/prisma/browser"
+import { ObligationType, RecurrenceType } from "@/generated/prisma/browser"
+import { Link } from "@tanstack/react-router"
+import { CheckCheckIcon, CheckIcon } from "lucide-react"
+import { useState } from "react"
+import {
+  formatPHP,
+  getProgressPercent,
+  getProgressPercentString,
+} from "./helpers"
+import { MarkPaidDialog } from "./mark-paid-dialog"
+import { ObligationItemMenu } from "./obligation-item-menu"
 
 function ObligationItem({
   obligation,
@@ -30,11 +30,26 @@ function ObligationItem({
   obligation: Obligation
   onMarkPaid: (obligation: Obligation) => void
 }) {
+  const isDone = obligation.isDone === true
+
   return (
-    <Card size="sm" className="relative border-none ring-0 lg:h-full">
+    <Card
+      size="sm"
+      className={`relative border-none ring-0 lg:h-full${isDone ? "opacity-60" : ""}`}
+    >
       <CardHeader>
         <CardDescription>
-          <Badge variant={obligation.type}>{obligation.category}</Badge>
+          <div className="flex items-center gap-1.5">
+            <Badge variant={obligation.type}>{obligation.category}</Badge>
+            {isDone && (
+              <Badge
+                variant="outline"
+                className="gap-1 border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400"
+              >
+                <CheckCheckIcon className="size-3" /> Done
+              </Badge>
+            )}
+          </div>
         </CardDescription>
         <CardTitle>
           <Link
@@ -52,7 +67,9 @@ function ObligationItem({
       <CardContent className="mt-auto flex items-center justify-between">
         <div className="space-y-0.5">
           <Text size="xxs" variant="muted" className="capitalize">
-            {obligation.recurrence.toLowerCase()} payment
+            {obligation.recurrence === RecurrenceType.ONCE
+              ? "One-time payment"
+              : `${obligation.recurrence.toLowerCase()} payment`}
           </Text>
           <Text size="lg" weight="bold" className="font-mono">
             {formatPHP(obligation.amount)}
@@ -68,7 +85,7 @@ function ObligationItem({
         </Badge>
       </CardContent>
       <CardFooter className="flex-col gap-4">
-        {obligation.type === ObligationType.LOAN && (
+        {obligation.type === ObligationType.LOAN && !isDone && (
           <div className="w-full space-y-1">
             <div className="flex justify-between">
               <Text size="xxs" variant="muted">
@@ -89,14 +106,16 @@ function ObligationItem({
             />
           </div>
         )}
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={() => onMarkPaid(obligation)}
-        >
-          <CheckIcon /> Mark as Paid
-        </Button>
+        {isDone ? null : (
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => onMarkPaid(obligation)}
+          >
+            <CheckIcon /> Mark as Paid
+          </Button>
+        )}
       </CardFooter>
     </Card>
   )

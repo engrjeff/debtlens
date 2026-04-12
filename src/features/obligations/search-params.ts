@@ -6,7 +6,7 @@ export const obligationsSearchSchema = z.object({
   q: z.string().optional(),
   type: z.enum(["ALL", "BILL", "LOAN"]).optional().default("ALL"),
   status: z
-    .enum(["overdue", "due-today", "due-this-week", "due-this-month"])
+    .enum(["overdue", "due-today", "due-this-week", "due-this-month", "done"])
     .optional(),
   categories: z.array(z.string()).optional(),
   dueRange: z

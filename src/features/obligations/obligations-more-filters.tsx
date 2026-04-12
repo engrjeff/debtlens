@@ -176,6 +176,7 @@ function StatusFilter() {
     { value: "due-today", label: "Due Today" },
     { value: "due-this-week", label: "Due This Week" },
     { value: "due-this-month", label: "Due This Month" },
+    { value: "done", label: "Done" },
   ] as const
 
   return (

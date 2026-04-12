@@ -159,6 +159,7 @@ export function getDueDaysLabel(nextDueDate: Date | string): string {
 
 export function getPerLabel(recurrence: string): string {
   const map: Record<string, string> = {
+    ONCE: "once",
     DAILY: "day",
     WEEKLY: "week",
     MONTHLY: "month",
@@ -170,6 +171,7 @@ export function getPerLabel(recurrence: string): string {
 
 export function getRecurrenceLabel(recurrence: string): string {
   const map: Record<string, string> = {
+    ONCE: "Once",
     DAILY: "Daily",
     WEEKLY: "Weekly",
     MONTHLY: "Monthly",
@@ -344,6 +346,9 @@ export function computeNextDueDate(
   const d = base.getDate()
 
   switch (recurrence) {
+    case "ONCE":
+      return base
+
     case "DAILY":
       return new Date(y, m, d + 1)
 

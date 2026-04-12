@@ -69,6 +69,9 @@ export function BillForm() {
                   className="w-full"
                   {...field}
                 >
+                  <NativeSelectOption value={RecurrenceType.ONCE}>
+                    Once
+                  </NativeSelectOption>
                   <NativeSelectOption value={RecurrenceType.DAILY}>
                     Daily
                   </NativeSelectOption>

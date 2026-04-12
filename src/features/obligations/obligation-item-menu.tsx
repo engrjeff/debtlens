@@ -5,12 +5,7 @@ import {
   ViewIcon,
 } from "lucide-react"
 
-import { useNavigate } from "@tanstack/react-router"
-import { useState } from "react"
-import { ObligationDeleteDialog } from "./obligation-delete-dialog"
-import { ObligationEditDialog } from "./obligation-edit-dialog"
-import { ObligationEditForm } from "./obligation-edit-form"
-import type { Obligation } from "@/generated/prisma/browser"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +13,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
+import type { Obligation } from "@/generated/prisma/browser"
+import { useNavigate } from "@tanstack/react-router"
+import { useState } from "react"
+import { ObligationDeleteDialog } from "./obligation-delete-dialog"
+import { ObligationEditDialog } from "./obligation-edit-dialog"
+import { ObligationEditForm } from "./obligation-edit-form"
 
 type Action = "edit" | "view" | "delete"
 
@@ -35,10 +35,12 @@ export function ObligationItemMenu({ obligation }: { obligation: Obligation }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setAction("edit")}>
-            <PencilIcon />
-            Edit
-          </DropdownMenuItem>
+          {obligation.isDone ? null : (
+            <DropdownMenuItem onClick={() => setAction("edit")}>
+              <PencilIcon />
+              Edit
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             onClick={() => {
               setAction("view")

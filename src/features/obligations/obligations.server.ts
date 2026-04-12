@@ -22,6 +22,8 @@ export async function getObligations(
   const monthStart = startOfMonth(now)
   const monthEnd = endOfMonth(now)
 
+  const isDoneFilter = search.status === "done" ? { isDone: true } : { isDone: false }
+
   const statusFilter = (() => {
     switch (search.status) {
       case "overdue":
@@ -72,6 +74,7 @@ export async function getObligations(
   const where = {
     userId,
     isDeleted: false,
+    ...isDoneFilter,
     ...(search.type !== "ALL" ? { type: search.type } : {}),
     ...(search.q
       ? {
@@ -126,7 +129,7 @@ export async function getObligations(
 }
 
 export async function getObligationInsights(userId: string) {
-  return prisma.obligation.findMany({ where: { userId, isDeleted: false } })
+  return prisma.obligation.findMany({ where: { userId, isDeleted: false, isDone: false } })
 }
 
 export async function createObligation(data: ObligationInput, userId: string) {
@@ -235,6 +238,9 @@ export async function markObligationPaid(
               obligation.dueDay
             )
           : obligation.nextDueDate
+    } else if (obligation.recurrence === "ONCE") {
+      // One-time bill — keep the due date and auto-mark as done
+      nextDueDate = obligation.nextDueDate
     } else {
       nextDueDate = computeNextDueDate(
         obligation.nextDueDate,
@@ -243,10 +249,33 @@ export async function markObligationPaid(
       )
     }
 
+    const isDone =
+      obligation.recurrence === "ONCE" ||
+      (obligation.type === "LOAN" && remainingBalance === 0)
+
     return tx.obligation.update({
       where: { id: obligationId },
-      data: { nextDueDate, remainingBalance },
+      data: {
+        nextDueDate,
+        remainingBalance,
+        ...(isDone ? { isDone: true } : {}),
+      },
     })
+  })
+}
+
+export async function markBillDone(obligationId: string, userId: string) {
+  const obligation = await prisma.obligation.findFirst({
+    where: { id: obligationId, userId, isDeleted: false, type: "BILL" },
+  })
+
+  if (!obligation) {
+    throw new Error("Bill not found")
+  }
+
+  return prisma.obligation.update({
+    where: { id: obligationId },
+    data: { isDone: true },
   })
 }
 

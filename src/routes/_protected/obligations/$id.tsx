@@ -4,6 +4,8 @@ import {
   AlertCircleIcon,
   CalendarDaysIcon,
   CalendarIcon,
+  CheckCheckIcon,
+  CheckIcon,
   ClockIcon,
   PencilIcon,
   Trash2Icon,
@@ -15,6 +17,7 @@ import type {
   ObligationWithPayments,
   PaymentRecord,
 } from "@/features/obligations/obligation-detail.types"
+import type {Obligation} from "@/generated/prisma/browser";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -48,12 +51,13 @@ import {
   getProgressPercent,
   getRecurrenceLabel,
 } from "@/features/obligations/helpers"
+import { BillDoneDialog } from "@/features/obligations/bill-done-dialog"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { ObligationDeleteDialog } from "@/features/obligations/obligation-delete-dialog"
 import { ObligationEditDialog } from "@/features/obligations/obligation-edit-dialog"
 import { ObligationEditForm } from "@/features/obligations/obligation-edit-form"
 import { fetchObligationById } from "@/features/obligations/obligations.functions"
-import { ObligationType } from "@/generated/prisma/browser"
+import {  ObligationType } from "@/generated/prisma/browser"
 import { generatePageTitle } from "@/lib/utils"
 
 // ── Route ─────────────────────────────────────────────────────────────────────
@@ -81,10 +85,11 @@ function RouteComponent() {
   const obligation = Route.useLoaderData()
 
   const [showMarkPaid, setShowMarkPaid] = useState(false)
-
   const [showDelete, setShowDelete] = useState(false)
+  const [showMarkDone, setShowMarkDone] = useState(false)
 
   const isLoan = obligation.type === ObligationType.LOAN
+  const isDone = obligation.isDone === true
   const status = getObligationStatus(obligation.nextDueDate)
 
   return (
@@ -111,8 +116,19 @@ function RouteComponent() {
         {/* Step 3 — Obligation identity */}
         <ObligationHeader obligation={obligation} />
 
+        {/* Done banner */}
+        {isDone && (
+          <Alert className="border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-200">
+            <CheckCheckIcon className="text-emerald-600 dark:text-emerald-400" />
+            <AlertTitle>Bill Completed</AlertTitle>
+            <AlertDescription className="text-emerald-800 dark:text-emerald-300">
+              This bill has been marked as done and is no longer active.
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Step 11 — Status & alerts */}
-        {(status === "overdue" ||
+        {!isDone && (status === "overdue" ||
           status === "due-today" ||
           status === "due-this-week") && (
           <StatusAlert nextDueDate={obligation.nextDueDate} />
@@ -128,7 +144,10 @@ function RouteComponent() {
         {isLoan && <LoanProgressSection obligation={obligation} />}
 
         {/* Step 9 — Recurrence details */}
-        <RecurrenceDetails obligation={obligation} />
+        <RecurrenceDetails
+          obligation={obligation}
+          onMarkDone={() => setShowMarkDone(true)}
+        />
 
         {/* Steps 7 & 8 — Payment history */}
         <PaymentHistory payments={obligation.payments} />
@@ -151,6 +170,12 @@ function RouteComponent() {
         obligation={obligation}
         open={showDelete}
         onOpenChange={(open) => setShowDelete(open)}
+      />
+
+      <BillDoneDialog
+        obligation={obligation}
+        open={showMarkDone}
+        onOpenChange={(open) => setShowMarkDone(open)}
       />
     </div>
   )
@@ -554,45 +579,84 @@ function LoanProgressSection({
 
 function RecurrenceDetails({
   obligation,
+  onMarkDone,
 }: {
   obligation: ObligationWithPayments
+  onMarkDone: () => void
 }) {
+  const [pendingObligation, setPendingObligation] = useState<Obligation | null>(
+    null
+  )
+
   const description = buildRecurrenceDescription(
     obligation.recurrence,
     obligation.dueDay
   )
 
   return (
-    <Card size="sm">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2">
-          <CalendarDaysIcon className="size-4 text-muted-foreground" />
-          Schedule
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
-          <div className="space-y-0.5">
-            <p className="text-xs text-muted-foreground">Frequency</p>
-            <p className="font-semibold">{description}</p>
-          </div>
-          <div className="space-y-0.5">
-            <p className="text-xs text-muted-foreground">Next Payment</p>
-            <p className="font-semibold">
-              {formatDueDate(obligation.nextDueDate)}
-            </p>
-          </div>
-          {obligation.dueDay && obligation.recurrence === "MONTHLY" && (
+    <>
+      {pendingObligation && (
+        <MarkPaidDialog
+          obligation={pendingObligation}
+          open={true}
+          onClose={() => setPendingObligation(null)}
+        />
+      )}
+
+      <Card size="sm">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2">
+            <CalendarDaysIcon className="size-4 text-muted-foreground" />
+            Schedule
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
             <div className="space-y-0.5">
-              <p className="text-xs text-muted-foreground">Due Day</p>
+              <p className="text-xs text-muted-foreground">Frequency</p>
+              <p className="font-semibold">{description}</p>
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-xs text-muted-foreground">Next Payment</p>
               <p className="font-semibold">
-                {ordinal(obligation.dueDay)} of each month
+                {formatDueDate(obligation.nextDueDate)}
               </p>
             </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            {obligation.dueDay && obligation.recurrence === "MONTHLY" && (
+              <div className="space-y-0.5">
+                <p className="text-xs text-muted-foreground">Due Day</p>
+                <p className="font-semibold">
+                  {ordinal(obligation.dueDay)} of each month
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-6 flex flex-col gap-2">
+            {!obligation.isDone && (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => setPendingObligation(obligation)}
+              >
+                <CheckIcon /> Mark as Paid
+              </Button>
+            )}
+            {obligation.type === "BILL" && !obligation.isDone && (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+                onClick={onMarkDone}
+              >
+                <CheckCheckIcon /> Mark as Done
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </>
   )
 }
 

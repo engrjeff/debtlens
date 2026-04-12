@@ -9,6 +9,7 @@ import {
 import { MarkPaidDialog } from "./mark-paid-dialog"
 import { ObligationItemMenu } from "./obligation-item-menu"
 import type { Obligation } from "@/generated/prisma/browser"
+import { CheckCheckIcon } from "lucide-react"
 import {
   Table,
   TableBody,
@@ -100,31 +101,39 @@ export function ObligationsTable({
                   {formatDueDate(obligation.nextDueDate)}
                 </TableCell>
                 <TableCell className="text-center">
-                  <Badge
-                    variant={
-                      getObligationStatus(obligation.nextDueDate) === "overdue"
-                        ? "destructive"
-                        : "secondary"
-                    }
-                    className="capitalize"
-                  >
-                    {getObligationStatus(obligation.nextDueDate).replaceAll(
-                      "-",
-                      " "
-                    )}
-                  </Badge>
+                  {obligation.isDone ? (
+                    <Badge variant="outline" className="gap-1 border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
+                      <CheckCheckIcon className="size-3" /> Done
+                    </Badge>
+                  ) : (
+                    <Badge
+                      variant={
+                        getObligationStatus(obligation.nextDueDate) === "overdue"
+                          ? "destructive"
+                          : "secondary"
+                      }
+                      className="capitalize"
+                    >
+                      {getObligationStatus(obligation.nextDueDate).replaceAll(
+                        "-",
+                        " "
+                      )}
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Button
-                      type="button"
-                      size="xs"
-                      variant="link"
-                      className="px-0 text-blue-500"
-                      onClick={() => setPendingObligation(obligation)}
-                    >
-                      Mark as Paid
-                    </Button>
+                    {!obligation.isDone && (
+                      <Button
+                        type="button"
+                        size="xs"
+                        variant="link"
+                        className="px-0 text-blue-500"
+                        onClick={() => setPendingObligation(obligation)}
+                      >
+                        Mark as Paid
+                      </Button>
+                    )}
                     <ObligationItemMenu obligation={obligation} />
                   </div>
                 </TableCell>

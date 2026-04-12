@@ -1,4 +1,3 @@
-import type { Obligation } from "@/generated/prisma/client"
 import { DebtFreeBanner } from "../obligations/debt-free-banner"
 import { ObligationCreateDialog } from "../obligations/obligation-create-dialog"
 import { DashboardEmpty } from "./dashboard-empty"
@@ -12,6 +11,7 @@ import { DebtProgress } from "./debt-progress"
 import { InsightsPanel } from "./insights-panel"
 import { SummaryCards } from "./summary-cards"
 import { UpcomingList } from "./upcoming-list"
+import type { Obligation } from "@/generated/prisma/client"
 
 interface DashboardPageProps {
   obligations: Array<Obligation>
