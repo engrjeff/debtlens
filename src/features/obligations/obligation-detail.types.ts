@@ -8,7 +8,7 @@ export type PaymentRecord = Pick<
 >
 
 export type ObligationWithPayments = Obligation & {
-  payments: PaymentRecord[]
+  payments: Array<PaymentRecord>
 }
 
 // ── Derived / computed types ──────────────────────────────────────────────────

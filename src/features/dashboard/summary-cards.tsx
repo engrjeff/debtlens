@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Link } from "@tanstack/react-router"
+import type { DashboardSummary } from "./dashboard.utils"
+import { Text } from "@/components/text"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatCompactPHP } from "@/features/obligations/helpers"
-import { Link } from "@tanstack/react-router"
-import { AlertTriangle, CalendarDays, CreditCard, Wallet } from "lucide-react"
-import type { DashboardSummary } from "./dashboard.utils"
 
 interface SummaryCardsProps {
   summary: DashboardSummary
@@ -12,6 +12,7 @@ interface SummaryCardsProps {
 export function SummaryCards({ summary }: SummaryCardsProps) {
   const {
     totalDueThisMonth,
+    dueThisMonthCount,
     dueInNext7DaysAmount,
     dueInNext7DaysCount,
     overdueAmount,
@@ -19,124 +20,103 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
     totalRemainingDebt,
   } = summary
 
-  const isOverdue = overdueCount > 0
-
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {/* Due This Month */}
-      <Link
-        to="/obligations"
-        search={(c) => ({ ...c, status: "due-this-month" })}
-        className="group"
-      >
-        <Card
-          size="sm"
-          className="h-full transition-shadow group-hover:ring-primary"
-        >
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-normal text-muted-foreground">
-                Due This Month
-              </CardTitle>
-              <Wallet className="size-4 text-blue-500" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="font-mono text-2xl font-bold">
-              {formatCompactPHP(totalDueThisMonth)}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Total obligations this month
-            </p>
-          </CardContent>
-        </Card>
-      </Link>
-
-      {/* Due in Next 7 Days */}
+    <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
       <Link
         to="/obligations"
         search={(c) => ({ ...c, status: "due-this-week" })}
-        className="group"
+        className="group data-[disabled=true]:opacity-60"
+        data-disabled={dueInNext7DaysCount === 0}
       >
-        <Card
-          size="sm"
-          className="h-full transition-shadow group-hover:ring-primary"
-        >
+        <Card size="sm" className="group-hover:ring-primary data-[size=sm]:gap-2">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-normal text-muted-foreground">
-                Due in 7 Days
-              </CardTitle>
-              <CalendarDays className="size-4 text-amber-500" />
-            </div>
+            <Text size="xxs" variant="muted" weight="semibold" className="uppercase">
+              Due This Week
+            </Text>
           </CardHeader>
           <CardContent>
-            <p className="font-mono text-2xl font-bold">
+            <Text size="xl" weight="bold" className="font-mono">
               {formatCompactPHP(dueInNext7DaysAmount)}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
+            </Text>
+            <Text size="xs" variant="muted" className="mt-1">
               {dueInNext7DaysCount === 0
-                ? "Nothing due soon"
+                ? "Nothing coming up"
                 : `${dueInNext7DaysCount} obligation${dueInNext7DaysCount !== 1 ? "s" : ""} coming up`}
-            </p>
+            </Text>
           </CardContent>
         </Card>
       </Link>
 
-      {/* Overdue */}
+      <Link
+        to="/obligations"
+        search={(c) => ({ ...c, status: "due-this-month" })}
+        className="group data-[disabled=true]:opacity-60"
+        data-disabled={dueThisMonthCount === 0}
+      >
+        <Card size="sm" className="group-hover:ring-primary data-[size=sm]:gap-2">
+          <CardHeader>
+            <Text size="xxs" variant="muted" weight="semibold" className="uppercase">
+              Due This Month
+            </Text>
+          </CardHeader>
+          <CardContent>
+            <Text size="xl" weight="bold" className="font-mono">
+              {formatCompactPHP(totalDueThisMonth)}
+            </Text>
+            {dueThisMonthCount === 0 ? (
+              <Text size="xs" variant="muted" className="mt-1">All caught up</Text>
+            ) : (
+              <Text size="xs" variant="success" className="mt-1">
+                {dueThisMonthCount} obligation{dueThisMonthCount !== 1 ? "s" : ""}
+              </Text>
+            )}
+          </CardContent>
+        </Card>
+      </Link>
+
       <Link
         to="/obligations"
         search={(c) => ({ ...c, status: "overdue" })}
-        className="group"
+        className="group data-[disabled=true]:opacity-60"
+        data-disabled={overdueCount === 0}
       >
-        <Card
-          size="sm"
-          className={`h-full transition-shadow group-hover:ring-primary ${isOverdue ? "ring-destructive/40" : ""}`}
-        >
+        <Card size="sm" className="group-hover:ring-primary data-[size=sm]:gap-2">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle
-                className={`text-sm font-normal ${isOverdue ? "text-destructive" : "text-muted-foreground"}`}
-              >
-                Overdue
-              </CardTitle>
-              <AlertTriangle
-                className={`size-4 ${isOverdue ? "text-destructive" : "text-emerald-500"}`}
-              />
-            </div>
+            <Text size="xxs" variant="muted" weight="semibold" className="uppercase">
+              Overdue
+            </Text>
           </CardHeader>
           <CardContent>
-            <p
-              className={`font-mono text-2xl font-bold ${isOverdue ? "text-destructive" : ""}`}
+            <Text
+              size="xl"
+              weight="bold"
+              variant={overdueCount > 0 ? "destructive" : "default"}
+              className="font-mono"
             >
-              {isOverdue ? formatCompactPHP(overdueAmount) : "None"}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {isOverdue
+              {formatCompactPHP(overdueAmount)}
+            </Text>
+            <Text size="xs" variant="muted" className="mt-1">
+              {overdueCount > 0
                 ? `${overdueCount} unpaid obligation${overdueCount !== 1 ? "s" : ""}`
-                : "You're all caught up"}
-            </p>
+                : "All caught up"}
+            </Text>
           </CardContent>
         </Card>
       </Link>
 
-      {/* Total Remaining Debt */}
-      <Card size="sm" className="h-full">
+      <Card size="sm" className="data-[size=sm]:gap-2">
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-normal text-muted-foreground">
-              Remaining Debt
-            </CardTitle>
-            <CreditCard className="size-4 text-violet-500" />
-          </div>
+          <Text size="xxs" variant="muted" weight="semibold" className="uppercase">
+            Remaining Debt
+          </Text>
         </CardHeader>
         <CardContent>
-          <p className="font-mono text-2xl font-bold">
+          <Text size="xl" weight="bold" className="font-mono">
             {formatCompactPHP(totalRemainingDebt)}
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          </Text>
+          <Text size="xs" className="mt-1 text-violet-400">
             {totalRemainingDebt === 0 ? "No active loans" : "Across all loans"}
-          </p>
+          </Text>
         </CardContent>
       </Card>
     </div>

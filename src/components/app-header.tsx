@@ -1,10 +1,10 @@
-import { siteConfig } from "@/config/site"
 import { Link } from "@tanstack/react-router"
-import { SidebarTrigger } from "./ui/sidebar"
+import { HeaderUserMenu } from "./user-menu"
+import { siteConfig } from "@/config/site"
 
 export function AppHeader() {
   return (
-    <div className="flex h-16 items-center justify-between border-b bg-background p-4 lg:hidden">
+    <header className="fixed inset-x-0 top-0 z-10 flex h-16 items-center justify-between border-b bg-background p-4 lg:hidden">
       <Link to="/dashboard" className="flex items-center gap-3">
         <img
           src="/logo.svg"
@@ -14,7 +14,7 @@ export function AppHeader() {
         />
         <span className="text-base font-semibold">{siteConfig.title}</span>
       </Link>
-      <SidebarTrigger />
-    </div>
+      <HeaderUserMenu />
+    </header>
   )
 }

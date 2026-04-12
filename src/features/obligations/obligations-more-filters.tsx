@@ -1,3 +1,9 @@
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { FilterIcon, XIcon } from "lucide-react"
+import { createContext, useCallback, useContext, useState } from "react"
+import { getCategoryMeta } from "./helpers"
+import type { ReactNode } from "react"
+import type { ObligationsSearch } from "./search-params"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -14,12 +20,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
-import { useNavigate, useSearch } from "@tanstack/react-router"
-import { FilterIcon, XIcon } from "lucide-react"
-import type { ReactNode } from "react"
-import { createContext, useCallback, useContext, useState } from "react"
-import { getCategoryMeta } from "./helpers"
-import type { ObligationsSearch } from "./search-params"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

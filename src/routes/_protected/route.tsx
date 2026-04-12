@@ -1,8 +1,9 @@
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router"
 import { AppHeader } from "@/components/app-header"
 import { AppSidebar } from "@/components/app-sidebar"
+import { BottomNav } from "@/components/bottom-nav"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { getSession } from "@/lib/auth.functions"
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: async ({ location }) => {
@@ -33,7 +34,10 @@ function RouteComponent() {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <Outlet />
+        <div className="pb-16 pt-16 lg:pb-0 lg:pt-0">
+          <Outlet />
+        </div>
+        <BottomNav />
       </SidebarInset>
     </SidebarProvider>
   )

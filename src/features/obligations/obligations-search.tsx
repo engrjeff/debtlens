@@ -15,9 +15,9 @@ export function ObligationsSearch() {
   const [query, setQuery] = useState(() => search.q ?? "")
 
   return (
-    <InputGroup className="max-w-xs">
+    <InputGroup className="h-10 max-w-full lg:h-9 lg:max-w-xs">
       <InputGroupInput
-        placeholder="Search by name or category…"
+        placeholder="Search by name or category"
         value={query}
         onChange={(e) => {
           const value = e.currentTarget.value
@@ -29,7 +29,7 @@ export function ObligationsSearch() {
             search: (prev) => ({ ...prev, q: value }),
           })
         }}
-        className="pl-9"
+        className="h-full pl-9"
       />
       <InputGroupAddon>
         <SearchIcon />

@@ -1,3 +1,7 @@
+import { createFileRoute } from "@tanstack/react-router"
+import { Suspense } from "react"
+import { Text } from "@/components/text"
+import { DebtFreeBanner } from "@/features/obligations/debt-free-banner"
 import { EmptyObligationsView } from "@/features/obligations/empty-obligations-view"
 import { FiltersBar } from "@/features/obligations/filters-bar"
 import {
@@ -5,7 +9,10 @@ import {
   InsightCardsSkeleton,
 } from "@/features/obligations/insight-cards"
 import { NoObligationsResultsView } from "@/features/obligations/no-obligations-result-view"
-import { ObligationCreateDialog } from "@/features/obligations/obligation-create-dialog"
+import {
+  ObligationCreateDialog,
+  ObligationCreateFab,
+} from "@/features/obligations/obligation-create-dialog"
 import { ObligationList } from "@/features/obligations/obligations-list"
 import { ObligationsTable } from "@/features/obligations/obligations-table"
 import {
@@ -14,8 +21,6 @@ import {
 } from "@/features/obligations/obligations.functions"
 import { obligationsSearchSchema } from "@/features/obligations/search-params"
 import { generatePageTitle } from "@/lib/utils"
-import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
 
 export const Route = createFileRoute("/_protected/obligations/")({
   validateSearch: obligationsSearchSchema,
@@ -60,7 +65,7 @@ function RouteComponent() {
 
   return (
     <div className="container mx-auto grid space-y-4 p-4">
-      <header className="flex items-center gap-4 border-b pb-4">
+      <header className="hidden items-center gap-4 border-b pb-4 lg:flex">
         <div>
           <h1 className="font-semibold">Obligations</h1>
           <p className="text-sm text-muted-foreground">
@@ -77,9 +82,16 @@ function RouteComponent() {
           <EmptyObligationsView />
         ) : (
           <>
+            <DebtFreeBanner obligations={allObligations} />
             <Suspense fallback={<InsightCardsSkeleton />}>
               <InsightCards obligations={allObligations} />
             </Suspense>
+            <div className="flex items-center justify-between lg:hidden">
+              <h1 className="font-semibold">Obligations</h1>
+              <Text size="xs" variant="muted">
+                {pageInfo.total} shown
+              </Text>
+            </div>
             <FiltersBar />
             {pageInfo.total === 0 ? (
               <NoObligationsResultsView />
@@ -95,6 +107,7 @@ function RouteComponent() {
           </>
         )}
       </main>
+      <ObligationCreateFab />
     </div>
   )
 }

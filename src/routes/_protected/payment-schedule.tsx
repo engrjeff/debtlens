@@ -15,7 +15,7 @@ import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { fetchObligationInsights } from "@/features/obligations/obligations.functions"
 import type { Obligation } from "@/generated/prisma/browser"
 import { generatePageTitle } from "@/lib/utils"
-import { createFileRoute, Link } from "@tanstack/react-router"
+import { Link, createFileRoute } from "@tanstack/react-router"
 import { format, isSameDay } from "date-fns"
 import {
   ArrowLeftIcon,
@@ -79,7 +79,7 @@ function RouteComponent() {
 
   return (
     <>
-      <header className="container mx-auto flex max-w-6xl items-center gap-4 border-b p-4">
+      <header className="container mx-auto flex max-w-6xl items-center gap-4 p-4">
         <div>
           <h1 className="font-semibold">Payment Schedule</h1>
           <p className="text-xs text-muted-foreground">
@@ -89,17 +89,19 @@ function RouteComponent() {
         </div>
       </header>
 
-      <main className="container mx-auto max-w-6xl p-4">
+      <main className="container mx-auto max-w-6xl px-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-          {/* ── Left: Calendar panel ── */}
-          <ScheduleCalendar
-            viewMonth={viewMonth}
-            selectedDay={selectedDay}
-            obligationMap={obligationMap}
-            onMonthChange={handleMonthChange}
-            onDaySelect={setSelectedDay}
-            onYearStep={handleYearStep}
-          />
+          {/* ── Left: Calendar panel — hidden on mobile when a day is selected ── */}
+          <div className={selectedDay ? "hidden lg:block" : undefined}>
+            <ScheduleCalendar
+              viewMonth={viewMonth}
+              selectedDay={selectedDay}
+              obligationMap={obligationMap}
+              onMonthChange={handleMonthChange}
+              onDaySelect={setSelectedDay}
+              onYearStep={handleYearStep}
+            />
+          </div>
 
           {/* ── Right: Detail panel ── */}
           <div className="flex-1">
@@ -185,7 +187,7 @@ function ScheduleCalendar({
   )
 
   return (
-    <Card size="sm" className="w-full md:w-fit md:shrink-0">
+    <Card size="sm" className="w-full lg:w-fit lg:shrink-0">
       <CardHeader className="pb-2">
         {/* Year navigation */}
         <div className="flex items-center justify-between gap-4">
@@ -221,6 +223,7 @@ function ScheduleCalendar({
           selected={selectedDay}
           onSelect={onDaySelect}
           showOutsideDays={false}
+          classNames={{ root: "w-full lg:w-fit" }}
           modifiers={{ hasDue: markedDays }}
           modifiersClassNames={{
             hasDue:
@@ -254,7 +257,7 @@ function DayDetailPanel({
   onClear,
 }: {
   day: Date
-  obligations: Obligation[]
+  obligations: Array<Obligation>
   onClear: () => void
 }) {
   const today = new Date()
@@ -439,11 +442,11 @@ function ObligationScheduleItem({ obligation }: { obligation: Obligation }) {
             {getPerLabel(obligation.recurrence)}
           </p>
         </div>
-        <div>
-          <span className="shrink-0 font-mono font-semibold">
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <span className="font-mono font-semibold">
             {formatPHP(obligation.amount)}
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Button
               type="button"
               size="xs"
@@ -497,7 +500,7 @@ function MonthOverviewItem({ obligation }: { obligation: Obligation }) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-type ObligationMap = Record<string, Obligation[]>
+type ObligationMap = Record<string, Array<Obligation>>
 
 /**
  * Returns due dates for an obligation within a given month (0-indexed).
@@ -510,9 +513,9 @@ function getObligationDatesInMonth(
   obligation: Obligation,
   year: number,
   month: number
-): Date[] {
+): Array<Date> {
   const monthEnd = new Date(year, month + 1, 0)
-  const dates: Date[] = []
+  const dates: Array<Date> = []
 
   // Normalise nextDueDate to midnight so date-only comparisons are reliable
   const raw = new Date(obligation.nextDueDate)
@@ -579,7 +582,7 @@ function getObligationDatesInMonth(
 
 /** Builds a map of { "yyyy-MM-dd" → Obligation[] } for the given month. */
 function buildObligationMap(
-  obligations: Obligation[],
+  obligations: Array<Obligation>,
   year: number,
   month: number
 ): ObligationMap {
@@ -589,7 +592,7 @@ function buildObligationMap(
     const dates = getObligationDatesInMonth(ob, year, month)
     for (const date of dates) {
       const key = format(date, "yyyy-MM-dd")
-      if (!map[key]) map[key] = []
+      if (!(key in map)) map[key] = []
       map[key].push(ob)
     }
   }

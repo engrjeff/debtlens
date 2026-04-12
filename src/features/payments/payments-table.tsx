@@ -1,3 +1,6 @@
+import { Link } from "@tanstack/react-router"
+import { format } from "date-fns"
+import type { ObligationType } from "@/generated/prisma/enums"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -17,9 +20,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { formatPHP } from "@/features/obligations/helpers"
-import type { ObligationType } from "@/generated/prisma/enums"
-import { Link } from "@tanstack/react-router"
-import { format } from "date-fns"
 
 type Payment = {
   id: string

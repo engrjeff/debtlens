@@ -1,5 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Link } from "@tanstack/react-router"
+import { LayoutGrid } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 import type { ChartConfig } from "@/components/ui/chart"
+import type { CategoryBreakdownItem } from "./dashboard.utils"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
@@ -11,10 +15,6 @@ import {
   formatPHP,
   getCategoryMeta,
 } from "@/features/obligations/helpers"
-import { Link } from "@tanstack/react-router"
-import { LayoutGrid } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
-import type { CategoryBreakdownItem } from "./dashboard.utils"
 
 // Map Tailwind dot class → hex so Recharts can use it as fill
 const DOT_TO_HEX: Record<string, string> = {

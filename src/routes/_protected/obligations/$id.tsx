@@ -1,3 +1,20 @@
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { format } from "date-fns"
+import {
+  AlertCircleIcon,
+  CalendarDaysIcon,
+  CalendarIcon,
+  ClockIcon,
+  PencilIcon,
+  Trash2Icon,
+  TrendingUpIcon,
+} from "lucide-react"
+import { useState } from "react"
+import type {
+  ObligationInsight,
+  ObligationWithPayments,
+  PaymentRecord,
+} from "@/features/obligations/obligation-detail.types"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -22,8 +39,8 @@ import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   formatDueDate,
-  formatPayoffDate,
   formatPHP,
+  formatPayoffDate,
   getDueDaysLabel,
   getObligationStatus,
   getPayoffMonths,
@@ -33,28 +50,11 @@ import {
 } from "@/features/obligations/helpers"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { ObligationDeleteDialog } from "@/features/obligations/obligation-delete-dialog"
-import type {
-  ObligationInsight,
-  ObligationWithPayments,
-  PaymentRecord,
-} from "@/features/obligations/obligation-detail.types"
 import { ObligationEditDialog } from "@/features/obligations/obligation-edit-dialog"
 import { ObligationEditForm } from "@/features/obligations/obligation-edit-form"
 import { fetchObligationById } from "@/features/obligations/obligations.functions"
 import { ObligationType } from "@/generated/prisma/browser"
 import { generatePageTitle } from "@/lib/utils"
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { format } from "date-fns"
-import {
-  AlertCircleIcon,
-  CalendarDaysIcon,
-  CalendarIcon,
-  ClockIcon,
-  PencilIcon,
-  Trash2Icon,
-  TrendingUpIcon,
-} from "lucide-react"
-import { useState } from "react"
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
@@ -411,8 +411,8 @@ function InsightPill({ insight }: { insight: ObligationInsight }) {
 
 function buildInsights(
   obligation: ObligationWithPayments
-): ObligationInsight[] {
-  const insights: ObligationInsight[] = []
+): Array<ObligationInsight> {
+  const insights: Array<ObligationInsight> = []
   const isLoan = obligation.type === ObligationType.LOAN
   const status = getObligationStatus(obligation.nextDueDate)
   const today = new Date()
@@ -617,14 +617,18 @@ function buildRecurrenceDescription(
 }
 
 function ordinal(n: number): string {
-  const s = ["th", "st", "nd", "rd"]
   const v = n % 100
-  return `${n}${s[(v - 20) % 10] ?? s[v] ?? s[0]}`
+  const t = n % 10
+  if (v >= 11 && v <= 13) return `${n}th`
+  if (t === 1) return `${n}st`
+  if (t === 2) return `${n}nd`
+  if (t === 3) return `${n}rd`
+  return `${n}th`
 }
 
 // ── Steps 7 & 8: Payment history ──────────────────────────────────────────────
 
-function PaymentHistory({ payments }: { payments: PaymentRecord[] }) {
+function PaymentHistory({ payments }: { payments: Array<PaymentRecord> }) {
   return (
     <Card size="sm">
       <CardHeader className="pb-3">

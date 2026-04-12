@@ -1,10 +1,10 @@
+import { Link } from "@tanstack/react-router"
+import { ArrowRight, CalendarClock } from "lucide-react"
+import type { UpcomingObligation } from "./dashboard.utils"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatPHP, getDueDaysLabel } from "@/features/obligations/helpers"
-import { Link } from "@tanstack/react-router"
-import { ArrowRight, CalendarClock } from "lucide-react"
-import type { UpcomingObligation } from "./dashboard.utils"
 
 interface UpcomingListProps {
   items: Array<UpcomingObligation>

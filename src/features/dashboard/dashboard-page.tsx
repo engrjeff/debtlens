@@ -1,10 +1,9 @@
 import type { Obligation } from "@/generated/prisma/client"
+import { DebtFreeBanner } from "../obligations/debt-free-banner"
 import { ObligationCreateDialog } from "../obligations/obligation-create-dialog"
-import { CategoryBreakdown } from "./category-breakdown"
 import { DashboardEmpty } from "./dashboard-empty"
 import {
   generateInsights,
-  getCategoryBreakdown,
   getDashboardSummary,
   getDebtProgress,
   getUpcoming,
@@ -23,12 +22,12 @@ export function DashboardPage({ obligations }: DashboardPageProps) {
   const upcoming = getUpcoming(obligations, 7)
   const debtProgress = getDebtProgress(obligations)
   const insights = generateInsights(obligations)
-  const categories = getCategoryBreakdown(obligations)
+  // const categories = getCategoryBreakdown(obligations)
 
   return (
     <>
       {/* ── Header ── */}
-      <header className="container mx-auto flex items-center gap-4 border-b p-4">
+      <header className="container mx-auto hidden items-center gap-4 border-b p-4 lg:flex">
         <div>
           <h2 className="font-semibold">Dashboard</h2>
           <p className="hidden text-sm text-muted-foreground md:block">
@@ -47,8 +46,9 @@ export function DashboardPage({ obligations }: DashboardPageProps) {
           <DashboardEmpty />
         ) : (
           <>
-            {/* Row 1 — Summary cards */}
-            <section aria-label="Summary">
+            {/* Row 1 — Debt-free banner + Summary cards */}
+            <section aria-label="Summary" className="space-y-4">
+              <DebtFreeBanner obligations={obligations} />
               <SummaryCards summary={summary} />
             </section>
 
@@ -73,13 +73,13 @@ export function DashboardPage({ obligations }: DashboardPageProps) {
             </section>
 
             {/* Row 4 — Category breakdown */}
-            <div className="grid grid-cols-1 lg:grid-cols-2">
+            {/* <div className="grid grid-cols-1 lg:grid-cols-2">
               {categories.length > 0 && (
                 <section aria-label="Category breakdown">
                   <CategoryBreakdown items={categories} />
                 </section>
               )}
-            </div>
+            </div> */}
           </>
         )}
       </main>

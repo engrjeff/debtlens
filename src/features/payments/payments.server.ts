@@ -6,11 +6,9 @@ export async function getPayments(userId: string, search: PaymentsSearch) {
   const page = search.page
   const skip = (page - 1) * PAGE_SIZE
 
-  const where = { userId }
-
   const [items, total] = await Promise.all([
     prisma.payment.findMany({
-      where,
+      where: { userId, obligation: { isDeleted: false } },
       orderBy: { paidAt: "desc" },
       skip,
       take: PAGE_SIZE,
@@ -20,7 +18,9 @@ export async function getPayments(userId: string, search: PaymentsSearch) {
         },
       },
     }),
-    prisma.payment.count({ where }),
+    prisma.payment.count({
+      where: { userId, obligation: { isDeleted: false } },
+    }),
   ])
 
   return {

@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { Obligation } from "@/generated/prisma/browser"
 import { Link } from "@tanstack/react-router"
-import { AlertTriangle, CalendarClock, CreditCard, Wallet } from "lucide-react"
 import { computeInsights, formatCompactPHP, formatPayoffDate } from "./helpers"
+import type { Obligation } from "@/generated/prisma/browser"
+import { Text } from "@/components/text"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface InsightCardsProps {
   obligations: Array<Obligation>
@@ -18,32 +18,45 @@ export function InsightCards({ obligations }: InsightCardsProps) {
     overdueAmount,
     totalRemainingDebt,
     debtFreeMonths,
+    dueThisMonthCount,
   } = computeInsights(obligations)
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
       <Link
         to="/obligations"
         search={(current) => ({ ...current, status: "due-this-week" })}
-        className="group"
+        className="group data-[disabled=true]:opacity-60"
+        data-disabled={dueThisWeekCount === 0}
       >
-        <Card size="sm" className="group-hover:ring-primary">
+        <Card
+          size="sm"
+          className="group-hover:ring-primary data-[size=sm]:gap-2"
+        >
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-normal text-muted-foreground">
-                Due This Week
-              </CardTitle>
-              <CalendarClock className="size-4 text-amber-500" />
-            </div>
+            <Text
+              size="xxs"
+              variant="muted"
+              weight="semibold"
+              className="uppercase"
+            >
+              Due This Week
+            </Text>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">
+            <Text size="xl" weight="bold" className="font-mono">
               {formatCompactPHP(dueThisWeekAmount)}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {dueThisWeekCount} obligation{dueThisWeekCount !== 1 ? "s" : ""}{" "}
-              coming up
-            </p>
+            </Text>
+            {dueThisWeekCount === 0 ? (
+              <Text size="xs" variant="muted" className="mt-1">
+                Nothing coming up
+              </Text>
+            ) : (
+              <Text size="xs" variant="muted" className="mt-1">
+                {dueThisWeekCount} obligation{dueThisWeekCount !== 1 ? "s" : ""}{" "}
+                coming up
+              </Text>
+            )}
           </CardContent>
         </Card>
       </Link>
@@ -51,24 +64,36 @@ export function InsightCards({ obligations }: InsightCardsProps) {
       <Link
         to="/obligations"
         search={(current) => ({ ...current, status: "due-this-month" })}
-        className="group"
+        className="group data-[disabled=true]:opacity-60"
+        data-disabled={dueThisMonthCount === 0}
       >
-        <Card size="sm" className="group-hover:ring-primary">
+        <Card
+          size="sm"
+          className="group-hover:ring-primary data-[size=sm]:gap-2"
+        >
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-normal text-muted-foreground">
-                Due This Month
-              </CardTitle>
-              <Wallet className="size-4 text-blue-500" />
-            </div>
+            <Text
+              size="xxs"
+              variant="muted"
+              weight="semibold"
+              className="uppercase"
+            >
+              Due This Month
+            </Text>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">
+            <Text size="xl" weight="bold" className="font-mono">
               {formatCompactPHP(totalDueThisMonth)}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Total obligations this month
-            </p>
+            </Text>
+            {dueThisMonthCount === 0 ? (
+              <Text size="xs" variant="muted" className="mt-1">
+                {"All caught up"}
+              </Text>
+            ) : (
+              <Text size="xs" variant="success" className="mt-1">
+                {dueThisMonthCount} obligations
+              </Text>
+            )}
           </CardContent>
         </Card>
       </Link>
@@ -76,61 +101,67 @@ export function InsightCards({ obligations }: InsightCardsProps) {
       <Link
         to="/obligations"
         search={(current) => ({ ...current, status: "overdue" })}
-        className="group"
+        className="group data-[disabled=true]:opacity-60"
+        data-disabled={overdueCount === 0}
       >
-        <Card size="sm" className="group-hover:ring-primary">
+        <Card
+          size="sm"
+          className="group-hover:ring-primary data-[size=sm]:gap-2"
+        >
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle
-                className={`text-sm font-normal ${overdueCount > 0 ? "text-destructive" : "text-muted-foreground"}`}
-              >
-                Overdue
-              </CardTitle>
-              <AlertTriangle
-                className={`size-4 ${overdueCount > 0 ? "text-destructive" : "text-emerald-500"}`}
-              />
-            </div>
+            <Text
+              size="xxs"
+              variant="muted"
+              weight="semibold"
+              className="uppercase"
+            >
+              Overdue
+            </Text>
           </CardHeader>
           <CardContent>
-            <p
-              className={`text-2xl font-bold ${overdueCount > 0 ? "text-destructive" : ""}`}
+            <Text
+              size="xl"
+              weight="bold"
+              variant={overdueCount > 0 ? "destructive" : "default"}
+              className="font-mono"
             >
-              {overdueCount > 0 ? formatCompactPHP(overdueAmount) : "None"}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
+              {formatCompactPHP(overdueAmount)}
+            </Text>
+            <Text size="xs" variant="muted" className="mt-1">
               {overdueCount > 0
                 ? `${overdueCount} unpaid obligation${overdueCount !== 1 ? "s" : ""}`
-                : "You're all caught up"}
-            </p>
+                : "All caught up"}
+            </Text>
           </CardContent>
         </Card>
       </Link>
 
-      <Card size="sm">
+      <Card size="sm" className="group-hover:ring-primary data-[size=sm]:gap-2">
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-normal text-muted-foreground">
-              Remaining Debt
-            </CardTitle>
-            <CreditCard className="size-4 text-violet-500" />
-          </div>
+          <Text
+            size="xxs"
+            variant="muted"
+            weight="semibold"
+            className="uppercase"
+          >
+            Remaining Debt
+          </Text>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-bold">
+          <Text size="2xl" weight="bold" className="font-mono">
             {formatCompactPHP(totalRemainingDebt)}
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          </Text>
+          <Text
+            size="xs"
+            weight="semibold"
+            className="mt-1 text-xs text-violet-400"
+          >
             {debtFreeMonths != null ? (
-              <>
-                Debt-free by{" "}
-                <span className="font-semibold text-emerald-500">
-                  {formatPayoffDate(debtFreeMonths)}
-                </span>
-              </>
+              <span>Debt-free by {formatPayoffDate(debtFreeMonths)}</span>
             ) : (
-              "No active loans"
+              <span>No active loans</span>
             )}
-          </p>
+          </Text>
         </CardContent>
       </Card>
     </div>

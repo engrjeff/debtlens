@@ -26,6 +26,8 @@ export type ObligationStatus =
 export interface DashboardSummary {
   /** Sum of all obligation amounts whose nextDueDate falls in the current calendar month */
   totalDueThisMonth: number
+  /** Number of obligations due this month */
+  dueThisMonthCount: number
   /** Sum of amounts due within the next 7 days (includes today) */
   dueInNext7DaysAmount: number
   /** Number of obligations due within the next 7 days */
@@ -98,6 +100,7 @@ export function getDashboardSummary(
   next7.setDate(now.getDate() + 7)
 
   let totalDueThisMonth = 0
+  let dueThisMonthCount = 0
   let dueInNext7DaysAmount = 0
   let dueInNext7DaysCount = 0
   let overdueAmount = 0
@@ -111,6 +114,7 @@ export function getDashboardSummary(
     // This month
     if (due >= monthStart && due <= monthEnd) {
       totalDueThisMonth += o.amount
+      dueThisMonthCount++
     }
 
     // Next 7 days (includes today through day 7)
@@ -133,6 +137,7 @@ export function getDashboardSummary(
 
   return {
     totalDueThisMonth,
+    dueThisMonthCount,
     dueInNext7DaysAmount,
     dueInNext7DaysCount,
     overdueAmount,

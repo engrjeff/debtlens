@@ -36,7 +36,7 @@ function RouteComponent() {
 
   return (
     <>
-      <header className="container mx-auto flex items-center gap-4 space-y-4 border-b p-4">
+      <header className="container mx-auto flex items-center gap-4 space-y-4 p-4">
         <div>
           <h1 className="font-semibold">Payment History</h1>
           <p className="text-sm text-muted-foreground">
@@ -45,7 +45,7 @@ function RouteComponent() {
         </div>
       </header>
 
-      <main className="container mx-auto space-y-4 p-4">
+      <main className="container mx-auto space-y-4 px-4">
         {pageInfo.total === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <p className="text-muted-foreground">No payments recorded yet.</p>

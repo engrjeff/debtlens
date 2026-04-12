@@ -1,6 +1,6 @@
+import { endOfMonth, startOfMonth } from "date-fns"
 import type { Obligation } from "@/generated/prisma/client"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
-import { endOfMonth, startOfMonth } from "date-fns"
 
 // ── Category colors ───────────────────────────────────────────────────────────
 
@@ -212,6 +212,57 @@ export function formatPayoffDate(months: number): string {
   }).format(date)
 }
 
+// ── Debt-free banner ──────────────────────────────────────────────────────────
+
+export interface DebtFreeBannerData {
+  /** "Jul 2027" */
+  formattedTarget: string
+  /** projected debt-free date */
+  targetDate: Date
+  /** months from today to target */
+  monthsAway: number
+  /** overall % paid across all loans (0–100) */
+  overallProgress: number
+  totalRemaining: number
+  totalOriginal: number
+}
+
+export function computeDebtFreeBanner(
+  obligations: Array<Obligation>
+): DebtFreeBannerData | null {
+  const loans = obligations.filter((o) => o.type === "LOAN")
+  if (loans.length === 0) return null
+
+  let totalOriginal = 0
+  let totalRemaining = 0
+  let maxMonths = 0
+
+  for (const o of loans) {
+    totalOriginal += o.totalAmount
+    totalRemaining += o.remainingBalance
+    if (o.remainingBalance > 0 && o.amount > 0) {
+      const months = Math.ceil(o.remainingBalance / o.amount)
+      if (months > maxMonths) maxMonths = months
+    }
+  }
+
+  if (maxMonths === 0) return null
+
+  const overallProgress =
+    totalOriginal > 0
+      ? Math.min(100, Math.max(0, ((totalOriginal - totalRemaining) / totalOriginal) * 100))
+      : 0
+
+  const targetDate = new Date()
+  targetDate.setMonth(targetDate.getMonth() + maxMonths)
+  const formattedTarget = new Intl.DateTimeFormat("en-PH", {
+    month: "short",
+    year: "numeric",
+  }).format(targetDate)
+
+  return { formattedTarget, targetDate, monthsAway: maxMonths, overallProgress, totalRemaining, totalOriginal }
+}
+
 // ── Insights ─────────────────────────────────────────────────────────────────
 
 export function computeInsights(obligations: Array<Obligation>) {
@@ -220,6 +271,7 @@ export function computeInsights(obligations: Array<Obligation>) {
   const monthEnd = endOfMonth(now)
 
   let totalDueThisMonth = 0
+  let dueThisMonthCount = 0
   let dueThisWeekCount = 0
   let dueThisWeekAmount = 0
   let overdueCount = 0
@@ -232,6 +284,7 @@ export function computeInsights(obligations: Array<Obligation>) {
 
     if (due >= monthStart && due <= monthEnd) {
       totalDueThisMonth += o.amount
+      dueThisMonthCount++
     }
 
     if (status === "due-today" || status === "due-this-week") {
@@ -262,6 +315,7 @@ export function computeInsights(obligations: Array<Obligation>) {
 
   return {
     totalDueThisMonth,
+    dueThisMonthCount,
     dueThisWeekCount,
     dueThisWeekAmount,
     overdueCount,

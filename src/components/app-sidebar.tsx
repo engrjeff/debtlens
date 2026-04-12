@@ -1,5 +1,14 @@
 import * as React from "react"
 
+import { Link } from "@tanstack/react-router"
+import {
+  Calendar1Icon,
+  HistoryIcon,
+  LayoutDashboardIcon,
+  PhilippinePesoIcon,
+} from "lucide-react"
+import { UserMenu } from "./user-menu"
+import { siteConfig } from "@/config/site"
 import {
   Sidebar,
   SidebarContent,
@@ -13,15 +22,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { siteConfig } from "@/config/site"
-import { Link } from "@tanstack/react-router"
-import {
-  Calendar1Icon,
-  HistoryIcon,
-  LayoutDashboardIcon,
-  PhilippinePesoIcon,
-} from "lucide-react"
-import { UserMenu } from "./user-menu"
 
 const sidebar = {
   navMain: [
