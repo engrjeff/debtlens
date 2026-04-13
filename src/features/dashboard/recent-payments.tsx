@@ -1,11 +1,11 @@
-import { Link } from "@tanstack/react-router"
-import { format } from "date-fns"
-import { ArrowRight, CheckCheckIcon } from "lucide-react"
-import type { ObligationType } from "@/generated/prisma/enums"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatPHP } from "@/features/obligations/helpers"
+import type { ObligationType } from "@/generated/prisma/enums"
+import { Link } from "@tanstack/react-router"
+import { format } from "date-fns"
+import { ArrowRight, CheckCheckIcon } from "lucide-react"
 
 type RecentPayment = {
   id: string
@@ -35,7 +35,7 @@ export function RecentPaymentsList({ items }: RecentPaymentsListProps) {
             </CardTitle>
           </div>
           <Link
-            to="/payment-schedule"
+            to="/payment-history"
             className="flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
           >
             View all

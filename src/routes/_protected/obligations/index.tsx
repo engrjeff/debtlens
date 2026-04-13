@@ -1,5 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
 import { Text } from "@/components/text"
 import { DebtFreeBanner } from "@/features/obligations/debt-free-banner"
 import { EmptyObligationsView } from "@/features/obligations/empty-obligations-view"
@@ -21,6 +19,8 @@ import {
 } from "@/features/obligations/obligations.functions"
 import { obligationsSearchSchema } from "@/features/obligations/search-params"
 import { generatePageTitle } from "@/lib/utils"
+import { createFileRoute } from "@tanstack/react-router"
+import { Suspense } from "react"
 
 export const Route = createFileRoute("/_protected/obligations/")({
   validateSearch: obligationsSearchSchema,
@@ -107,7 +107,9 @@ function RouteComponent() {
           </>
         )}
       </main>
-      <ObligationCreateFab />
+      <div className="lg:hidden">
+        <ObligationCreateFab />
+      </div>
     </div>
   )
 }

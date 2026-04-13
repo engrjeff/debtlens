@@ -1,7 +1,7 @@
+import { Button } from "@/components/ui/button"
 import { Link, useSearch } from "@tanstack/react-router"
 import { CheckIcon } from "lucide-react"
 import type { ObligationsSearch } from "./search-params"
-import { Button } from "@/components/ui/button"
 
 const statusFilters: Array<{
   label: string

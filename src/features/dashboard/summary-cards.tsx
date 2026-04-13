@@ -1,9 +1,9 @@
-import { Link } from "@tanstack/react-router"
-import type { DashboardSummary } from "./dashboard.utils"
 import { Text } from "@/components/text"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatCompactPHP } from "@/features/obligations/helpers"
+import { Link } from "@tanstack/react-router"
+import type { DashboardSummary } from "./dashboard.utils"
 
 interface SummaryCardsProps {
   summary: DashboardSummary
@@ -28,9 +28,17 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
         className="group data-[disabled=true]:opacity-60"
         data-disabled={dueInNext7DaysCount === 0}
       >
-        <Card size="sm" className="group-hover:ring-primary data-[size=sm]:gap-2">
+        <Card
+          size="sm"
+          className="group-hover:ring-primary data-[size=sm]:gap-2"
+        >
           <CardHeader>
-            <Text size="xxs" variant="muted" weight="semibold" className="uppercase">
+            <Text
+              size="xxs"
+              variant="muted"
+              weight="semibold"
+              className="uppercase"
+            >
               Due This Week
             </Text>
           </CardHeader>
@@ -53,9 +61,17 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
         className="group data-[disabled=true]:opacity-60"
         data-disabled={dueThisMonthCount === 0}
       >
-        <Card size="sm" className="group-hover:ring-primary data-[size=sm]:gap-2">
+        <Card
+          size="sm"
+          className="group-hover:ring-primary data-[size=sm]:gap-2"
+        >
           <CardHeader>
-            <Text size="xxs" variant="muted" weight="semibold" className="uppercase">
+            <Text
+              size="xxs"
+              variant="muted"
+              weight="semibold"
+              className="uppercase"
+            >
               Due This Month
             </Text>
           </CardHeader>
@@ -64,10 +80,13 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
               {formatCompactPHP(totalDueThisMonth)}
             </Text>
             {dueThisMonthCount === 0 ? (
-              <Text size="xs" variant="muted" className="mt-1">All caught up</Text>
+              <Text size="xs" variant="muted" className="mt-1">
+                All caught up
+              </Text>
             ) : (
               <Text size="xs" variant="success" className="mt-1">
-                {dueThisMonthCount} obligation{dueThisMonthCount !== 1 ? "s" : ""}
+                {dueThisMonthCount} obligation
+                {dueThisMonthCount !== 1 ? "s" : ""}
               </Text>
             )}
           </CardContent>
@@ -80,9 +99,17 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
         className="group data-[disabled=true]:opacity-60"
         data-disabled={overdueCount === 0}
       >
-        <Card size="sm" className="group-hover:ring-primary data-[size=sm]:gap-2">
+        <Card
+          size="sm"
+          className="group-hover:ring-primary data-[size=sm]:gap-2"
+        >
           <CardHeader>
-            <Text size="xxs" variant="muted" weight="semibold" className="uppercase">
+            <Text
+              size="xxs"
+              variant="muted"
+              weight="semibold"
+              className="uppercase"
+            >
               Overdue
             </Text>
           </CardHeader>
@@ -106,7 +133,12 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
 
       <Card size="sm" className="data-[size=sm]:gap-2">
         <CardHeader>
-          <Text size="xxs" variant="muted" weight="semibold" className="uppercase">
+          <Text
+            size="xxs"
+            variant="muted"
+            weight="semibold"
+            className="uppercase"
+          >
             Remaining Debt
           </Text>
         </CardHeader>
@@ -114,7 +146,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
           <Text size="xl" weight="bold" className="font-mono">
             {formatCompactPHP(totalRemainingDebt)}
           </Text>
-          <Text size="xs" className="mt-1 text-violet-400">
+          <Text size="xs" weight="semibold" className="mt-1 text-violet-400">
             {totalRemainingDebt === 0 ? "No active loans" : "Across all loans"}
           </Text>
         </CardContent>

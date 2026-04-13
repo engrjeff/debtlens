@@ -1,3 +1,9 @@
+import { SignedIn } from "@/components/signed-in"
+import { SignedOut } from "@/components/signed-out"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { siteConfig } from "@/config/site"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import {
   AlertTriangle,
@@ -9,12 +15,6 @@ import {
   TrendingDown,
   Wallet,
 } from "lucide-react"
-import { SignedIn } from "@/components/signed-in"
-import { SignedOut } from "@/components/signed-out"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { siteConfig } from "@/config/site"
 
 export const Route = createFileRoute("/_site/")({ component: LandingPage })
 
@@ -395,8 +395,21 @@ function Nav() {
 
 function Footer() {
   return (
-    <footer className="border-t px-6 py-6 text-center text-sm text-muted-foreground">
-      &copy; {new Date().getFullYear()} {siteConfig.title}. Built for clarity.
+    <footer className="space-y-4 border-t px-6 py-6 text-center text-sm text-muted-foreground">
+      <p>
+        &copy; {new Date().getFullYear()} {siteConfig.title}. Built for clarity.
+      </p>
+      <p>
+        Made by{" "}
+        <a
+          href="https://jeffsegovia.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-emerald-500 hover:underline"
+        >
+          Jeff Segovia
+        </a>
+      </p>
     </footer>
   )
 }

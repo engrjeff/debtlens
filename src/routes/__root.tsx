@@ -2,9 +2,9 @@ import { TanStackDevtools } from "@tanstack/react-devtools"
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 
-import appCss from "../styles.css?url"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import appCss from "../styles.css?url"
 
 export const Route = createRootRoute({
   head: () => ({
@@ -18,6 +18,23 @@ export const Route = createRootRoute({
       },
       {
         title: "Debt Lens",
+      },
+      {
+        property: "og:title",
+        content: "DebtLens",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://res.cloudinary.com/abide-in-the-vine/image/upload/v1776075693/debtlens/debtlens-banner_tjyoeq.png",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        property: "og:image:width",
+        content: "1200",
       },
     ],
     links: [
