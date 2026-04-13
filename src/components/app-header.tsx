@@ -1,6 +1,6 @@
-import { siteConfig } from "@/config/site"
 import { Link } from "@tanstack/react-router"
 import { HeaderUserMenu } from "./user-menu"
+import { siteConfig } from "@/config/site"
 
 export function AppHeader() {
   return (

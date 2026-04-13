@@ -1,3 +1,4 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import {
   Pagination,
   PaginationContent,
@@ -12,7 +13,6 @@ import {
   paymentsSearchSchema,
 } from "@/features/payments/search-params"
 import { generatePageTitle } from "@/lib/utils"
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_protected/payment-history")({
   validateSearch: paymentsSearchSchema,

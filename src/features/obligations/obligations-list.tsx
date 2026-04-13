@@ -1,3 +1,14 @@
+import { Link } from "@tanstack/react-router"
+import { CheckCheckIcon, CheckIcon } from "lucide-react"
+import { useState } from "react"
+import {
+  formatPHP,
+  getProgressPercent,
+  getProgressPercentString,
+} from "./helpers"
+import { MarkPaidDialog } from "./mark-paid-dialog"
+import { ObligationItemMenu } from "./obligation-item-menu"
+import type { Obligation } from "@/generated/prisma/browser"
 import { Text } from "@/components/text"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -10,19 +21,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import type { Obligation } from "@/generated/prisma/browser"
 import { ObligationType, RecurrenceType } from "@/generated/prisma/browser"
 import { cn } from "@/lib/utils"
-import { Link } from "@tanstack/react-router"
-import { CheckCheckIcon, CheckIcon } from "lucide-react"
-import { useState } from "react"
-import {
-  formatPHP,
-  getProgressPercent,
-  getProgressPercentString,
-} from "./helpers"
-import { MarkPaidDialog } from "./mark-paid-dialog"
-import { ObligationItemMenu } from "./obligation-item-menu"
 
 function ObligationItem({
   obligation,

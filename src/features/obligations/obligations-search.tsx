@@ -1,12 +1,12 @@
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { SearchIcon, XIcon } from "lucide-react"
+import { useState } from "react"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group"
-import { useNavigate, useSearch } from "@tanstack/react-router"
-import { SearchIcon, XIcon } from "lucide-react"
-import { useState } from "react"
 
 export function ObligationsSearch() {
   const search = useSearch({ from: "/_protected/obligations/" })

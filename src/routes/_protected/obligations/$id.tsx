@@ -17,7 +17,7 @@ import type {
   ObligationWithPayments,
   PaymentRecord,
 } from "@/features/obligations/obligation-detail.types"
-import type {Obligation} from "@/generated/prisma/browser";
+import type { Obligation } from "@/generated/prisma/browser"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -40,6 +40,7 @@ import {
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import { BillDoneDialog } from "@/features/obligations/bill-done-dialog"
 import {
   formatDueDate,
   formatPHP,
@@ -51,13 +52,12 @@ import {
   getProgressPercent,
   getRecurrenceLabel,
 } from "@/features/obligations/helpers"
-import { BillDoneDialog } from "@/features/obligations/bill-done-dialog"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { ObligationDeleteDialog } from "@/features/obligations/obligation-delete-dialog"
 import { ObligationEditDialog } from "@/features/obligations/obligation-edit-dialog"
 import { ObligationEditForm } from "@/features/obligations/obligation-edit-form"
 import { fetchObligationById } from "@/features/obligations/obligations.functions"
-import {  ObligationType } from "@/generated/prisma/browser"
+import { ObligationType } from "@/generated/prisma/browser"
 import { generatePageTitle } from "@/lib/utils"
 
 // ── Route ─────────────────────────────────────────────────────────────────────
@@ -128,11 +128,15 @@ function RouteComponent() {
         )}
 
         {/* Step 11 — Status & alerts */}
-        {!isDone && (status === "overdue" ||
-          status === "due-today" ||
-          status === "due-this-week") && (
-          <StatusAlert nextDueDate={obligation.nextDueDate} />
-        )}
+        {!isDone &&
+          (status === "overdue" ||
+            status === "due-today" ||
+            status === "due-this-week") && (
+            <StatusAlert
+              amount={obligation.amount}
+              nextDueDate={obligation.nextDueDate}
+            />
+          )}
 
         {/* Step 4 — Summary card */}
         <SummaryCard obligation={obligation} />
@@ -207,7 +211,13 @@ function ObligationHeader({
 
 // ── Step 11: Status alert ─────────────────────────────────────────────────────
 
-function StatusAlert({ nextDueDate }: { nextDueDate: Date | string }) {
+function StatusAlert({
+  amount,
+  nextDueDate,
+}: {
+  amount: number
+  nextDueDate: Date | string
+}) {
   const status = getObligationStatus(nextDueDate)
   const due = new Date(nextDueDate)
   const today = new Date()
@@ -225,10 +235,7 @@ function StatusAlert({ nextDueDate }: { nextDueDate: Date | string }) {
 
   if (status === "overdue") {
     return (
-      <Alert
-        variant="destructive"
-        className="border-destructive/50 bg-destructive/5"
-      >
+      <Alert variant="destructive" className="border-none bg-destructive/5">
         <AlertCircleIcon />
         <AlertTitle>Overdue</AlertTitle>
         <AlertDescription>
@@ -242,11 +249,11 @@ function StatusAlert({ nextDueDate }: { nextDueDate: Date | string }) {
 
   if (status === "due-today") {
     return (
-      <Alert className="border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
+      <Alert className="border-none bg-amber-50 text-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
         <ClockIcon className="text-amber-600 dark:text-amber-400" />
         <AlertTitle>Due Today</AlertTitle>
         <AlertDescription className="text-amber-800 dark:text-amber-300">
-          Payment of {formatPHP(0 as unknown as number)} is due today.
+          Payment of {formatPHP(amount as unknown as number)} is due today.
         </AlertDescription>
       </Alert>
     )

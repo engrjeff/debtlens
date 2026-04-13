@@ -1,10 +1,10 @@
+import { Link } from "@tanstack/react-router"
+import { TrendingUpIcon } from "lucide-react"
+import type { DebtProgressData } from "./dashboard.utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatPHP } from "@/features/obligations/helpers"
-import { Link } from "@tanstack/react-router"
-import { TrendingUpIcon } from "lucide-react"
-import type { DebtProgressData } from "./dashboard.utils"
 
 interface DebtProgressProps {
   data: DebtProgressData
@@ -71,7 +71,7 @@ export function DebtProgress({ data }: DebtProgressProps) {
 
             {/* Top loans */}
             {topLoans.length > 0 && (
-              <div className="flex-1 space-y-3 p-4">
+              <div className="flex-1 space-y-3 py-4">
                 <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                   Largest loans
                 </p>

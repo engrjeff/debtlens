@@ -1,3 +1,15 @@
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { format, formatDistanceToNow, isSameDay } from "date-fns"
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ReceiptIcon,
+} from "lucide-react"
+import { useMemo, useState } from "react"
+import type { Obligation } from "@/generated/prisma/browser"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
@@ -10,21 +22,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { formatPHP, getPerLabel } from "@/features/obligations/helpers"
+import { formatPHP } from "@/features/obligations/helpers"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { fetchObligationInsights } from "@/features/obligations/obligations.functions"
-import type { Obligation } from "@/generated/prisma/browser"
 import { generatePageTitle } from "@/lib/utils"
-import { Link, createFileRoute } from "@tanstack/react-router"
-import { format, isSameDay } from "date-fns"
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ReceiptIcon,
-} from "lucide-react"
-import { useMemo, useState } from "react"
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
@@ -79,7 +80,7 @@ function RouteComponent() {
 
   return (
     <>
-      <header className="container mx-auto flex max-w-6xl items-center gap-4 p-4">
+      <header className="container mx-auto flex max-w-6xl items-center gap-4 p-4 pb-0">
         <div>
           <h1 className="font-semibold">Payment Schedule</h1>
           <p className="text-xs text-muted-foreground">
@@ -89,7 +90,7 @@ function RouteComponent() {
         </div>
       </header>
 
-      <main className="container mx-auto space-y-6 p-4">
+      <main className="container mx-auto max-w-6xl space-y-6 p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
           {/* ── Left: Calendar panel — hidden on mobile when a day is selected ── */}
           <div className={selectedDay ? "hidden lg:block" : undefined}>
@@ -262,7 +263,6 @@ function DayDetailPanel({
 }) {
   const today = new Date()
   const isToday = isSameDay(day, today)
-  const isPast = day < today && !isToday
 
   return (
     <Card size="sm">
@@ -281,11 +281,7 @@ function DayDetailPanel({
             {format(day, "EEEE, MMMM dd, yyyy")}
           </CardTitle>
           <CardDescription>
-            {isToday
-              ? "Today"
-              : isPast
-                ? "Past date"
-                : `In ${Math.ceil((day.getTime() - today.getTime()) / 86400000)} days`}
+            {isToday ? "Today" : formatDistanceToNow(day, { addSuffix: true })}
           </CardDescription>
         </div>
         <CardAction>
@@ -394,15 +390,10 @@ function MonthOverviewPanel({
                 <div className="mb-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span
-                      className={`text-sm font-semibold ${isToday ? "text-primary" : isPast ? "text-muted-foreground" : ""}`}
+                      className={`text-sm font-semibold ${isToday ? "text-emerald-500" : isPast ? "text-muted-foreground" : ""}`}
                     >
                       {isToday ? "Today" : format(date, "EEE, MMM d")}
                     </span>
-                    {isToday && (
-                      <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground">
-                        Today
-                      </span>
-                    )}
                   </div>
                   <ArrowRightIcon className="size-3.5 text-muted-foreground" />
                 </div>
@@ -429,19 +420,24 @@ function ObligationScheduleItem({ obligation }: { obligation: Obligation }) {
 
   return (
     <li className="py-3">
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0 flex-1 space-y-1">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <Badge variant={obligation.type} className="shrink-0 capitalize">
-              {obligation.type.toLowerCase()}
+      <div className="flex items-center justify-between gap-4">
+        <Link
+          to="/obligations/$id"
+          params={{ id: obligation.id }}
+          className="group flex-1"
+        >
+          <div className="min-w-0 space-y-1">
+            <Badge variant={obligation.type} className="shrink-0">
+              {obligation.category}
             </Badge>
+            <p className="truncate font-medium group-hover:underline">
+              {obligation.name}
+            </p>
+            <p className="text-xs text-muted-foreground capitalize">
+              {obligation.recurrence.toLowerCase()}
+            </p>
           </div>
-          <p className="truncate font-medium">{obligation.name}</p>
-          <p className="text-xs text-muted-foreground">
-            {obligation.category} · {formatPHP(obligation.amount)} /{" "}
-            {getPerLabel(obligation.recurrence)}
-          </p>
-        </div>
+        </Link>
         <div className="flex shrink-0 flex-col items-end gap-1">
           <span className="font-mono font-semibold">
             {formatPHP(obligation.amount)}
@@ -454,18 +450,7 @@ function ObligationScheduleItem({ obligation }: { obligation: Obligation }) {
               className="px-0 text-emerald-500"
               onClick={() => setShowMarkPaid(true)}
             >
-              Mark as Paid
-            </Button>
-            <Button
-              asChild
-              size="xs"
-              variant="link"
-              className="px-0 text-muted-foreground"
-            >
-              <Link to="/obligations/$id" params={{ id: obligation.id }}>
-                View
-                <ArrowRightIcon className="size-3" />
-              </Link>
+              <CheckIcon /> Mark as Paid
             </Button>
           </div>
         </div>

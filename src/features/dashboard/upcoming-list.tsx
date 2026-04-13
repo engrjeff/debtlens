@@ -1,10 +1,11 @@
+import { Link } from "@tanstack/react-router"
+import { ArrowRight, CalendarClock } from "lucide-react"
+import type { UpcomingObligation } from "./dashboard.utils"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatPHP, getDueDaysLabel } from "@/features/obligations/helpers"
-import { Link } from "@tanstack/react-router"
-import { ArrowRight, CalendarClock } from "lucide-react"
-import type { UpcomingObligation } from "./dashboard.utils"
+import { cn } from "@/lib/utils"
 
 interface UpcomingListProps {
   items: Array<UpcomingObligation>
@@ -51,7 +52,6 @@ export function UpcomingList({ items }: UpcomingListProps) {
 function UpcomingRow({ item }: { item: UpcomingObligation }) {
   const isOverdue = item.status === "overdue"
   const isDueToday = item.status === "due-today"
-  const isUrgent = isOverdue || isDueToday
 
   return (
     <li>
@@ -91,7 +91,11 @@ function UpcomingRow({ item }: { item: UpcomingObligation }) {
             {formatPHP(item.amount)}
           </span>
           <p
-            className={`mt-0.5 text-xs ${isUrgent ? "font-medium text-destructive" : "text-muted-foreground"}`}
+            className={cn(
+              "mt-0.5 text-xs",
+              isOverdue ? "font-semibold text-destructive" : "",
+              isDueToday ? "font-semibold text-amber-500" : ""
+            )}
           >
             {getDueDaysLabel(item.nextDueDate)}
           </p>

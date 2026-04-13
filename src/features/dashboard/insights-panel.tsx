@@ -1,5 +1,6 @@
-import { AlertTriangle, Info, Lightbulb, Zap } from "lucide-react"
+import { AlertTriangle, Info, LightbulbIcon, Zap } from "lucide-react"
 import type { DashboardInsight } from "./dashboard.utils"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface InsightsPanelProps {
@@ -31,27 +32,30 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
   if (insights.length === 0) return null
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-        <Lightbulb className="size-3.5" />
-        Insights
-      </div>
-
-      <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-        {insights.map((insight) => {
-          const { row, icon, text, Icon } = SEVERITY_STYLES[insight.severity]
-          return (
-            <li
-              key={insight.key}
-              className={`flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-sm sm:flex-1 sm:basis-64 ${row}`}
-            >
-              <Icon className={`mt-0.5 size-4 shrink-0 ${icon}`} />
-              <span className={text}>{insight.message}</span>
-            </li>
-          )
-        })}
-      </ul>
-    </div>
+    <Card size="sm" className="flex h-full flex-col">
+      <CardHeader className="border-b">
+        <div className="flex items-center gap-2">
+          <LightbulbIcon className="size-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium">Insights</CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+          {insights.map((insight) => {
+            const { row, icon, text, Icon } = SEVERITY_STYLES[insight.severity]
+            return (
+              <li
+                key={insight.key}
+                className={`flex items-start gap-2.5 rounded-lg px-3 py-2.5 text-sm sm:flex-1 sm:basis-64 ${row}`}
+              >
+                <Icon className={`mt-0.5 size-4 shrink-0 ${icon}`} />
+                <span className={text}>{insight.message}</span>
+              </li>
+            )
+          })}
+        </ul>
+      </CardContent>
+    </Card>
   )
 }
 

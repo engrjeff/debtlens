@@ -1,9 +1,9 @@
-import { Text } from "@/components/text"
-import { Progress } from "@/components/ui/progress"
-import type { Obligation } from "@/generated/prisma/browser"
 import { formatDistanceToNow } from "date-fns"
 import { TrophyIcon } from "lucide-react"
 import { computeDebtFreeBanner, formatPHP } from "./helpers"
+import type { Obligation } from "@/generated/prisma/browser"
+import { Progress } from "@/components/ui/progress"
+import { Text } from "@/components/text"
 
 interface DebtFreeBannerProps {
   obligations: Array<Obligation>
@@ -25,7 +25,7 @@ export function DebtFreeBanner({ obligations }: DebtFreeBannerProps) {
       <div className="relative space-y-3">
         {/* row 1 – title */}
         <div className="flex items-center gap-2">
-          <TrophyIcon className="size-4 text-emerald-400" />
+          <TrophyIcon className="size-3.5 text-emerald-400" />
           <Text size="sm" weight="semibold" className="text-emerald-300">
             Debt-free target
           </Text>

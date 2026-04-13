@@ -1,5 +1,6 @@
 import { Link, useSearch } from "@tanstack/react-router"
 import { useState } from "react"
+import { CheckCheckIcon } from "lucide-react"
 import {
   formatDueDate,
   formatPHP,
@@ -9,7 +10,6 @@ import {
 import { MarkPaidDialog } from "./mark-paid-dialog"
 import { ObligationItemMenu } from "./obligation-item-menu"
 import type { Obligation } from "@/generated/prisma/browser"
-import { CheckCheckIcon } from "lucide-react"
 import {
   Table,
   TableBody,
