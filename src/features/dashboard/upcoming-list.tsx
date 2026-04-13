@@ -1,10 +1,10 @@
-import { Link } from "@tanstack/react-router"
-import { ArrowRight, CalendarClock } from "lucide-react"
-import type { UpcomingObligation } from "./dashboard.utils"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatPHP, getDueDaysLabel } from "@/features/obligations/helpers"
+import { Link } from "@tanstack/react-router"
+import { ArrowRight, CalendarClock } from "lucide-react"
+import type { UpcomingObligation } from "./dashboard.utils"
 
 interface UpcomingListProps {
   items: Array<UpcomingObligation>
@@ -80,9 +80,7 @@ function UpcomingRow({ item }: { item: UpcomingObligation }) {
           >
             {item.name}
           </p>
-          <Badge variant={item.type}>
-            {item.type === "BILL" ? "Bill" : "Loan"}
-          </Badge>
+          <Badge variant={item.type}>{item.category}</Badge>
         </div>
 
         {/* Amount */}

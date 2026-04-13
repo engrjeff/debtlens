@@ -14,6 +14,7 @@ export function FiltersBar() {
           <ObligationsSearch />
           <ObligationsMoreFilters />
         </div>
+        <ObligationTypeTabs />
         <ObligationFilterChips />
         <ObligationActiveFilters />
       </div>

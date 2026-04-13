@@ -1,14 +1,3 @@
-import { Link, createFileRoute } from "@tanstack/react-router"
-import { format, isSameDay } from "date-fns"
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ReceiptIcon,
-} from "lucide-react"
-import { useMemo, useState } from "react"
-import type { Obligation } from "@/generated/prisma/browser"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
@@ -24,7 +13,18 @@ import { Separator } from "@/components/ui/separator"
 import { formatPHP, getPerLabel } from "@/features/obligations/helpers"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { fetchObligationInsights } from "@/features/obligations/obligations.functions"
+import type { Obligation } from "@/generated/prisma/browser"
 import { generatePageTitle } from "@/lib/utils"
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { format, isSameDay } from "date-fns"
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ReceiptIcon,
+} from "lucide-react"
+import { useMemo, useState } from "react"
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
@@ -89,7 +89,7 @@ function RouteComponent() {
         </div>
       </header>
 
-      <main className="container mx-auto max-w-6xl px-4">
+      <main className="container mx-auto space-y-6 p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
           {/* ── Left: Calendar panel — hidden on mobile when a day is selected ── */}
           <div className={selectedDay ? "hidden lg:block" : undefined}>

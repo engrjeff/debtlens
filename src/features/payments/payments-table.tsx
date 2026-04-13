@@ -1,6 +1,3 @@
-import { Link } from "@tanstack/react-router"
-import { format } from "date-fns"
-import type { ObligationType } from "@/generated/prisma/enums"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -20,6 +17,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { formatPHP } from "@/features/obligations/helpers"
+import type { ObligationType } from "@/generated/prisma/enums"
+import { Link } from "@tanstack/react-router"
+import { format } from "date-fns"
 
 type Payment = {
   id: string
@@ -59,20 +59,20 @@ export function PaymentsTable({
                   {payment.obligation.name}
                 </Link>
               </CardTitle>
-              <CardDescription>{payment.obligation.category}</CardDescription>
-              <CardAction>
+
+              <CardDescription>
                 <Badge variant={payment.obligation.type}>
                   {payment.obligation.type.toLowerCase()}
                 </Badge>
+              </CardDescription>
+              <CardAction>
+                <Badge variant="secondary">{payment.modeOfPayment}</Badge>
               </CardAction>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <span className="font-mono font-semibold text-emerald-500">
                   {formatPHP(payment.amount)}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {payment.modeOfPayment}
                 </span>
               </div>
               <div className="mt-1 flex gap-4 text-xs text-muted-foreground">

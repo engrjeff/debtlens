@@ -1,4 +1,3 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import {
   Pagination,
   PaginationContent,
@@ -13,6 +12,7 @@ import {
   paymentsSearchSchema,
 } from "@/features/payments/search-params"
 import { generatePageTitle } from "@/lib/utils"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_protected/payment-history")({
   validateSearch: paymentsSearchSchema,
@@ -45,7 +45,7 @@ function RouteComponent() {
         </div>
       </header>
 
-      <main className="container mx-auto space-y-4 px-4">
+      <main className="container mx-auto space-y-6 p-4">
         {pageInfo.total === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <p className="text-muted-foreground">No payments recorded yet.</p>
