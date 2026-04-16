@@ -30,6 +30,9 @@ export const NumberInput = ({
     onChange(e)
   }
 
+  const inputMode = noDecimal ? "numeric" : "decimal"
+  const step = noDecimal ? 1 : 0.01
+
   if (currency || usePeso)
     return (
       <div className="relative rounded-md">
@@ -41,7 +44,8 @@ export const NumberInput = ({
         <Input
           className={cn("pl-7", className)}
           type={type}
-          inputMode="numeric"
+          inputMode={inputMode}
+          step={step}
           onWheel={(e) => {
             e.currentTarget.blur()
           }}
@@ -55,7 +59,8 @@ export const NumberInput = ({
     <Input
       className={className}
       type="number"
-      inputMode="numeric"
+      inputMode={inputMode}
+      step={step}
       onWheel={(e) => {
         e.currentTarget.blur()
       }}
