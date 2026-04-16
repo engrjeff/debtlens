@@ -1,12 +1,32 @@
 import { TanStackDevtools } from "@tanstack/react-devtools"
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRoute,
+  useRouterState,
+} from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import appCss from "../styles.css?url"
 
+function RootComponent() {
+  const isLoading = useRouterState({ select: (s) => s.isLoading })
+
+  return (
+    <>
+      <Outlet />
+      {isLoading && (
+        <div className="fixed inset-0 z-50 animate-pulse bg-background/20 backdrop-blur-[1px]" />
+      )}
+    </>
+  )
+}
+
 export const Route = createRootRoute({
+  component: RootComponent,
   head: () => ({
     meta: [
       {
