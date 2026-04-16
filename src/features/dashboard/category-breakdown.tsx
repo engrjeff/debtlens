@@ -1,9 +1,9 @@
-import { Link } from "@tanstack/react-router"
-import { LayoutGrid } from "lucide-react"
-import type { CategoryBreakdownItem } from "./dashboard.utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatPHP, getCategoryMeta } from "@/features/obligations/helpers"
+import { Link } from "@tanstack/react-router"
+import { LayoutGrid } from "lucide-react"
+import type { CategoryBreakdownItem } from "./dashboard.utils"
 
 // Map Tailwind dot class → hex for inline bar styles
 const DOT_TO_HEX: Record<string, string> = {
@@ -78,7 +78,7 @@ export function CategoryBreakdown({ items }: CategoryBreakdownProps) {
                       <span className="font-mono">
                         {formatPHP(item.totalAmount)}
                       </span>
-                      <span>({pct.toFixed(0)}%)</span>
+                      <span>({pct.toFixed(1)}%)</span>
                     </div>
                   </div>
                 </Link>
