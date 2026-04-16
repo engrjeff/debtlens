@@ -554,7 +554,7 @@ function getObligationDatesInMonth(
     case "QUARTERLY": {
       // Every 3 months from anchor
       if (monthsFromAnchor % 3 === 0) {
-        const day = obligation.dueDay ?? anchor.getDate()
+        const day = anchor.getDate()
         dates.push(new Date(year, month, Math.min(day, monthEnd.getDate())))
       }
       break
@@ -563,7 +563,7 @@ function getObligationDatesInMonth(
     case "ANNUALLY": {
       // Same calendar month, every year from anchor year onward
       if (monthsFromAnchor % 12 === 0) {
-        const day = obligation.dueDay ?? anchor.getDate()
+        const day = anchor.getDate()
         dates.push(new Date(year, month, Math.min(day, monthEnd.getDate())))
       }
       break

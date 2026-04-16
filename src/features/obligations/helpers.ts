@@ -365,7 +365,7 @@ export function computeNextDueDate(
     }
 
     case "QUARTERLY": {
-      const targetDay = dueDay ?? d
+      const targetDay = d
       const rawMonth = m + 3
       const targetY = y + Math.floor(rawMonth / 12)
       const targetM = rawMonth % 12
@@ -374,7 +374,7 @@ export function computeNextDueDate(
     }
 
     case "ANNUALLY": {
-      const targetDay = dueDay ?? d
+      const targetDay = d
       const maxDay = new Date(y + 1, m + 1, 0).getDate()
       return new Date(y + 1, m, Math.min(targetDay, maxDay))
     }
