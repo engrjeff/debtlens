@@ -46,8 +46,8 @@ export function ObligationDeleteDialog({
         toast.success(`${result.name} is successfully deleted!`, {
           richColors: true,
         })
+        await router.navigate({ to: "/obligations" })
         router.invalidate()
-        dialogProps.onOpenChange?.(false)
       }
     } catch (error) {
       console.log(error)

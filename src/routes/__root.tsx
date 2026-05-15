@@ -1,6 +1,7 @@
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import {
   HeadContent,
+  Link,
   Outlet,
   Scripts,
   createRootRoute,
@@ -25,8 +26,26 @@ function RootComponent() {
   )
 }
 
+function NotFoundPage() {
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center gap-4 text-center">
+      <p className="text-6xl font-bold tracking-tight text-muted-foreground/30">404</p>
+      <div className="space-y-1">
+        <h1 className="text-xl font-semibold">Page not found</h1>
+        <p className="text-sm text-muted-foreground">
+          The page you are looking for does not exist or has been removed.
+        </p>
+      </div>
+      <Link to="/dashboard" className="text-sm underline underline-offset-4">
+        Go to dashboard
+      </Link>
+    </div>
+  )
+}
+
 export const Route = createRootRoute({
   component: RootComponent,
+  notFoundComponent: NotFoundPage,
   head: () => ({
     meta: [
       {

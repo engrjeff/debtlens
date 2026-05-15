@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from "@tanstack/react-router"
+import { Link, createFileRoute, notFound } from "@tanstack/react-router"
 import { format } from "date-fns"
 import {
   AlertCircleIcon,
@@ -66,7 +66,11 @@ export const Route = createFileRoute("/_protected/obligations/$id")({
   component: RouteComponent,
   pendingComponent: ObligationDetailSkeleton,
   loader: async ({ params }) => {
-    return fetchObligationById({ data: { id: params.id } })
+    try {
+      return await fetchObligationById({ data: { id: params.id } })
+    } catch {
+      throw notFound()
+    }
   },
   head(ctx) {
     return {

@@ -499,6 +499,9 @@ function getObligationDatesInMonth(
   year: number,
   month: number
 ): Array<Date> {
+  // Skip obligations already marked done
+  if (obligation.isDone) return []
+
   const monthEnd = new Date(year, month + 1, 0)
   const dates: Array<Date> = []
 
@@ -513,6 +516,25 @@ function getObligationDatesInMonth(
 
   // Any month that comes before the anchor produces no occurrences
   if (monthsFromAnchor < 0) return dates
+
+  // For loans, stop showing payments once the remaining balance is exhausted.
+  // remainingPayments is computed from the current remaining balance, where
+  // nextDueDate is always the first remaining payment (i.e. payment 0).
+  if (obligation.type === "LOAN" && obligation.amount > 0) {
+    const remainingPayments = Math.ceil(
+      Math.max(obligation.remainingBalance, 0) / obligation.amount
+    )
+    const periodsPerPayment =
+      obligation.recurrence === "QUARTERLY"
+        ? 3
+        : obligation.recurrence === "ANNUALLY"
+          ? 12
+          : obligation.recurrence === "WEEKLY"
+            ? 0 // handled separately; not typical for loans
+            : 1
+    const lastPaymentMonthsFromAnchor = (remainingPayments - 1) * periodsPerPayment
+    if (monthsFromAnchor > lastPaymentMonthsFromAnchor) return []
+  }
 
   switch (obligation.recurrence) {
     case "ONCE": {
