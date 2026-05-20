@@ -4,9 +4,9 @@ import type { ReactNode } from "react"
 export function SignedIn({ children }: { children: ReactNode }) {
   const session = authClient.useSession()
 
-  if (session.isPending) return null
+  if (session.isPending && !session.error) return null
 
-  if (!session.data?.user) return null
+  if (session.error || !session.data?.user) return null
 
   return <>{children}</>
 }
