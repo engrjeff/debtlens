@@ -8,7 +8,10 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 
-interface PasswordInputProps extends Omit<React.ComponentProps<"input">, "type"> {
+interface PasswordInputProps extends Omit<
+  React.ComponentProps<"input">,
+  "type"
+> {
   ref?: React.Ref<HTMLInputElement>
 }
 
@@ -17,9 +20,14 @@ export function PasswordInput({ ref, ...props }: PasswordInputProps) {
 
   return (
     <InputGroup>
-      <InputGroupInput ref={ref} type={visible ? "text" : "password"} {...props} />
+      <InputGroupInput
+        ref={ref}
+        type={visible ? "text" : "password"}
+        {...props}
+      />
       <InputGroupAddon align="inline-end">
         <InputGroupButton
+          tabIndex={-1}
           aria-label={visible ? "Hide password" : "Show password"}
           onClick={() => setVisible((v) => !v)}
         >

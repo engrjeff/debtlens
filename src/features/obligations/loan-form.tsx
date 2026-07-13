@@ -1,6 +1,5 @@
-import { Controller, useFormContext } from "react-hook-form"
-import type {ObligationInput} from "./schema";
 import { NumberInput } from "@/components/number-input"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Field,
   FieldContent,
@@ -12,9 +11,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { RecurrenceType } from "@/generated/prisma/enums"
+import { useState } from "react"
+import { Controller, useFormContext } from "react-hook-form"
+import type { ObligationInput } from "./schema"
 
 export function LoanForm() {
   const form = useFormContext<ObligationInput>()
+  const [sameAsLoan, setSameAsLoan] = useState(false)
 
   return (
     <FieldSet>
@@ -30,7 +33,7 @@ export function LoanForm() {
             <Input
               {...field}
               id={field.name}
-              placeholder="Loan name"
+              placeholder="Loan/Debt name"
               aria-invalid={fieldState.invalid}
               autoFocus
             />
@@ -98,24 +101,43 @@ export function LoanForm() {
         <Controller
           name="totalAmount"
           control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Loan Amount</FieldLabel>
-              <NumberInput
-                id={field.name}
-                placeholder="0.00"
-                usePeso
-                aria-invalid={fieldState.invalid}
-                {...form.register("totalAmount", { valueAsNumber: true })}
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
+          render={({ field, fieldState }) => {
+            const registered = form.register("totalAmount", {
+              valueAsNumber: true,
+            })
+            return (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Loan Amount</FieldLabel>
+                <NumberInput
+                  id={field.name}
+                  placeholder="0.00"
+                  usePeso
+                  aria-invalid={fieldState.invalid}
+                  {...registered}
+                  onChange={(e) => {
+                    registered.onChange(e)
+                    if (sameAsLoan) {
+                      form.setValue(
+                        "remainingBalance",
+                        parseFloat(e.target.value) || 0,
+                        { shouldValidate: true }
+                      )
+                    }
+                  }}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )
+          }}
         />
         <Controller
           name="remainingBalance"
           control={form.control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }) => {
+            const registered = form.register("remainingBalance", { valueAsNumber: true })
+            return (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>Remaining Balance</FieldLabel>
               <NumberInput
@@ -123,11 +145,37 @@ export function LoanForm() {
                 placeholder="0.00"
                 usePeso
                 aria-invalid={fieldState.invalid}
-                {...form.register("remainingBalance", { valueAsNumber: true })}
+                {...registered}
+                onChange={(e) => {
+                  registered.onChange(e)
+                  if (sameAsLoan) {
+                    const val = parseFloat(e.target.value) || 0
+                    if (val !== (form.getValues("totalAmount") ?? 0)) {
+                      setSameAsLoan(false)
+                    }
+                  }
+                }}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              <label className="mt-1 flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
+                <Checkbox
+                  checked={sameAsLoan}
+                  onCheckedChange={(checked) => {
+                    const next = checked === true
+                    setSameAsLoan(next)
+                    if (next) {
+                      form.setValue(
+                        "remainingBalance",
+                        form.getValues("totalAmount") ?? 0,
+                        { shouldValidate: true }
+                      )
+                    }
+                  }}
+                />
+                Same as Loan Amount
+              </label>
             </Field>
-          )}
+          )}}
         />
       </div>
       <div className="grid grid-cols-2 gap-4">

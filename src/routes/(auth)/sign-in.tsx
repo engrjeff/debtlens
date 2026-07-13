@@ -114,7 +114,7 @@ function RouteComponent() {
                 <FieldLabel htmlFor="password">Password</FieldLabel>
                 <PasswordInput
                   id="password"
-                  placeholder="••••••••"
+                  placeholder="Enter your assword"
                   autoComplete="current-password"
                   aria-invalid={!!errors.password || undefined}
                   {...register("password")}

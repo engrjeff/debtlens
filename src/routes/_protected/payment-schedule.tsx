@@ -305,11 +305,21 @@ function DayDetailPanel({
             </p>
           </div>
         ) : (
-          <ul className="divide-y">
-            {obligations.map((ob) => (
-              <ObligationScheduleItem key={ob.id} obligation={ob} />
-            ))}
-          </ul>
+          <>
+            <ul className="divide-y">
+              {obligations.map((ob) => (
+                <ObligationScheduleItem key={ob.id} obligation={ob} />
+              ))}
+            </ul>
+            <div className="mt-1 flex items-center justify-between border-t pt-3">
+              <span className="text-sm font-medium text-muted-foreground">
+                Total due
+              </span>
+              <span className="font-mono font-semibold">
+                {formatPHP(obligations.reduce((sum, ob) => sum + ob.amount, 0))}
+              </span>
+            </div>
+          </>
         )}
       </CardContent>
     </Card>
