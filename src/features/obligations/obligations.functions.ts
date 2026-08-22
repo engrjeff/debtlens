@@ -10,7 +10,12 @@ import {
   markObligationPaid,
   updateObligation,
 } from "./obligations.server"
-import { editBillSchema, editLoanSchema, markAsPaidSchema, obligationFormSchema } from "./schema"
+import {
+  editBillSchema,
+  editLoanSchema,
+  markAsPaidSchema,
+  obligationFormSchema,
+} from "./schema"
 import { obligationsSearchSchema } from "./search-params"
 import { ensureSession } from "@/lib/auth.functions"
 

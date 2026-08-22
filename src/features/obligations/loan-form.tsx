@@ -141,46 +141,51 @@ export function LoanForm({
           name="remainingBalance"
           control={form.control}
           render={({ field, fieldState }) => {
-            const registered = form.register("remainingBalance", { valueAsNumber: true })
+            const registered = form.register("remainingBalance", {
+              valueAsNumber: true,
+            })
             return (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Remaining Balance</FieldLabel>
-              <NumberInput
-                id={field.name}
-                placeholder="0.00"
-                usePeso
-                aria-invalid={fieldState.invalid}
-                {...registered}
-                onChange={(e) => {
-                  registered.onChange(e)
-                  if (sameAsLoan) {
-                    const val = parseFloat(e.target.value) || 0
-                    if (val !== form.getValues("totalAmount")) {
-                      setSameAsLoan(false)
-                    }
-                  }
-                }}
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              <label className="mt-1 flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
-                <Checkbox
-                  checked={sameAsLoan}
-                  onCheckedChange={(checked) => {
-                    const next = checked === true
-                    setSameAsLoan(next)
-                    if (next) {
-                      form.setValue(
-                        "remainingBalance",
-                        form.getValues("totalAmount"),
-                        { shouldValidate: true }
-                      )
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Remaining Balance</FieldLabel>
+                <NumberInput
+                  id={field.name}
+                  placeholder="0.00"
+                  usePeso
+                  aria-invalid={fieldState.invalid}
+                  {...registered}
+                  onChange={(e) => {
+                    registered.onChange(e)
+                    if (sameAsLoan) {
+                      const val = parseFloat(e.target.value) || 0
+                      if (val !== form.getValues("totalAmount")) {
+                        setSameAsLoan(false)
+                      }
                     }
                   }}
                 />
-                Same as Loan Amount
-              </label>
-            </Field>
-          )}}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+                <label className="mt-1 flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
+                  <Checkbox
+                    checked={sameAsLoan}
+                    onCheckedChange={(checked) => {
+                      const next = checked === true
+                      setSameAsLoan(next)
+                      if (next) {
+                        form.setValue(
+                          "remainingBalance",
+                          form.getValues("totalAmount"),
+                          { shouldValidate: true }
+                        )
+                      }
+                    }}
+                  />
+                  Same as Loan Amount
+                </label>
+              </Field>
+            )
+          }}
         />
       </div>
       <div className="grid grid-cols-2 gap-4">

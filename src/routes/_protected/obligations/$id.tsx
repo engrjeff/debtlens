@@ -203,7 +203,9 @@ function ObligationHeader({
         <Badge variant={obligation.type as "BILL" | "LOAN"}>
           {obligation.type.charAt(0) + obligation.type.slice(1).toLowerCase()}
         </Badge>
-        {obligation.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+        {obligation.tags.map((tag) => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
       </div>
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">

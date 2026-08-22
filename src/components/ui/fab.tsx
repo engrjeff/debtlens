@@ -11,7 +11,8 @@ const fabVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/90",
         destructive: "bg-destructive text-white hover:bg-destructive/90",
       },
       size: {
@@ -21,7 +22,7 @@ const fabVariants = cva(
         extended: "h-14 gap-2 px-5 [&_svg:not([class*='size-'])]:size-5",
       },
       position: {
-        "bottom-right": "bottom-6 right-6",
+        "bottom-right": "right-6 bottom-6",
         "bottom-left": "bottom-6 left-6",
         "bottom-center": "bottom-6 left-1/2 -translate-x-1/2",
       },
@@ -35,8 +36,7 @@ const fabVariants = cva(
 )
 
 interface FabProps
-  extends React.ComponentProps<"button">,
-    VariantProps<typeof fabVariants> {
+  extends React.ComponentProps<"button">, VariantProps<typeof fabVariants> {
   asChild?: boolean
 }
 

@@ -5,7 +5,12 @@ interface SubmitButtonProps extends React.ComponentProps<typeof Button> {
   loading?: boolean
 }
 
-export function SubmitButton({ loading, disabled, children, ...props }: SubmitButtonProps) {
+export function SubmitButton({
+  loading,
+  disabled,
+  children,
+  ...props
+}: SubmitButtonProps) {
   return (
     <Button type="submit" disabled={loading || disabled} {...props}>
       {loading && <Spinner data-icon="inline-start" />}

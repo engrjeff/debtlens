@@ -9,9 +9,9 @@ import {
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 
+import appCss from "../styles.css?url"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import appCss from "../styles.css?url"
 
 function RootComponent() {
   const isLoading = useRouterState({ select: (s) => s.isLoading })
@@ -29,7 +29,9 @@ function RootComponent() {
 function NotFoundPage() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-4 text-center">
-      <p className="text-6xl font-bold tracking-tight text-muted-foreground/30">404</p>
+      <p className="text-6xl font-bold tracking-tight text-muted-foreground/30">
+        404
+      </p>
       <div className="space-y-1">
         <h1 className="text-xl font-semibold">Page not found</h1>
         <p className="text-sm text-muted-foreground">

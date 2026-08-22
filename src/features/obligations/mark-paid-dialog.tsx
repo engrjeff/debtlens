@@ -3,17 +3,12 @@ import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { format } from "date-fns"
 import { useState } from "react"
-import {
-  Controller,
-  FormProvider,
-  
-  useForm
-} from "react-hook-form"
+import { Controller, FormProvider, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { markAsPaid } from "./obligations.functions"
-import {  PAYMENT_MODES, markAsPaidSchema } from "./schema"
-import type {SubmitHandler} from "react-hook-form";
-import type {MarkAsPaidInput} from "./schema";
+import { PAYMENT_MODES, markAsPaidSchema } from "./schema"
+import type { SubmitHandler } from "react-hook-form"
+import type { MarkAsPaidInput } from "./schema"
 import type { Obligation } from "@/generated/prisma/browser"
 import { Textarea } from "@/components/ui/textarea"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"

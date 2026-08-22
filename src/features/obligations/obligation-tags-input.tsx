@@ -4,7 +4,12 @@ import { Controller, useFormContext } from "react-hook-form"
 import { dedupeTagsCaseInsensitive } from "./helpers"
 import type { KeyboardEventHandler } from "react"
 import type { ObligationInput } from "./schema"
-import { Field, FieldContent, FieldError, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Tag } from "@/components/ui/tag"
 

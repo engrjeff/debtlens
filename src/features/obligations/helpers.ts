@@ -252,7 +252,10 @@ export function computeDebtFreeBanner(
 
   const overallProgress =
     totalOriginal > 0
-      ? Math.min(100, Math.max(0, ((totalOriginal - totalRemaining) / totalOriginal) * 100))
+      ? Math.min(
+          100,
+          Math.max(0, ((totalOriginal - totalRemaining) / totalOriginal) * 100)
+        )
       : 0
 
   const targetDate = new Date()
@@ -262,7 +265,14 @@ export function computeDebtFreeBanner(
     year: "numeric",
   }).format(targetDate)
 
-  return { formattedTarget, targetDate, monthsAway: maxMonths, overallProgress, totalRemaining, totalOriginal }
+  return {
+    formattedTarget,
+    targetDate,
+    monthsAway: maxMonths,
+    overallProgress,
+    totalRemaining,
+    totalOriginal,
+  }
 }
 
 // ── Insights ─────────────────────────────────────────────────────────────────

@@ -70,7 +70,9 @@ function ObligationItem({
         </div>
         {obligation.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
-            {obligation.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+            {obligation.tags.map((tag) => (
+              <Tag key={tag}>{tag}</Tag>
+            ))}
           </div>
         )}
       </CardHeader>

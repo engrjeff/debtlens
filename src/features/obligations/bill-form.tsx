@@ -1,6 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form"
 import { ObligationTagsInput } from "./obligation-tags-input"
-import type {ObligationInput} from "./schema";
+import type { ObligationInput } from "./schema"
 import { NumberInput } from "@/components/number-input"
 import {
   Field,

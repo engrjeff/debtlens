@@ -2,10 +2,10 @@ import { Trash2Icon } from "lucide-react"
 
 import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
-import {  useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { removeObligation } from "./obligations.functions"
-import type {ComponentProps} from "react";
+import type { ComponentProps } from "react"
 import type { Obligation } from "@/generated/prisma/browser"
 import {
   AlertDialog,

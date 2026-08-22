@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 
-const SORT_OPTIONS: Array<{ value: ObligationsSearch["sort"]; label: string }> = [
-  { value: "due-date", label: "Due Date (Nearest)" },
-  { value: "amount", label: "Highest Amount" },
-  { value: "balance", label: "Largest Balance" },
-  { value: "type", label: "Type" },
-]
+const SORT_OPTIONS: Array<{ value: ObligationsSearch["sort"]; label: string }> =
+  [
+    { value: "due-date", label: "Due Date (Nearest)" },
+    { value: "amount", label: "Highest Amount" },
+    { value: "balance", label: "Largest Balance" },
+    { value: "type", label: "Type" },
+  ]
 
 export function ObligationsSort() {
   const search = useSearch({ from: "/_protected/obligations/" })

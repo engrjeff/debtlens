@@ -1,9 +1,9 @@
+import { Link } from "@tanstack/react-router"
+import { computeInsights, formatCompactPHP, formatPayoffDate } from "./helpers"
+import type { Obligation } from "@/generated/prisma/browser"
 import { Text } from "@/components/text"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import type { Obligation } from "@/generated/prisma/browser"
-import { Link } from "@tanstack/react-router"
-import { computeInsights, formatCompactPHP, formatPayoffDate } from "./helpers"
 
 interface InsightCardsProps {
   obligations: Array<Obligation>

@@ -1,3 +1,18 @@
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { format, formatDistanceToNow, isSameDay } from "date-fns"
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  FilterIcon,
+  ReceiptIcon,
+  TagIcon,
+  XIcon,
+} from "lucide-react"
+import { useMemo, useState } from "react"
+import type { Obligation } from "@/generated/prisma/browser"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
@@ -20,22 +35,7 @@ import { Separator } from "@/components/ui/separator"
 import { collectAvailableTags, formatPHP } from "@/features/obligations/helpers"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { fetchObligationInsights } from "@/features/obligations/obligations.functions"
-import type { Obligation } from "@/generated/prisma/browser"
 import { generatePageTitle } from "@/lib/utils"
-import { Link, createFileRoute } from "@tanstack/react-router"
-import { format, formatDistanceToNow, isSameDay } from "date-fns"
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  FilterIcon,
-  ReceiptIcon,
-  TagIcon,
-  XIcon,
-} from "lucide-react"
-import { useMemo, useState } from "react"
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 

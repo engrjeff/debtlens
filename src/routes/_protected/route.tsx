@@ -34,7 +34,7 @@ function RouteComponent() {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <div className="pb-16 pt-16 lg:pb-0 lg:pt-0">
+        <div className="pt-16 pb-16 lg:pt-0 lg:pb-0">
           <Outlet />
         </div>
         <BottomNav />

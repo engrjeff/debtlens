@@ -2,23 +2,18 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
-import {  useState } from "react"
-import {
-  FormProvider,
-  
-  
-  useForm
-} from "react-hook-form"
+import { useState } from "react"
+import { FormProvider, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { BillForm } from "./bill-form"
 import { LoanForm } from "./loan-form"
 import { ObligationCategorySelector } from "./obligation-category-selector"
 import { ObligationTypeSelector } from "./obligation-type-selector"
 import { addObligation } from "./obligations.functions"
-import {  obligationFormSchema } from "./schema"
-import type {SubmitErrorHandler, SubmitHandler} from "react-hook-form";
-import type {ChangeEventHandler} from "react";
-import type {ObligationInput} from "./schema";
+import { obligationFormSchema } from "./schema"
+import type { SubmitErrorHandler, SubmitHandler } from "react-hook-form"
+import type { ChangeEventHandler } from "react"
+import type { ObligationInput } from "./schema"
 import { ObligationType, RecurrenceType } from "@/generated/prisma/enums"
 import { Button } from "@/components/ui/button"
 import { SubmitButton } from "@/components/submit-button"

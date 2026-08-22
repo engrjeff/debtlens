@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { formatPHP, getCategoryMeta } from "@/features/obligations/helpers"
 import { Link } from "@tanstack/react-router"
 import { LayoutGrid } from "lucide-react"
 import type { CategoryBreakdownItem } from "./dashboard.utils"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { formatPHP, getCategoryMeta } from "@/features/obligations/helpers"
 
 // Map Tailwind dot class → hex for inline bar styles
 const DOT_TO_HEX: Record<string, string> = {

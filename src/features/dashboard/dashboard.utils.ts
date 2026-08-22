@@ -165,7 +165,9 @@ export function getOverdue(obligations: Array<Obligation>): Array<Obligation> {
 /**
  * Returns obligations due today or within the next 7 days, sorted by due date.
  */
-export function getDueInNext7Days(obligations: Array<Obligation>): Array<Obligation> {
+export function getDueInNext7Days(
+  obligations: Array<Obligation>
+): Array<Obligation> {
   return obligations
     .filter((o) => {
       const status = getObligationStatus(o.nextDueDate)
@@ -211,7 +213,9 @@ export function getUpcoming(
  * Computes overall loan payoff progress and an estimated debt-free date.
  * Debt-free date is derived from the loan that takes the longest to pay off.
  */
-export function getDebtProgress(obligations: Array<Obligation>): DebtProgressData {
+export function getDebtProgress(
+  obligations: Array<Obligation>
+): DebtProgressData {
   const loans = obligations.filter((o) => o.type === "LOAN")
 
   const totalRemaining = loans.reduce((sum, l) => sum + l.remainingBalance, 0)
