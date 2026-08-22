@@ -1,4 +1,10 @@
 import { z } from "zod/v3"
+import { dedupeTagsCaseInsensitive } from "./helpers"
+
+const tagsSchema = z
+  .array(z.string().trim().min(1).max(30))
+  .max(3, "Up to 3 tags allowed")
+  .transform(dedupeTagsCaseInsensitive)
 
 export const obligationFormSchema = z
   .object({
@@ -10,6 +16,7 @@ export const obligationFormSchema = z
       message: "Please select a type",
     }),
     category: z.string().min(1, "Category is required"),
+    tags: tagsSchema,
     amount: z
       .number({ message: "Enter a valid amount" })
       .positive("Must be greater than 0"),
@@ -60,6 +67,7 @@ const recurrenceEnum = z.enum(["ONCE", "DAILY", "WEEKLY", "MONTHLY", "QUARTERLY"
 export const editBillSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name must be 100 characters or fewer"),
   category: z.string().min(1, "Category is required"),
+  tags: tagsSchema,
   amount: z.number({ message: "Enter a valid amount" }).positive("Must be greater than 0"),
   recurrence: recurrenceEnum,
   nextDueDate: z.string().min(1, "Next due date is required"),
@@ -68,6 +76,7 @@ export const editBillSchema = z.object({
 export const editLoanSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name must be 100 characters or fewer"),
   category: z.string().min(1, "Category is required"),
+  tags: tagsSchema,
   amount: z.number({ message: "Enter a valid amount" }).positive("Must be greater than 0"),
   recurrence: recurrenceEnum,
   nextDueDate: z.string().min(1, "Next due date is required"),

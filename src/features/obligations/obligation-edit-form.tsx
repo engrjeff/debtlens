@@ -11,6 +11,7 @@ import {
 } from "react-hook-form"
 import { toast } from "sonner"
 import { BillForm } from "./bill-form"
+import { getObligationStatus } from "./helpers"
 import { LoanForm } from "./loan-form"
 import { ObligationCategorySelector } from "./obligation-category-selector"
 import { editObligation } from "./obligations.functions"
@@ -44,6 +45,7 @@ export function ObligationEditForm({
       type: obligation.type,
       name: obligation.name,
       category: obligation.category,
+      tags: obligation.tags,
       recurrence: obligation.recurrence,
       totalAmount: obligation.totalAmount,
       amount: obligation.amount, // amount to pay based on recurrence
@@ -55,6 +57,7 @@ export function ObligationEditForm({
   })
 
   const type = form.watch("type")
+  const isOverdue = getObligationStatus(obligation.nextDueDate) === "overdue"
 
   const onFormError: SubmitErrorHandler<ObligationInput> = (errors) => {
     console.log("Obligation Edit Form Errors:", errors)
@@ -118,8 +121,8 @@ export function ObligationEditForm({
         className="space-y-4"
       >
         <ObligationCategorySelector label="Category" />
-        {type === "BILL" && <BillForm />}
-        {type === "LOAN" && <LoanForm />}
+        {type === "BILL" && <BillForm allowPastDueDate={isOverdue} />}
+        {type === "LOAN" && <LoanForm allowPastDueDate={isOverdue} />}
 
         <div className="mt-6 flex justify-end gap-3">
           <Button type="button" variant="ghost" onClick={onAfterSave}>

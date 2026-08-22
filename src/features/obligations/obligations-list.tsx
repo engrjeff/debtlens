@@ -12,6 +12,7 @@ import type { Obligation } from "@/generated/prisma/browser"
 import { Text } from "@/components/text"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Tag } from "@/components/ui/tag"
 import {
   Card,
   CardContent,
@@ -67,6 +68,11 @@ function ObligationItem({
         <div className="absolute top-1 right-1">
           <ObligationItemMenu obligation={obligation} />
         </div>
+        {obligation.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {obligation.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+          </div>
+        )}
       </CardHeader>
       <CardContent className="mt-auto flex items-center justify-between">
         <div className="space-y-0.5">

@@ -43,6 +43,7 @@ export function ObligationForm({ onAfterSave }: ObligationFormProps) {
       type: ObligationType.BILL,
       name: "",
       category: "",
+      tags: [],
       recurrence: RecurrenceType.MONTHLY,
       totalAmount: 0,
       amount: 0, // amount to pay based on recurrence

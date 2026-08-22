@@ -89,6 +89,7 @@ export async function getObligations(
     ...(search.categories?.length
       ? { category: { in: search.categories } }
       : {}),
+    ...(search.tags?.length ? { tags: { hasSome: search.tags } } : {}),
     ...(search.minAmount != null || search.maxAmount != null
       ? {
           amount: {

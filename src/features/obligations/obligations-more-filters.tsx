@@ -1,9 +1,3 @@
-import { useNavigate, useSearch } from "@tanstack/react-router"
-import { FilterIcon, XIcon } from "lucide-react"
-import { createContext, useCallback, useContext, useState } from "react"
-import { getCategoryMeta } from "./helpers"
-import type { ReactNode } from "react"
-import type { ObligationsSearch } from "./search-params"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -20,6 +14,18 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
+import { useLoaderData, useNavigate, useSearch } from "@tanstack/react-router"
+import { FilterIcon, TagIcon, XIcon } from "lucide-react"
+import type { ReactNode } from "react"
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react"
+import { collectAvailableTags, getCategoryMeta } from "./helpers"
+import type { ObligationsSearch } from "./search-params"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -27,6 +33,7 @@ type FilterDraft = {
   type: "ALL" | "BILL" | "LOAN"
   status: ObligationsSearch["status"] | undefined
   categories: Array<string>
+  tags: Array<string>
   dueRange: "any" | "today" | "next7days" | "thisMonth" | "custom"
   dueStart: string
   dueEnd: string
@@ -42,6 +49,7 @@ const DEFAULT_DRAFT: FilterDraft = {
   type: "ALL",
   status: undefined,
   categories: [],
+  tags: [],
   dueRange: "any",
   dueStart: "",
   dueEnd: "",
@@ -62,6 +70,7 @@ type FilterDraftContextValue = {
     value: FilterDraft[TKey]
   ) => void
   toggleCategory: (value: string) => void
+  toggleTag: (value: string) => void
 }
 
 const FilterDraftContext = createContext<FilterDraftContextValue | null>(null)
@@ -92,6 +101,7 @@ function searchToDraft(search: ObligationsSearch): FilterDraft {
     type,
     status: search.status,
     categories: validCategoriesForType(search.categories ?? [], type),
+    tags: search.tags ?? [],
     dueRange: search.dueRange ?? "any",
     dueStart: search.dueStart ?? "",
     dueEnd: search.dueEnd ?? "",
@@ -109,6 +119,7 @@ function countActiveFilters(search: ObligationsSearch): number {
   if (search.type !== "ALL") n++
   if (search.status) n++
   if (search.categories?.length) n++
+  if (search.tags?.length) n++
   if (search.dueRange && search.dueRange !== "any") n++
   if (search.minAmount != null || search.maxAmount != null) n++
   if (search.minBalance != null || search.maxBalance != null) n++
@@ -262,6 +273,52 @@ function CategoryFilter() {
                 </Label>
               </div>
             ))}
+          </div>
+        ))}
+      </div>
+    </FilterSection>
+  )
+}
+
+function TagsFilter({ availableTags }: { availableTags: Array<string> }) {
+  const { draft, toggleTag } = useFilterDraft()
+
+  if (availableTags.length === 0) return null
+
+  return (
+    <FilterSection title="Tags">
+      {draft.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {draft.tags.map((tag) => (
+            <Button
+              key={tag}
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="h-7 rounded-full text-xs text-emerald-500"
+              onClick={() => toggleTag(tag)}
+            >
+              <TagIcon className="size-3 shrink-0" />
+              <span>{tag}</span>
+              <XIcon className="size-3 shrink-0" />
+            </Button>
+          ))}
+        </div>
+      )}
+      <div className="h-32 max-h-44 space-y-3 overflow-y-auto pr-1">
+        {availableTags.map((tag) => (
+          <div key={tag} className="flex items-center gap-2.5">
+            <Checkbox
+              id={`tag-${tag}`}
+              checked={draft.tags.includes(tag)}
+              onCheckedChange={() => toggleTag(tag)}
+            />
+            <Label
+              htmlFor={`tag-${tag}`}
+              className="cursor-pointer font-normal"
+            >
+              {tag}
+            </Label>
           </div>
         ))}
       </div>
@@ -463,11 +520,16 @@ function SortFilter() {
 
 export function ObligationsMoreFilters() {
   const search = useSearch({ from: "/_protected/obligations/" })
+  const [, allObligations] = useLoaderData({ from: "/_protected/obligations/" })
   const navigate = useNavigate({ from: "/obligations/" })
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<FilterDraft>(DEFAULT_DRAFT)
 
   const activeCount = countActiveFilters(search)
+  const availableTags = useMemo(
+    () => collectAvailableTags(allObligations),
+    [allObligations]
+  )
 
   const set = useCallback(
     <TKey extends keyof FilterDraft>(key: TKey, value: FilterDraft[TKey]) => {
@@ -485,6 +547,15 @@ export function ObligationsMoreFilters() {
     }))
   }, [])
 
+  const toggleTag = useCallback((value: string) => {
+    setDraft((prev) => ({
+      ...prev,
+      tags: prev.tags.includes(value)
+        ? prev.tags.filter((t) => t !== value)
+        : [...prev.tags, value],
+    }))
+  }, [])
+
   function handleOpenChange(isOpen: boolean) {
     if (isOpen) setDraft(searchToDraft(search))
     setOpen(isOpen)
@@ -497,6 +568,7 @@ export function ObligationsMoreFilters() {
         type: draft.type,
         status: draft.status,
         categories: draft.categories.length ? draft.categories : undefined,
+        tags: draft.tags.length ? draft.tags : undefined,
         dueRange: draft.dueRange !== "any" ? draft.dueRange : undefined,
         dueStart:
           draft.dueRange === "custom" && draft.dueStart
@@ -531,7 +603,9 @@ export function ObligationsMoreFilters() {
   }
 
   return (
-    <FilterDraftContext.Provider value={{ draft, set, toggleCategory }}>
+    <FilterDraftContext.Provider
+      value={{ draft, set, toggleCategory, toggleTag }}
+    >
       <Sheet open={open} onOpenChange={handleOpenChange}>
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="relative">
@@ -559,6 +633,8 @@ export function ObligationsMoreFilters() {
             <StatusFilter />
             <Separator />
             <CategoryFilter />
+            <Separator />
+            <TagsFilter availableTags={availableTags} />
             <Separator />
             <DueDateFilter />
             <Separator />

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Tag } from "@/components/ui/tag"
 
 export function ObligationsTable({
   obligations,
@@ -69,6 +70,11 @@ export function ObligationsTable({
                   <span className="text-xs text-muted-foreground">
                     {obligation.category}
                   </span>
+                  {obligation.tags.length > 0 && (
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {obligation.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+                    </div>
+                  )}
                 </TableCell>
 
                 <TableCell>

@@ -1,3 +1,7 @@
+import { useState } from "react"
+import { Controller, useFormContext } from "react-hook-form"
+import { ObligationTagsInput } from "./obligation-tags-input"
+import type { ObligationInput } from "./schema"
 import { NumberInput } from "@/components/number-input"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -11,11 +15,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { RecurrenceType } from "@/generated/prisma/enums"
-import { useState } from "react"
-import { Controller, useFormContext } from "react-hook-form"
-import type { ObligationInput } from "./schema"
 
-export function LoanForm() {
+export function LoanForm({
+  allowPastDueDate = false,
+}: {
+  allowPastDueDate?: boolean
+}) {
   const form = useFormContext<ObligationInput>()
   const [sameAsLoan, setSameAsLoan] = useState(false)
 
@@ -150,7 +155,7 @@ export function LoanForm() {
                   registered.onChange(e)
                   if (sameAsLoan) {
                     const val = parseFloat(e.target.value) || 0
-                    if (val !== (form.getValues("totalAmount") ?? 0)) {
+                    if (val !== form.getValues("totalAmount")) {
                       setSameAsLoan(false)
                     }
                   }
@@ -166,7 +171,7 @@ export function LoanForm() {
                     if (next) {
                       form.setValue(
                         "remainingBalance",
-                        form.getValues("totalAmount") ?? 0,
+                        form.getValues("totalAmount"),
                         { shouldValidate: true }
                       )
                     }
@@ -188,7 +193,11 @@ export function LoanForm() {
               <FieldContent>
                 <Input
                   type="date"
-                  min={new Date().toISOString().split("T")[0]}
+                  min={
+                    allowPastDueDate
+                      ? undefined
+                      : new Date().toISOString().split("T")[0]
+                  }
                   aria-invalid={fieldState.invalid}
                   {...field}
                 />
@@ -200,6 +209,7 @@ export function LoanForm() {
           )}
         />
       </div>
+      <ObligationTagsInput />
     </FieldSet>
   )
 }
