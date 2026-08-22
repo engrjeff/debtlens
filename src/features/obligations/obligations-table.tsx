@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Tag } from "@/components/ui/tag"
 
 export function ObligationsTable({
   obligations,
@@ -69,6 +70,13 @@ export function ObligationsTable({
                   <span className="text-xs text-muted-foreground">
                     {obligation.category}
                   </span>
+                  {obligation.tags.length > 0 && (
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {obligation.tags.map((tag) => (
+                        <Tag key={tag}>{tag}</Tag>
+                      ))}
+                    </div>
+                  )}
                 </TableCell>
 
                 <TableCell>
@@ -102,13 +110,17 @@ export function ObligationsTable({
                 </TableCell>
                 <TableCell className="text-center">
                   {obligation.isDone ? (
-                    <Badge variant="outline" className="gap-1 border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
+                    <Badge
+                      variant="outline"
+                      className="gap-1 border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400"
+                    >
                       <CheckCheckIcon className="size-3" /> Done
                     </Badge>
                   ) : (
                     <Badge
                       variant={
-                        getObligationStatus(obligation.nextDueDate) === "overdue"
+                        getObligationStatus(obligation.nextDueDate) ===
+                        "overdue"
                           ? "destructive"
                           : "secondary"
                       }

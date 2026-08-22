@@ -1,4 +1,10 @@
 import { z } from "zod/v3"
+import { dedupeTagsCaseInsensitive } from "./helpers"
+
+const tagsSchema = z
+  .array(z.string().trim().min(1).max(30))
+  .max(3, "Up to 3 tags allowed")
+  .transform(dedupeTagsCaseInsensitive)
 
 export const obligationFormSchema = z
   .object({
@@ -10,10 +16,18 @@ export const obligationFormSchema = z
       message: "Please select a type",
     }),
     category: z.string().min(1, "Category is required"),
+    tags: tagsSchema,
     amount: z
       .number({ message: "Enter a valid amount" })
       .positive("Must be greater than 0"),
-    recurrence: z.enum(["ONCE", "DAILY", "WEEKLY", "MONTHLY", "QUARTERLY", "ANNUALLY"]),
+    recurrence: z.enum([
+      "ONCE",
+      "DAILY",
+      "WEEKLY",
+      "MONTHLY",
+      "QUARTERLY",
+      "ANNUALLY",
+    ]),
     nextDueDate: z.string().min(1, "Next Due date is required"),
     // BILL-specific
     dueDay: z.number().int().min(1, "Minimum 1").max(31, "Maximum 31"),
@@ -39,9 +53,7 @@ export const obligationFormSchema = z
           path: ["totalAmount"],
         })
       }
-      if (
-        data.remainingBalance > data.totalAmount
-      ) {
+      if (data.remainingBalance > data.totalAmount) {
         ctx.addIssue({
           code: "custom",
           message: "Cannot exceed total loan amount",
@@ -55,20 +67,39 @@ export type ObligationInput = z.infer<typeof obligationFormSchema>
 
 // ── Edit schemas (no type change, no dueDay – recomputed server-side) ─────────
 
-const recurrenceEnum = z.enum(["ONCE", "DAILY", "WEEKLY", "MONTHLY", "QUARTERLY", "ANNUALLY"])
+const recurrenceEnum = z.enum([
+  "ONCE",
+  "DAILY",
+  "WEEKLY",
+  "MONTHLY",
+  "QUARTERLY",
+  "ANNUALLY",
+])
 
 export const editBillSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name must be 100 characters or fewer"),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be 100 characters or fewer"),
   category: z.string().min(1, "Category is required"),
-  amount: z.number({ message: "Enter a valid amount" }).positive("Must be greater than 0"),
+  tags: tagsSchema,
+  amount: z
+    .number({ message: "Enter a valid amount" })
+    .positive("Must be greater than 0"),
   recurrence: recurrenceEnum,
   nextDueDate: z.string().min(1, "Next due date is required"),
 })
 
 export const editLoanSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name must be 100 characters or fewer"),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be 100 characters or fewer"),
   category: z.string().min(1, "Category is required"),
-  amount: z.number({ message: "Enter a valid amount" }).positive("Must be greater than 0"),
+  tags: tagsSchema,
+  amount: z
+    .number({ message: "Enter a valid amount" })
+    .positive("Must be greater than 0"),
   recurrence: recurrenceEnum,
   nextDueDate: z.string().min(1, "Next due date is required"),
   remainingBalance: z

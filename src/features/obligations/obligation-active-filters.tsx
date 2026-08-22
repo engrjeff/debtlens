@@ -1,5 +1,5 @@
 import { Link, useSearch } from "@tanstack/react-router"
-import { XIcon } from "lucide-react"
+import { TagIcon, XIcon } from "lucide-react"
 import type { ObligationsSearch } from "./search-params"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
@@ -57,6 +57,17 @@ function buildActiveChips(search: ObligationsSearch): Array<ActiveChip> {
       remove: (c) => ({
         ...c,
         categories: c.categories?.filter((x) => x !== cat),
+      }),
+    })
+  }
+
+  for (const tag of search.tags ?? []) {
+    chips.push({
+      id: `tag-${tag}`,
+      label: tag,
+      remove: (c) => ({
+        ...c,
+        tags: c.tags?.filter((x) => x !== tag),
       }),
     })
   }
@@ -124,6 +135,7 @@ function hasActiveFilters(search: ObligationsSearch): boolean {
     search.type !== "ALL" ||
     search.status ||
     search.categories?.length ||
+    search.tags?.length ||
     search.dueRange ||
     search.dueStart ||
     search.dueEnd ||
@@ -152,7 +164,7 @@ export function ClearFiltersButton() {
         page: 1,
       })}
       className={cn(
-        buttonVariants({ variant: "outline", size: "sm" }),
+        buttonVariants({ variant: "outline", size: "xs" }),
         "h-7 rounded-full text-xs lg:h-8 lg:text-sm"
       )}
     >
@@ -175,10 +187,13 @@ export function ObligationActiveFilters() {
           to="/obligations"
           search={(current) => chip.remove(current as ObligationsSearch)}
           className={cn(
-            buttonVariants({ size: "sm", variant: "secondary" }),
-            "h-7 rounded-full text-xs lg:h-8 lg:text-sm"
+            buttonVariants({ size: "xs", variant: "secondary" }),
+            "h-7 rounded-full text-xs text-emerald-500 lg:h-8 lg:text-sm"
           )}
         >
+          {chip.id.startsWith("tag") ? (
+            <TagIcon className="size-3 shrink-0" />
+          ) : null}
           {chip.label}
           <XIcon className="size-3 shrink-0" />
         </Link>

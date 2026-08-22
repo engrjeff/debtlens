@@ -34,7 +34,10 @@ interface DashboardPageProps {
   recentPayments: Array<RecentPayment>
 }
 
-export function DashboardPage({ obligations, recentPayments }: DashboardPageProps) {
+export function DashboardPage({
+  obligations,
+  recentPayments,
+}: DashboardPageProps) {
   const summary = getDashboardSummary(obligations)
   const upcoming = getUpcoming(obligations, 7)
   const debtProgress = getDebtProgress(obligations)

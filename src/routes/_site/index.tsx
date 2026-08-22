@@ -1,9 +1,3 @@
-import { SignedIn } from "@/components/signed-in"
-import { SignedOut } from "@/components/signed-out"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { siteConfig } from "@/config/site"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import {
   AlertTriangle,
@@ -15,6 +9,12 @@ import {
   TrendingDown,
   Wallet,
 } from "lucide-react"
+import { SignedIn } from "@/components/signed-in"
+import { SignedOut } from "@/components/signed-out"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { siteConfig } from "@/config/site"
 
 export const Route = createFileRoute("/_site/")({ component: LandingPage })
 

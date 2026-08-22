@@ -40,6 +40,7 @@ import {
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Tag } from "@/components/ui/tag"
 import { BillDoneDialog } from "@/features/obligations/bill-done-dialog"
 import {
   formatDueDate,
@@ -202,6 +203,9 @@ function ObligationHeader({
         <Badge variant={obligation.type as "BILL" | "LOAN"}>
           {obligation.type.charAt(0) + obligation.type.slice(1).toLowerCase()}
         </Badge>
+        {obligation.tags.map((tag) => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
       </div>
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">

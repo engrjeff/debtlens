@@ -1,11 +1,11 @@
+import { Link } from "@tanstack/react-router"
+import { format } from "date-fns"
+import { ArrowRight, CheckCheckIcon } from "lucide-react"
+import type { ObligationType } from "@/generated/prisma/enums"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatPHP } from "@/features/obligations/helpers"
-import type { ObligationType } from "@/generated/prisma/enums"
-import { Link } from "@tanstack/react-router"
-import { format } from "date-fns"
-import { ArrowRight, CheckCheckIcon } from "lucide-react"
 
 type RecentPayment = {
   id: string

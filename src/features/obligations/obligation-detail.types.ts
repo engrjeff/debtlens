@@ -4,7 +4,13 @@ import type { Obligation, Payment } from "@/generated/prisma/browser"
 
 export type PaymentRecord = Pick<
   Payment,
-  "id" | "amount" | "paidAt" | "forDueDate" | "modeOfPayment" | "notes" | "proofOfPayment"
+  | "id"
+  | "amount"
+  | "paidAt"
+  | "forDueDate"
+  | "modeOfPayment"
+  | "notes"
+  | "proofOfPayment"
 >
 
 export type ObligationWithPayments = Obligation & {
@@ -13,7 +19,11 @@ export type ObligationWithPayments = Obligation & {
 
 // ── Derived / computed types ──────────────────────────────────────────────────
 
-export type DueDateStatus = "overdue" | "due-today" | "due-this-week" | "upcoming"
+export type DueDateStatus =
+  | "overdue"
+  | "due-today"
+  | "due-this-week"
+  | "upcoming"
 
 export type LoanStats = {
   amountPaid: number

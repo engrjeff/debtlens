@@ -9,6 +9,7 @@ export const obligationsSearchSchema = z.object({
     .enum(["overdue", "due-today", "due-this-week", "due-this-month", "done"])
     .optional(),
   categories: z.array(z.string()).optional(),
+  tags: z.array(z.string()).optional(),
   dueRange: z
     .enum(["any", "today", "next7days", "thisMonth", "custom"])
     .optional(),

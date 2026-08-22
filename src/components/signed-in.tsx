@@ -1,5 +1,5 @@
-import { authClient } from "@/lib/auth-client"
 import type { ReactNode } from "react"
+import { authClient } from "@/lib/auth-client"
 
 export function SignedIn({ children }: { children: ReactNode }) {
   const session = authClient.useSession()

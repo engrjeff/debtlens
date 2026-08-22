@@ -2,22 +2,18 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { format } from "date-fns"
-import {  useState } from "react"
-import {
-  FormProvider,
-  
-  
-  useForm
-} from "react-hook-form"
+import { useState } from "react"
+import { FormProvider, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { BillForm } from "./bill-form"
+import { getObligationStatus } from "./helpers"
 import { LoanForm } from "./loan-form"
 import { ObligationCategorySelector } from "./obligation-category-selector"
 import { editObligation } from "./obligations.functions"
-import {  obligationFormSchema } from "./schema"
-import type {SubmitErrorHandler, SubmitHandler} from "react-hook-form";
-import type {ChangeEventHandler} from "react";
-import type {ObligationInput} from "./schema";
+import { obligationFormSchema } from "./schema"
+import type { SubmitErrorHandler, SubmitHandler } from "react-hook-form"
+import type { ChangeEventHandler } from "react"
+import type { ObligationInput } from "./schema"
 import type { Obligation } from "@/generated/prisma/browser"
 import { ObligationType, RecurrenceType } from "@/generated/prisma/enums"
 import { Button } from "@/components/ui/button"
@@ -44,6 +40,7 @@ export function ObligationEditForm({
       type: obligation.type,
       name: obligation.name,
       category: obligation.category,
+      tags: obligation.tags,
       recurrence: obligation.recurrence,
       totalAmount: obligation.totalAmount,
       amount: obligation.amount, // amount to pay based on recurrence
@@ -55,6 +52,7 @@ export function ObligationEditForm({
   })
 
   const type = form.watch("type")
+  const isOverdue = getObligationStatus(obligation.nextDueDate) === "overdue"
 
   const onFormError: SubmitErrorHandler<ObligationInput> = (errors) => {
     console.log("Obligation Edit Form Errors:", errors)
@@ -118,8 +116,8 @@ export function ObligationEditForm({
         className="space-y-4"
       >
         <ObligationCategorySelector label="Category" />
-        {type === "BILL" && <BillForm />}
-        {type === "LOAN" && <LoanForm />}
+        {type === "BILL" && <BillForm allowPastDueDate={isOverdue} />}
+        {type === "LOAN" && <LoanForm allowPastDueDate={isOverdue} />}
 
         <div className="mt-6 flex justify-end gap-3">
           <Button type="button" variant="ghost" onClick={onAfterSave}>

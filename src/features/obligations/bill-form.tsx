@@ -1,5 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form"
-import type {ObligationInput} from "./schema";
+import { ObligationTagsInput } from "./obligation-tags-input"
+import type { ObligationInput } from "./schema"
 import { NumberInput } from "@/components/number-input"
 import {
   Field,
@@ -13,7 +14,11 @@ import { Input } from "@/components/ui/input"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { RecurrenceType } from "@/generated/prisma/enums"
 
-export function BillForm() {
+export function BillForm({
+  allowPastDueDate = false,
+}: {
+  allowPastDueDate?: boolean
+}) {
   const form = useFormContext<ObligationInput>()
 
   return (
@@ -104,7 +109,11 @@ export function BillForm() {
               <FieldContent>
                 <Input
                   type="date"
-                  min={new Date().toISOString().split("T")[0]}
+                  min={
+                    allowPastDueDate
+                      ? undefined
+                      : new Date().toISOString().split("T")[0]
+                  }
                   aria-invalid={fieldState.invalid}
                   {...field}
                 />
@@ -116,6 +125,7 @@ export function BillForm() {
           )}
         />
       </div>
+      <ObligationTagsInput />
     </FieldSet>
   )
 }

@@ -6,7 +6,10 @@ import {
   CheckIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  FilterIcon,
   ReceiptIcon,
+  TagIcon,
+  XIcon,
 } from "lucide-react"
 import { useMemo, useState } from "react"
 import type { Obligation } from "@/generated/prisma/browser"
@@ -21,8 +24,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
-import { formatPHP } from "@/features/obligations/helpers"
+import { collectAvailableTags, formatPHP } from "@/features/obligations/helpers"
 import { MarkPaidDialog } from "@/features/obligations/mark-paid-dialog"
 import { fetchObligationInsights } from "@/features/obligations/obligations.functions"
 import { generatePageTitle } from "@/lib/utils"
@@ -46,6 +56,28 @@ function RouteComponent() {
     () => new Date(new Date().getFullYear(), new Date().getMonth(), 1)
   )
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
+  const [selectedTags, setSelectedTags] = useState<Array<string>>([])
+
+  const availableTags = useMemo(
+    () => collectAvailableTags(obligations),
+    [obligations]
+  )
+
+  const filteredObligations = useMemo(
+    () =>
+      selectedTags.length === 0
+        ? obligations
+        : obligations.filter((o) =>
+            o.tags.some((t) => selectedTags.includes(t))
+          ),
+    [obligations, selectedTags]
+  )
+
+  function toggleTag(tag: string) {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    )
+  }
 
   function handleMonthChange(month: Date) {
     setViewMonth(month)
@@ -65,11 +97,11 @@ function RouteComponent() {
   const obligationMap = useMemo(
     () =>
       buildObligationMap(
-        obligations,
+        filteredObligations,
         viewMonth.getFullYear(),
         viewMonth.getMonth()
       ),
-    [obligations, viewMonth]
+    [filteredObligations, viewMonth]
   )
 
   const selectedDayObligations = useMemo(() => {
@@ -80,14 +112,52 @@ function RouteComponent() {
 
   return (
     <>
-      <header className="container mx-auto flex max-w-6xl items-center gap-4 p-4 pb-0">
-        <div>
-          <h1 className="font-semibold">Payment Schedule</h1>
-          <p className="text-xs text-muted-foreground">
-            {format(viewMonth, "MMMM yyyy")} · {obligations.length} obligation
-            {obligations.length !== 1 ? "s" : ""}
-          </p>
+      <header className="container mx-auto max-w-6xl space-y-3 p-4 pb-0">
+        <div className="flex items-center gap-4">
+          <div>
+            <h1 className="font-semibold">Payment Schedule</h1>
+            <p className="text-xs text-muted-foreground">
+              {format(viewMonth, "MMMM yyyy")} · {filteredObligations.length}{" "}
+              obligation
+              {filteredObligations.length !== 1 ? "s" : ""}
+            </p>
+          </div>
+          <div className="ml-auto">
+            <ScheduleTagsFilter
+              availableTags={availableTags}
+              selectedTags={selectedTags}
+              onToggleTag={toggleTag}
+            />
+          </div>
         </div>
+        {selectedTags.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {selectedTags.map((tag) => (
+              <Button
+                key={tag}
+                type="button"
+                size="sm"
+                variant="secondary"
+                className="h-7 rounded-full text-xs text-emerald-500"
+                onClick={() => toggleTag(tag)}
+              >
+                <TagIcon className="size-3 shrink-0" />
+                <span>{tag}</span>
+                <XIcon className="size-3 shrink-0" />
+              </Button>
+            ))}
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="h-7 rounded-full text-xs"
+              onClick={() => setSelectedTags([])}
+            >
+              Clear
+              <XIcon className="size-3 shrink-0" />
+            </Button>
+          </div>
+        )}
       </header>
 
       <main className="container mx-auto max-w-6xl space-y-6 p-4">
@@ -247,6 +317,60 @@ function ScheduleCalendar({
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+// ── Tags filter ────────────────────────────────────────────────────────────────
+
+function ScheduleTagsFilter({
+  availableTags,
+  selectedTags,
+  onToggleTag,
+}: {
+  availableTags: Array<string>
+  selectedTags: Array<string>
+  onToggleTag: (tag: string) => void
+}) {
+  if (availableTags.length === 0) return null
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button size="sm" variant="outline" className="relative">
+          <FilterIcon />
+          Tags
+          {selectedTags.length > 0 && (
+            <Badge className="absolute -top-2 -right-2 flex size-4 items-center justify-center rounded-full p-0 text-[10px]">
+              {selectedTags.length}
+            </Badge>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="end"
+        className="max-h-56 w-56 overflow-y-auto px-1 py-2"
+      >
+        <ul className="space-y-1">
+          {availableTags.map((tag) => (
+            <li key={tag}>
+              <div className="flex items-center gap-2.5 rounded p-1 hover:bg-accent">
+                <Checkbox
+                  id={`schedule-tag-${tag}`}
+                  checked={selectedTags.includes(tag)}
+                  onCheckedChange={() => onToggleTag(tag)}
+                />
+                <Label
+                  htmlFor={`schedule-tag-${tag}`}
+                  className="flex-1 cursor-pointer font-normal"
+                >
+                  {tag}
+                </Label>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </PopoverContent>
+    </Popover>
   )
 }
 
@@ -542,7 +666,8 @@ function getObligationDatesInMonth(
           : obligation.recurrence === "WEEKLY"
             ? 0 // handled separately; not typical for loans
             : 1
-    const lastPaymentMonthsFromAnchor = (remainingPayments - 1) * periodsPerPayment
+    const lastPaymentMonthsFromAnchor =
+      (remainingPayments - 1) * periodsPerPayment
     if (monthsFromAnchor > lastPaymentMonthsFromAnchor) return []
   }
 

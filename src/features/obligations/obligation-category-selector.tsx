@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form"
-import type {ObligationInput} from "./schema";
+import type { ObligationInput } from "./schema"
 import {
   Field,
   FieldContent,

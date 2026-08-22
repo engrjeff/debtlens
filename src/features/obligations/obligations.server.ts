@@ -6,8 +6,8 @@ import {
   startOfMonth,
 } from "date-fns"
 import { computeNextDueDate } from "./helpers"
-import {  PAGE_SIZE } from "./search-params"
-import type {ObligationsSearch} from "./search-params";
+import { PAGE_SIZE } from "./search-params"
+import type { ObligationsSearch } from "./search-params"
 import type { EditBillInput, EditLoanInput, ObligationInput } from "./schema"
 import { prisma } from "@/db/prisma"
 
@@ -22,7 +22,8 @@ export async function getObligations(
   const monthStart = startOfMonth(now)
   const monthEnd = endOfMonth(now)
 
-  const isDoneFilter = search.status === "done" ? { isDone: true } : { isDone: false }
+  const isDoneFilter =
+    search.status === "done" ? { isDone: true } : { isDone: false }
 
   const statusFilter = (() => {
     switch (search.status) {
@@ -51,7 +52,9 @@ export async function getObligations(
         const gte = search.dueStart ? new Date(search.dueStart) : undefined
         const lte = search.dueEnd ? new Date(search.dueEnd) : undefined
         if (!gte && !lte) return {}
-        return { nextDueDate: { ...(gte ? { gte } : {}), ...(lte ? { lte } : {}) } }
+        return {
+          nextDueDate: { ...(gte ? { gte } : {}), ...(lte ? { lte } : {}) },
+        }
       }
       default:
         return {}
@@ -89,6 +92,7 @@ export async function getObligations(
     ...(search.categories?.length
       ? { category: { in: search.categories } }
       : {}),
+    ...(search.tags?.length ? { tags: { hasSome: search.tags } } : {}),
     ...(search.minAmount != null || search.maxAmount != null
       ? {
           amount: {
@@ -129,7 +133,9 @@ export async function getObligations(
 }
 
 export async function getObligationInsights(userId: string) {
-  return prisma.obligation.findMany({ where: { userId, isDeleted: false, isDone: false } })
+  return prisma.obligation.findMany({
+    where: { userId, isDeleted: false, isDone: false },
+  })
 }
 
 export async function createObligation(data: ObligationInput, userId: string) {

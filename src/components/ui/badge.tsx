@@ -22,6 +22,7 @@ const badgeVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         BILL: "bg-emerald-500/20 text-[10px] font-semibold text-emerald-500 uppercase",
         LOAN: "bg-cyan-500/20 text-[10px] font-semibold text-cyan-500 uppercase",
+        TAG: "bg-emerald-500/20 text-[10px] font-semibold text-emerald-500",
       },
     },
     defaultVariants: {

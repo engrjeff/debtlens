@@ -1,9 +1,9 @@
+import { Link } from "@tanstack/react-router"
+import type { DashboardSummary } from "./dashboard.utils"
 import { Text } from "@/components/text"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatCompactPHP } from "@/features/obligations/helpers"
-import { Link } from "@tanstack/react-router"
-import type { DashboardSummary } from "./dashboard.utils"
 
 interface SummaryCardsProps {
   summary: DashboardSummary

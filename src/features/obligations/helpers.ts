@@ -252,7 +252,10 @@ export function computeDebtFreeBanner(
 
   const overallProgress =
     totalOriginal > 0
-      ? Math.min(100, Math.max(0, ((totalOriginal - totalRemaining) / totalOriginal) * 100))
+      ? Math.min(
+          100,
+          Math.max(0, ((totalOriginal - totalRemaining) / totalOriginal) * 100)
+        )
       : 0
 
   const targetDate = new Date()
@@ -262,7 +265,14 @@ export function computeDebtFreeBanner(
     year: "numeric",
   }).format(targetDate)
 
-  return { formattedTarget, targetDate, monthsAway: maxMonths, overallProgress, totalRemaining, totalOriginal }
+  return {
+    formattedTarget,
+    targetDate,
+    monthsAway: maxMonths,
+    overallProgress,
+    totalRemaining,
+    totalOriginal,
+  }
 }
 
 // ── Insights ─────────────────────────────────────────────────────────────────
@@ -382,6 +392,33 @@ export function computeNextDueDate(
     default:
       return base
   }
+}
+
+// ── Tags ─────────────────────────────────────────────────────────────────────
+
+/** Dedupes tags case-insensitively, keeping the first-seen casing. */
+export function dedupeTagsCaseInsensitive(tags: Array<string>): Array<string> {
+  const seen = new Set<string>()
+  const result: Array<string> = []
+
+  for (const tag of tags) {
+    const key = tag.toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+    result.push(tag)
+  }
+
+  return result
+}
+
+/** Builds a sorted, deduped list of every tag used across the given obligations. */
+export function collectAvailableTags(
+  obligations: Array<Pick<Obligation, "tags">>
+): Array<string> {
+  const all = obligations.flatMap((o) => o.tags)
+  return dedupeTagsCaseInsensitive(all).sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" })
+  )
 }
 
 // ── Filter + Sort ─────────────────────────────────────────────────────────────
