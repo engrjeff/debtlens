@@ -7,12 +7,13 @@
  * duplicating date logic.
  */
 
-import { endOfMonth, startOfMonth } from "date-fns"
 import type { Obligation } from "@/generated/prisma/client"
 import {
   formatPayoffDate,
   getObligationStatus,
   getProgressPercent,
+  utcEndOfMonth,
+  utcStartOfMonth,
 } from "@/features/obligations/helpers"
 
 // ── Shared types ──────────────────────────────────────────────────────────────
@@ -94,10 +95,8 @@ export function getDashboardSummary(
   obligations: Array<Obligation>
 ): DashboardSummary {
   const now = new Date()
-  const monthStart = startOfMonth(now)
-  const monthEnd = endOfMonth(now)
-  const next7 = new Date(now)
-  next7.setDate(now.getDate() + 7)
+  const monthStart = utcStartOfMonth(now)
+  const monthEnd = utcEndOfMonth(now)
 
   let totalDueThisMonth = 0
   let dueThisMonthCount = 0

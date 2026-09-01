@@ -1,11 +1,10 @@
 import {
-  addDays,
-  startOfTomorrow as dateFnsStartOfTomorrow,
-  endOfMonth,
-  startOfDay,
-  startOfMonth,
-} from "date-fns"
-import { computeNextDueDate } from "./helpers"
+  computeNextDueDate,
+  utcAddDays,
+  utcEndOfMonth,
+  utcStartOfDay,
+  utcStartOfMonth,
+} from "./helpers"
 import { PAGE_SIZE } from "./search-params"
 import type { ObligationsSearch } from "./search-params"
 import type { EditBillInput, EditLoanInput, ObligationInput } from "./schema"
@@ -16,11 +15,11 @@ export async function getObligations(
   search: ObligationsSearch
 ) {
   const now = new Date()
-  const startOfToday = startOfDay(now)
-  const startOfTomorrow = dateFnsStartOfTomorrow()
-  const endOfWeek = addDays(startOfToday, 8) // inclusive of day 7
-  const monthStart = startOfMonth(now)
-  const monthEnd = endOfMonth(now)
+  const startOfToday = utcStartOfDay(now)
+  const startOfTomorrow = utcAddDays(startOfToday, 1)
+  const endOfWeek = utcAddDays(startOfToday, 8) // inclusive of day 7
+  const monthStart = utcStartOfMonth(now)
+  const monthEnd = utcEndOfMonth(now)
 
   const isDoneFilter =
     search.status === "done" ? { isDone: true } : { isDone: false }
