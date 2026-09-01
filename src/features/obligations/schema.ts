@@ -90,27 +90,40 @@ export const editBillSchema = z.object({
   nextDueDate: z.string().min(1, "Next due date is required"),
 })
 
-export const editLoanSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .max(100, "Name must be 100 characters or fewer"),
-  category: z.string().min(1, "Category is required"),
-  tags: tagsSchema,
-  amount: z
-    .number({ message: "Enter a valid amount" })
-    .positive("Must be greater than 0"),
-  recurrence: recurrenceEnum,
-  nextDueDate: z.string().min(1, "Next due date is required"),
-  remainingBalance: z
-    .number({ message: "Enter a valid amount" })
-    .nonnegative("Cannot be negative"),
-  interestRate: z
-    .number({ message: "Enter a valid rate" })
-    .min(0, "Cannot be negative")
-    .max(100, "Enter the rate as a percentage, e.g. 5.25")
-    .optional(),
-})
+export const editLoanSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, "Name is required")
+      .max(100, "Name must be 100 characters or fewer"),
+    category: z.string().min(1, "Category is required"),
+    tags: tagsSchema,
+    amount: z
+      .number({ message: "Enter a valid amount" })
+      .positive("Must be greater than 0"),
+    recurrence: recurrenceEnum,
+    nextDueDate: z.string().min(1, "Next due date is required"),
+    totalAmount: z
+      .number({ message: "Enter a valid amount" })
+      .positive("Must be greater than 0"),
+    remainingBalance: z
+      .number({ message: "Enter a valid amount" })
+      .nonnegative("Cannot be negative"),
+    interestRate: z
+      .number({ message: "Enter a valid rate" })
+      .min(0, "Cannot be negative")
+      .max(100, "Enter the rate as a percentage, e.g. 5.25")
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.remainingBalance > data.totalAmount) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Cannot exceed total loan amount",
+        path: ["remainingBalance"],
+      })
+    }
+  })
 
 export type EditBillInput = z.infer<typeof editBillSchema>
 export type EditLoanInput = z.infer<typeof editLoanSchema>
