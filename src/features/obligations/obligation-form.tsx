@@ -1,8 +1,13 @@
+import { SubmitButton } from "@/components/submit-button"
+import { Button } from "@/components/ui/button"
+import { ObligationType, RecurrenceType } from "@/generated/prisma/enums"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
+import type { ChangeEventHandler } from "react"
 import { useState } from "react"
+import type { SubmitErrorHandler, SubmitHandler } from "react-hook-form"
 import { FormProvider, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { BillForm } from "./bill-form"
@@ -10,13 +15,8 @@ import { LoanForm } from "./loan-form"
 import { ObligationCategorySelector } from "./obligation-category-selector"
 import { ObligationTypeSelector } from "./obligation-type-selector"
 import { addObligation } from "./obligations.functions"
-import { obligationFormSchema } from "./schema"
-import type { SubmitErrorHandler, SubmitHandler } from "react-hook-form"
-import type { ChangeEventHandler } from "react"
 import type { ObligationInput } from "./schema"
-import { ObligationType, RecurrenceType } from "@/generated/prisma/enums"
-import { Button } from "@/components/ui/button"
-import { SubmitButton } from "@/components/submit-button"
+import { obligationFormSchema } from "./schema"
 
 type FormStep = "select-type" | "select-category" | "enter-details"
 
@@ -139,9 +139,14 @@ export function ObligationForm({ onAfterSave }: ObligationFormProps) {
             </Button>
           )}
           {formStep !== "enter-details" && (
-            <Button type="button" onClick={handleNextClick}>
-              Next <ArrowRightIcon />
-            </Button>
+            <>
+              <Button type="button" variant="ghost" onClick={onAfterSave}>
+                Cancel
+              </Button>
+              <Button type="button" onClick={handleNextClick}>
+                Next <ArrowRightIcon />
+              </Button>
+            </>
           )}
           {formStep === "enter-details" && (
             <SubmitButton type="submit" loading={pending}>

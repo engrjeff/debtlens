@@ -1,6 +1,43 @@
-import { endOfMonth, startOfMonth } from "date-fns"
 import type { Obligation } from "@/generated/prisma/client"
 import { OBLIGATION_CATEGORIES } from "@/lib/constants/obligation-categories"
+
+// ── Timezone-safe date boundaries ───────────────────────────────────────────────
+//
+// `nextDueDate` is always stored as the UTC-midnight instant of the intended
+// calendar date (dates come from plain "YYYY-MM-DD" inputs, which the Date
+// constructor parses as UTC). Deriving "today"/day-boundaries with UTC getters
+// (instead of local getters like `getFullYear`/`getDate`) keeps these
+// comparisons stable no matter what timezone the server or browser is running
+// in — otherwise a server in UTC and a browser in another zone can disagree on
+// which calendar day an obligation falls on.
+
+export function utcStartOfDay(date: Date | string): Date {
+  const d = new Date(date)
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))
+}
+
+export function utcAddDays(date: Date, days: number): Date {
+  const d = new Date(date)
+  d.setUTCDate(d.getUTCDate() + days)
+  return d
+}
+
+export function utcStartOfMonth(date: Date): Date {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1))
+}
+
+export function utcEndOfMonth(date: Date): Date {
+  return new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0, 23, 59, 59, 999)
+  )
+}
+
+/** Whole calendar days between today and `nextDueDate` (negative when overdue). */
+export function getDiffDays(nextDueDate: Date | string): number {
+  const today = utcStartOfDay(new Date())
+  const dueDay = utcStartOfDay(nextDueDate)
+  return Math.floor((dueDay.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+}
 
 // ── Category colors ───────────────────────────────────────────────────────────
 
@@ -101,13 +138,7 @@ export type SortOption = "due-date" | "amount" | "balance"
 export function getObligationStatus(
   nextDueDate: Date | string
 ): ObligationStatus {
-  const due = new Date(nextDueDate)
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate())
-  const diffDays = Math.floor(
-    (dueDay.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  )
+  const diffDays = getDiffDays(nextDueDate)
 
   if (diffDays < 0) return "overdue"
   if (diffDays === 0) return "due-today"
@@ -141,13 +172,7 @@ export function formatDueDate(date: Date | string): string {
 }
 
 export function getDueDaysLabel(nextDueDate: Date | string): string {
-  const due = new Date(nextDueDate)
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate())
-  const diffDays = Math.floor(
-    (dueDay.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  )
+  const diffDays = getDiffDays(nextDueDate)
 
   if (diffDays < -1) return `${Math.abs(diffDays)} days overdue`
   if (diffDays === -1) return "1 day overdue"
@@ -279,8 +304,8 @@ export function computeDebtFreeBanner(
 
 export function computeInsights(obligations: Array<Obligation>) {
   const now = new Date()
-  const monthStart = startOfMonth(now)
-  const monthEnd = endOfMonth(now)
+  const monthStart = utcStartOfMonth(now)
+  const monthEnd = utcEndOfMonth(now)
 
   let totalDueThisMonth = 0
   let dueThisMonthCount = 0

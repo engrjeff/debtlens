@@ -46,6 +46,7 @@ import {
   formatDueDate,
   formatPHP,
   formatPayoffDate,
+  getDiffDays,
   getDueDaysLabel,
   getObligationStatus,
   getPayoffMonths,
@@ -227,19 +228,7 @@ function StatusAlert({
   nextDueDate: Date | string
 }) {
   const status = getObligationStatus(nextDueDate)
-  const due = new Date(nextDueDate)
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const dueNormalized = new Date(
-    due.getFullYear(),
-    due.getMonth(),
-    due.getDate()
-  )
-  const diffDays = Math.abs(
-    Math.floor(
-      (dueNormalized.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-    )
-  )
+  const diffDays = Math.abs(getDiffDays(nextDueDate))
 
   if (status === "overdue") {
     return (
@@ -455,16 +444,7 @@ function buildInsights(
   const insights: Array<ObligationInsight> = []
   const isLoan = obligation.type === ObligationType.LOAN
   const status = getObligationStatus(obligation.nextDueDate)
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const dueNormalized = new Date(
-    new Date(obligation.nextDueDate).getFullYear(),
-    new Date(obligation.nextDueDate).getMonth(),
-    new Date(obligation.nextDueDate).getDate()
-  )
-  const diffDays = Math.floor(
-    (dueNormalized.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  )
+  const diffDays = getDiffDays(obligation.nextDueDate)
 
   // Due-date insight
   if (status === "overdue") {
