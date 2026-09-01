@@ -166,8 +166,9 @@ export function getOverdue(obligations: Array<Obligation>): Array<Obligation> {
  * Returns obligations due today or within the next 7 days, sorted by due date.
  */
 export function getDueInNext7Days(
-  obligations: Array<Obligation>
-): Array<Obligation> {
+  obligations: Array<Obligation>,
+  limit?: number
+): Array<UpcomingObligation> {
   return obligations
     .filter((o) => {
       const status = getObligationStatus(o.nextDueDate)
@@ -177,6 +178,16 @@ export function getDueInNext7Days(
       (a, b) =>
         new Date(a.nextDueDate).getTime() - new Date(b.nextDueDate).getTime()
     )
+    .slice(0, limit)
+    .map((o) => ({
+      id: o.id,
+      name: o.name,
+      category: o.category,
+      type: o.type as "BILL" | "LOAN",
+      amount: o.amount,
+      nextDueDate: new Date(o.nextDueDate),
+      status: getObligationStatus(o.nextDueDate),
+    }))
 }
 
 // ── 4. Upcoming list ──────────────────────────────────────────────────────────
