@@ -7,7 +7,7 @@ import {
   getCategoryBreakdown,
   getDashboardSummary,
   getDebtProgress,
-  getUpcoming,
+  getDueInNext7Days,
 } from "./dashboard.utils"
 import { DebtProgress } from "./debt-progress"
 import { InsightsPanel } from "./insights-panel"
@@ -39,7 +39,7 @@ export function DashboardPage({
   recentPayments,
 }: DashboardPageProps) {
   const summary = getDashboardSummary(obligations)
-  const upcoming = getUpcoming(obligations, 7)
+  const upcoming = getDueInNext7Days(obligations)
   const debtProgress = getDebtProgress(obligations)
   const insights = generateInsights(obligations)
   const categories = getCategoryBreakdown(obligations)
